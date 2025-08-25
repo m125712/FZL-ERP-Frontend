@@ -71,13 +71,11 @@ export default function TotalsRow({
 			)}
 
 			<td className={`${rowClass} text-right font-bold text-green-600`}>
-				{currencySymbol}
-				{formatAmountSmart(totalDr.toFixed(precision))}
+				{formatAmountSmart(totalDr.toFixed(precision, currencySymbol))}
 			</td>
 
 			<td className={`${rowClass} text-right font-bold text-red-600`}>
-				{currencySymbol}
-				{formatAmountSmart(totalCr.toFixed(precision))}
+				{formatAmountSmart(totalCr.toFixed(precision, currencySymbol))}
 			</td>
 
 			<td className={rowClass}>

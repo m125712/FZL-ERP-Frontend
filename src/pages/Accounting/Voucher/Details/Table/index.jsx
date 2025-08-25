@@ -170,10 +170,10 @@ const VoucherDetailsTable = ({ data }) => {
 									Date
 								</th>
 								<th className='w-28 border-r border-gray-300 px-4 py-3 text-right text-sm font-medium text-gray-700'>
-									Debit
+									Debit ({data?.currency_symbol})
 								</th>
 								<th className='w-28 px-4 py-3 text-right text-sm font-medium text-gray-700'>
-									Credit
+									Credit ({data?.currency_symbol})
 								</th>
 							</tr>
 						</thead>
@@ -253,16 +253,18 @@ const VoucherDetailsTable = ({ data }) => {
 									>
 										{row.data.debit && (
 											<span>
-												{data?.currency_symbol}
+												{/* {data?.currency_symbol} */}
 												{typeof row.data.debit ===
 												'number'
 													? formatAmountSmart(
 															row.data.debit.toFixed(
 																2
-															)
+															),
+															data?.currency_symbol
 														)
 													: formatAmountSmart(
-															row.data.debit
+															row.data.debit,
+															data?.currency_symbol
 														)}
 											</span>
 										)}
@@ -278,16 +280,18 @@ const VoucherDetailsTable = ({ data }) => {
 									>
 										{row.data.credit && (
 											<span>
-												{data?.currency_symbol}
+												{/* {data?.currency_symbol} */}
 												{typeof row.data.credit ===
 												'number'
 													? formatAmountSmart(
 															row.data.credit.toFixed(
 																2
-															)
+															),
+															data?.currency_symbol
 														)
 													: formatAmountSmart(
-															row.data.credit
+															row.data.credit,
+															data?.currency_symbol
 														)}
 											</span>
 										)}
@@ -306,19 +310,21 @@ const VoucherDetailsTable = ({ data }) => {
 										{data?.narration}
 									</span>
 								</td>
-								<td className='px-4 py-3 text-right font-bold text-gray-800'>
+								<td className='px-2 py-3 text-right font-bold text-gray-800'>
 									<span>
-										{data?.currency_symbol}
+										{/* {data?.currency_symbol} */}
 										{formatAmountSmart(
-											totals.debit.toFixed(2)
+											totals.debit.toFixed(2),
+											data?.currency_symbol
 										)}
 									</span>
 								</td>
-								<td className='px-4 py-3 text-right font-bold text-gray-800'>
+								<td className='px-2 py-3 text-right font-bold text-gray-800'>
 									<span>
-										{data?.currency_symbol}
+										{/* {data?.currency_symbol} */}
 										{formatAmountSmart(
-											totals.credit.toFixed(2)
+											totals.credit.toFixed(2),
+											data?.currency_symbol
 										)}
 									</span>
 								</td>

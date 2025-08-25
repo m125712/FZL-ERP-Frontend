@@ -59,7 +59,7 @@ export function formatAmountSmart(value, symbol, decimals = 2) {
 		// Use numeral for western grouping
 		const fmt = decimals > 0 ? `0,0.${'0'.repeat(decimals)}` : '0,0';
 		const core = numeral(num).format(fmt);
-		return symbol ? `${symbol}${core}` : core;
+		return core;
 	}
 }
 
@@ -82,5 +82,5 @@ function formatWithLakhGrouping(num, symbol, decimals) {
 	const result = decimalPart
 		? `${formattedInteger}.${decimalPart}`
 		: formattedInteger;
-	return symbol ? `${symbol}${result}` : result;
+	return result;
 }

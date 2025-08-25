@@ -193,12 +193,12 @@ function VoucherEntryRow({
 								<th
 									className={`${rowClass} text-right font-semibold`}
 								>
-									Debit
+									Debit ({watch('currency_symbol')})
 								</th>
 								<th
 									className={`${rowClass} text-right font-semibold`}
 								>
-									Credit
+									Credit ({watch('currency_symbol')})
 								</th>
 								<th
 									className={`${rowClass} text-center font-semibold`}

@@ -25,7 +25,11 @@ export default function CostCenter({
 		watchedLedgers ? `ledger_uuid=${watchedLedgers}` : ''
 	);
 	return (
-		<div>
+		<div className='flex gap-2'>
+			<p className='justify-center py-4 align-baseline text-sm font-medium text-gray-900'>
+				{p + 1}.{subIdx + 1}
+			</p>
+
 			<FormField
 				label={`${entryPath}.voucher_entry_cost_center[${subIdx}].cost_center_uuid`}
 				is_title_needed='false'

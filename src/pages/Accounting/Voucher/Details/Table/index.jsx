@@ -87,6 +87,7 @@ const VoucherDetailsTable = ({ data }) => {
 					entryIndex,
 					isFirst: false,
 					data: {
+						index: centerIndex + 1,
 						label: centerIndex === 0 ? 'Cost Centers' : '',
 						name: center.cost_center_name || 'N/A',
 						transactionNo: '',
@@ -108,6 +109,7 @@ const VoucherDetailsTable = ({ data }) => {
 					entryIndex,
 					isFirst: false,
 					data: {
+						index: paymentIndex + 1,
 						label: paymentIndex === 0 ? 'Payments' : '',
 						paymentType: payment.payment_type || 'N/A',
 						transactionNo: payment.trx_no || '',
@@ -195,7 +197,7 @@ const VoucherDetailsTable = ({ data }) => {
 										</td>
 									)}
 
-									{/* Ledger Name / Details column */}
+									{/* Ledger Name */}
 									<td
 										className={`border-r border-gray-300 px-4 py-3 text-sm ${
 											row.type === 'main'
@@ -207,12 +209,16 @@ const VoucherDetailsTable = ({ data }) => {
 											row.data.ledgerName || 'N/A'
 										) : row.type === 'cost_center' ? (
 											<div className='flex items-center gap-2'>
+												{row.entryIndex + 1}.
+												{row.data.index}
 												<span className='flex-1'>
 													{row.data.name}
 												</span>
 											</div>
 										) : (
 											<div className='flex items-center gap-2'>
+												{row.entryIndex + 1}.
+												{row.data.index}
 												<span className='flex-1 font-medium'>
 													{
 														paymentTypeOption.find(
@@ -247,6 +253,7 @@ const VoucherDetailsTable = ({ data }) => {
 									>
 										{row.data.debit && (
 											<span>
+												{data?.currency_symbol}
 												{typeof row.data.debit ===
 												'number'
 													? row.data.debit.toFixed(2)
@@ -265,6 +272,7 @@ const VoucherDetailsTable = ({ data }) => {
 									>
 										{row.data.credit && (
 											<span>
+												{data?.currency_symbol}
 												{typeof row.data.credit ===
 												'number'
 													? row.data.credit.toFixed(2)
@@ -287,10 +295,16 @@ const VoucherDetailsTable = ({ data }) => {
 									</span>
 								</td>
 								<td className='px-4 py-3 text-right font-bold text-gray-800'>
-									<span>{totals.debit.toFixed(2)}</span>
+									<span>
+										{data?.currency_symbol}
+										{totals.debit.toFixed(2)}
+									</span>
 								</td>
 								<td className='px-4 py-3 text-right font-bold text-gray-800'>
-									<span>{totals.credit.toFixed(2)}</span>
+									<span>
+										{data?.currency_symbol}
+										{totals.credit.toFixed(2)}
+									</span>
 								</td>
 							</tr>
 						</tfoot>

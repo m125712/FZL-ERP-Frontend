@@ -14,11 +14,8 @@ export default function Header({
 	setValue,
 	Controller,
 	watch,
+	currencyOptions,
 }) {
-	const { uuid } = useParams();
-	const { data: currencyOptions } = useOtherCurrency();
-	console.log(currencyOptions?.find((item) => item.default === true).value);
-
 	return (
 		<SectionEntryBody
 			title='Information'
@@ -58,7 +55,7 @@ export default function Header({
 								<ReactSelect
 									placeholder='Select Currency'
 									options={currencyOptions}
-									value={selectedOption || null} // Use the full option object
+									value={selectedOption || null}
 									onChange={(selectedOption) => {
 										if (selectedOption) {
 											setValue(

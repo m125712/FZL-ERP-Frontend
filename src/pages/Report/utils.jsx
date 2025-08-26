@@ -30,6 +30,23 @@ const threadProductionOptions = [
 	{ value: 'all', label: 'All' },
 ];
 
+export const itemTypes = [
+	{ value: 'all', label: 'All' },
+	{ value: 'zipper', label: 'Zipper' },
+	{ value: 'thread', label: 'Thread' },
+];
+export const orderTypes = [
+	{ value: 'all', label: 'All' },
+	{ value: 'sample', label: 'Sample' },
+	{ value: 'bulk', label: 'Bulk' },
+];
+export const orderStatuses = [
+	{ value: 'all', label: 'All' },
+	{ value: 'pending', label: 'Pending' },
+	{ value: 'complete', label: 'Complete' },
+	{ value: 'processing', label: 'Processing' },
+];
+
 export const ProductionStatus = ({ className, status, setStatus, page }) => {
 	let options;
 	switch (page) {

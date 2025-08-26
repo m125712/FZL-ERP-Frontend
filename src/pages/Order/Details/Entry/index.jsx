@@ -271,10 +271,7 @@ export default function Index() {
 				is_meter: rest?.is_meter ? 1 : 0,
 				is_cm: rest?.is_cm ? 1 : 0,
 				is_multi_color: rest?.is_multi_color ? 1 : 0,
-				hand:
-					endType === 'Open End' || endType === '2 Way - Open End'
-						? rest?.hand
-						: null,
+				hand: rest?.hand,
 				updated_at: GetDateTime(),
 				updated_by: user?.uuid,
 			};
@@ -552,6 +549,7 @@ export default function Index() {
 						is_logo_body: getValues('is_logo_body'),
 						is_logo_puller: getValues('is_logo_puller'),
 						isUpdate,
+						setValue,
 					}}
 					setType={setType}
 				/>

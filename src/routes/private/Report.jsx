@@ -75,6 +75,7 @@ const MetalTeethColoring = lazy(
 const MetalFinishing = lazy(
 	() => import('@/pages/Report/Production/MetalFinishing')
 );
+const OrderWise = lazy(() => import('@/pages/Report/OrderTImeLength'));
 
 export const ReportRoutes = [
 	{
@@ -295,6 +296,13 @@ export const ReportRoutes = [
 				path: '/report/daily-order-status',
 				element: <DailyOrderStatus />,
 				page_name: 'report__daily_order_status',
+				actions: ['read'],
+			},
+			{
+				name: 'Order Time Length',
+				path: '/report/order-time-length',
+				element: <OrderWise />,
+				page_name: 'report__time_length',
 				actions: ['read'],
 			},
 			{

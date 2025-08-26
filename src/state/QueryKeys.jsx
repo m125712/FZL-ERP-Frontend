@@ -115,7 +115,12 @@ export const commercialQK = {
 
 	//* pi
 	pi: () => [...commercialQK.all(), 'pi'],
-	piByQuery: (params) => [...commercialQK.all(), 'piByQuery', params],
+	piByQuery: (params, piType) => [
+		...commercialQK.all(),
+		'piByQuery',
+		params,
+		piType,
+	],
 	piCash: () => [...commercialQK.all(), 'pi-cash'],
 	piByUUID: (uuid) => [...commercialQK.pi(), uuid],
 	piDetailsByUUID: (uuid) => [...commercialQK.pi(), 'details', uuid],
@@ -2026,6 +2031,14 @@ export const reportQK = {
 		from,
 		to,
 		nylon_stopper || '',
+	],
+	orderWise: (item_type, order_type, status, query) => [
+		...reportQK.all(),
+		'order-wise',
+		item_type,
+		order_type,
+		status,
+		query,
 	],
 };
 

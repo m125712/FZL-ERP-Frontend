@@ -1,6 +1,6 @@
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
-import { DateTime, TitleValue } from '@/ui';
+import { DateTime } from '@/ui';
 
 export default function Information({ batch }) {
 	const renderItems = () => {

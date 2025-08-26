@@ -55,12 +55,14 @@ export default function Index() {
 			return acc + itemTotal;
 		}, 0)
 		.toFixed(3);
-	const volume = parseFloat(raw_tape) * parseFloat(batch?.water_capacity);
+
+	const yarn = batch?.yarn_issued;
+	const volume = parseFloat(yarn) * parseFloat(batch?.water_capacity);
 	const shade_recipes_entries = useMemo(() => {
 		return shade_recipe?.recipe_entry?.map((item) => ({
 			...item,
 			quantity: Number(item?.quantity).toFixed(5),
-			bulk: Number((volume * item?.quantity).toFixed(3)),
+			bulk: Number((yarn * 10 * item?.quantity).toFixed(3)),
 		}));
 	}, [shade_recipe, volume]);
 
@@ -68,9 +70,9 @@ export default function Index() {
 		return shade_recipe?.programs?.map((item) => ({
 			...item,
 			quantity: Number(item?.quantity).toFixed(5),
-			bulk: Number((volume * item?.quantity).toFixed(3)),
+			bulk: Number((batch?.water_capacity * item?.quantity).toFixed(3)),
 		}));
-	}, [shade_recipe, volume]);
+	}, [shade_recipe, batch]);
 
 	useEffect(() => {
 		document.title = 'Planning Batch Details';

@@ -26,26 +26,34 @@ export default function Information({ batch }) {
 							{batch?.batch_status}
 						</span>
 					) : batch?.batch_status === 'completed' ? (
-						<span className='badge badge-success badge-sm h-5 capitalize'>
-							{batch?.batch_status}
-						</span>
+						<div className='flex gap-1'>
+							<span className='badge badge-success badge-sm h-5 capitalize'>
+								{batch?.batch_status}
+							</span>
+							(
+							<DateTime
+								date={batch?.production_date}
+								isTime={false}
+							/>
+							)
+						</div>
 					) : (
 						<span className='badge badge-error badge-sm h-5 capitalize'>
 							{batch?.batch_status}
 						</span>
 					),
 			},
-			{
-				label: 'Production Date',
-				value: (
-					<DateTime date={batch?.production_date} isTime={false} />
-				),
-			},
+			// {
+			// 	label: 'Production Date',
+			// 	value: (
+
+			// 	),
+			// },
 			{
 				label: 'Yarn Issued',
 				value: (
 					<div className='flex gap-1'>
-						<span>{batch?.yarn_issued}</span>
+						<span>{batch?.yarn_issued} KG</span>
 						(
 						<DateTime
 							date={batch?.yarn_issued_date}

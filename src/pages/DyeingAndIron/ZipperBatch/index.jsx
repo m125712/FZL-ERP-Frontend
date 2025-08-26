@@ -194,12 +194,24 @@ export default function Index() {
 					</div>
 				),
 			},
+
+			{
+				accessorKey: 'total_quantity',
+				header: (
+					<>
+						Total Qty <br />
+						(Pcs)
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
 			{
 				accessorKey: 'yarn_issued',
 				header: () => (
 					<>
 						Yarn <br />
-						Issued
+						Issued (KG)
 					</>
 				),
 				enableColumnFilter: false,
@@ -216,18 +228,6 @@ export default function Index() {
 					);
 				},
 			},
-
-			{
-				accessorKey: 'total_quantity',
-				header: (
-					<>
-						Total Qty <br />
-						(Pcs)
-					</>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
 			{
 				accessorKey: 'expected_kg',
 				header: (
@@ -239,6 +239,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
+
 			{
 				accessorKey: 'add_actions',
 				header: '',

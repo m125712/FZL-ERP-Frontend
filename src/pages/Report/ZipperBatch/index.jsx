@@ -25,6 +25,7 @@ const orderTypeOptions = [
 const filterTypeOptions = [
 	{ value: 'dyeing_status_date', label: 'Dyeing Status' },
 	{ value: 'received_date', label: 'Stock Received' },
+	{ value: 'yarn_issued_date', label: 'Yarn Issued' },
 ];
 
 export default function Index() {
@@ -197,6 +198,28 @@ export default function Index() {
 				),
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'yarn_issued',
+				header: () => (
+					<>
+						Yarn <br />
+						Issued (KG)
+					</>
+				),
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return (
+						<div className='flex flex-col gap-1'>
+							<span>{info.getValue()}</span>
+							<DateTime
+								date={info.row.original.yarn_issued_date}
+								isTime={false}
+							/>
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'expected_kg',

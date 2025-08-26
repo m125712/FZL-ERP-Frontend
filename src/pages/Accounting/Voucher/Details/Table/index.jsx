@@ -89,7 +89,10 @@ const VoucherDetailsTable = ({ data }) => {
 					data: {
 						index: centerIndex + 1,
 						label: centerIndex === 0 ? 'Cost Centers' : '',
-						name: center.cost_center_name || 'N/A',
+						name:
+							center.cost_center_name +
+								': ' +
+								center.invoice_no || 'N/A',
 						transactionNo: '',
 						date: '',
 						debit: isDebit ? center.amount || 'N/A' : '',

@@ -68,6 +68,7 @@ export default function Index() {
 		setError,
 		context: form,
 		voucherFields,
+		dirtyFields,
 	} = formProps;
 
 	// Entry management
@@ -95,6 +96,7 @@ export default function Index() {
 		VOUCHER_NULLABLE,
 		voucherURL,
 		setError,
+		dirtyFields,
 	});
 
 	const rowClass = 'border px-3 py-2 text-sm align-center';

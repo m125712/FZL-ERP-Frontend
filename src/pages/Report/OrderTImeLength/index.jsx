@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useOrderWise } from '@/state/Report';
+import { formatDistanceStrict } from 'date-fns';
 
 import ReactTable from '@/components/Table';
 import { CustomLink, DateTime, ReactSelect } from '@/ui';
@@ -16,8 +17,8 @@ import {
 
 export default function Index() {
 	const [orderType, setOrderType] = useState('all');
-	const [itemType, setItemType] = useState('all');
-	const [status, setStatus] = useState('all');
+	const [itemType, setItemType] = useState('zipper');
+	const [status, setStatus] = useState('processing');
 	const { data, isLoading, url } = useOrderWise(itemType, orderType, status);
 	const info = new PageInfo('Order Time Length', url, 'report__time_length');
 
@@ -67,6 +68,7 @@ export default function Index() {
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
+
 			{
 				accessorFn: (row) => REPORT_DATE_FORMATE(row.issue_date),
 				header: 'Created At',
@@ -81,6 +83,20 @@ export default function Index() {
 				),
 			},
 			{
+				accessorFn: (row) => {
+					let date = formatDistanceStrict(
+						row.issue_date,
+						Date.now(),
+						{ unit: 'day' }
+					);
+
+					return date;
+				},
+				id: 'day_passed',
+				header: 'Day Passed',
+				enableColumnFilter: false,
+			},
+			{
 				accessorKey: 'color_count',
 				header: 'Color Count',
 				enableColumnFilter: false,
@@ -89,7 +105,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'delivery_order_quantity',
-				header: 'Delivery QTY',
+				header: 'Del/Order QTY',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => info.getValue(),

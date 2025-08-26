@@ -195,6 +195,29 @@ export default function Index() {
 				),
 			},
 			{
+				accessorKey: 'yarn_issued',
+				header: () => (
+					<>
+						Yarn <br />
+						Issued
+					</>
+				),
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => {
+					return (
+						<div className='flex flex-col gap-1'>
+							<span>{info.getValue()}</span>
+							<DateTime
+								date={info.row.original.yarn_issued_date}
+								isTime={false}
+							/>
+						</div>
+					);
+				},
+			},
+
+			{
 				accessorKey: 'total_quantity',
 				header: (
 					<>

@@ -41,6 +41,20 @@ export default function Information({ batch }) {
 					<DateTime date={batch?.production_date} isTime={false} />
 				),
 			},
+			{
+				label: 'Yarn Issued',
+				value: (
+					<div className='flex gap-1'>
+						<span>{batch?.yarn_issued}</span>
+						(
+						<DateTime
+							date={batch?.yarn_issued_date}
+							isTime={false}
+						/>
+						)
+					</div>
+				),
+			},
 		];
 
 		const created_details = [

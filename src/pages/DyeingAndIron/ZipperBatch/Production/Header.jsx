@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useOtherMachinesWithSlot } from '@/state/Other';
 import { formatDate } from 'date-fns';
 
-import { DateInput } from '@/ui/Core';
+import { DateInput, Input } from '@/ui/Core';
 import { FormField, ReactSelect, SectionEntryBody, Textarea } from '@/ui';
 
 import cn from '@/lib/cn';
@@ -51,7 +51,7 @@ export default function Header({
 	}, [machine]);
 
 	return (
-		<div className='flex flex-col gap-4'>
+		<div>
 			<SectionEntryBody
 				title={
 					<div>
@@ -80,101 +80,106 @@ export default function Header({
 						<span>{`Batch Quantity (PCS): ${totalQuantity}`}</span>
 					</div>
 				}
+				className='grid grid-cols-3 gap-4'
 			>
-				<div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'>
-					<DateInput
-						label='production_date'
-						Controller={Controller}
+				{/* <div className='flex flex-col gap-1 px-2 text-secondary-content md:flex-row'> */}
+				<DateInput
+					label='production_date'
+					Controller={Controller}
+					control={control}
+					selected={watch('production_date')}
+					{...{ register, errors }}
+					disabled={true}
+				/>
+
+				<FormField label='machine_uuid' title='Machine' errors={errors}>
+					<Controller
+						name='machine_uuid'
 						control={control}
-						selected={watch('production_date')}
-						{...{ register, errors }}
-						disabled={true}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select Machine'
+									options={machine}
+									value={machine?.find(
+										(item) =>
+											item.value ==
+											getValues('machine_uuid')
+									)}
+									onChange={(e) => {
+										const value = e.value;
+										onChange(value);
+										setSlot(e.open_slot);
+									}}
+									isDisabled={true}
+								/>
+							);
+						}}
 					/>
-					<FormField
-						label='machine_uuid'
-						title='Machine'
-						errors={errors}
-					>
-						<Controller
-							name='machine_uuid'
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Machine'
-										options={machine}
-										value={machine?.find(
-											(item) =>
-												item.value ==
-												getValues('machine_uuid')
-										)}
-										onChange={(e) => {
-											const value = e.value;
-											onChange(value);
-											setSlot(e.open_slot);
-										}}
-										isDisabled={true}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-					<FormField label='slot' title='Slot' errors={errors}>
-						<Controller
-							name='slot'
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Slot'
-										options={slot}
-										value={slot?.find(
-											(item) =>
-												item.value == getValues('slot')
-										)}
-										onChange={(e) => {
-											const value = e.value;
-											onChange(value);
-										}}
-										isDisabled={true}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-					<Textarea
-						label='remarks'
-						{...{ register, errors }}
-						disabled={true}
+				</FormField>
+				<Input
+					label='yarn_issued'
+					type='number'
+					{...{ register, errors }}
+				/>
+				<FormField
+					label='Batch Status'
+					title='Batch Status'
+					errors={errors}
+				>
+					<Controller
+						name={'batch_status'}
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									label='Status'
+									className='w-full'
+									placeholder='Select Transaction Area'
+									options={states}
+									value={states?.find(
+										(item) =>
+											item.value ==
+											getValues('batch_status')
+									)}
+									onChange={(e) => onChange(e.value)}
+									isDisabled={false}
+								/>
+							);
+						}}
 					/>
-					<FormField
-						label='Batch Status'
-						title='Batch Status'
-						errors={errors}
-					>
-						<Controller
-							name={'batch_status'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										label='Status'
-										className='w-full'
-										placeholder='Select Transaction Area'
-										options={states}
-										value={states?.find(
-											(item) =>
-												item.value ==
-												getValues('batch_status')
-										)}
-										onChange={(e) => onChange(e.value)}
-										isDisabled={false}
-									/>
-								);
-							}}
-						/>
-					</FormField>
-				</div>
+				</FormField>
+
+				<FormField label='slot' title='Slot' errors={errors}>
+					<Controller
+						name='slot'
+						control={control}
+						render={({ field: { onChange } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select Slot'
+									options={slot}
+									value={slot?.find(
+										(item) =>
+											item.value == getValues('slot')
+									)}
+									onChange={(e) => {
+										const value = e.value;
+										onChange(value);
+									}}
+									isDisabled={true}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+				<Textarea
+					label='remarks'
+					{...{ register, errors }}
+					disabled={true}
+				/>
+
+				{/* </div> */}
 			</SectionEntryBody>
 		</div>
 	);

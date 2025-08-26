@@ -30,6 +30,17 @@ const threadProductionOptions = [
 	{ value: 'all', label: 'All' },
 ];
 
+export const itemTypes = [
+	{ value: 'all', label: 'All' },
+	{ value: 'zipper', label: 'Zipper' },
+	{ value: 'thread', label: 'Thread' },
+];
+export const orderTypes = [
+	{ value: 'all', label: 'All' },
+	{ value: 'sample', label: 'Sample' },
+	{ value: 'bulk', label: 'Bulk' },
+];
+
 export const ProductionStatus = ({ className, status, setStatus, page }) => {
 	let options;
 	switch (page) {

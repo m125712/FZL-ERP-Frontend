@@ -28,6 +28,7 @@ const privateRoutes = [
 	...OrderRoutes,
 	...ThreadRoutes,
 	...CommercialRoutes,
+	...AccountingRoutes,
 	...StoreMaintenanceRoutes,
 	...StoreRmRoutes,
 	...StoreAccessoriesRoutes,
@@ -45,7 +46,6 @@ const privateRoutes = [
 	...LibraryRoutes,
 	...MarketingRoutes,
 	...ProfileRoutes,
-	...AccountingRoutes,
 ];
 
 export default privateRoutes;

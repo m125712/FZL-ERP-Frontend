@@ -83,7 +83,7 @@ export const VOUCHER_SCHEMA = {
 				.of(
 					yup.object().shape({
 						payment_type: STRING_REQUIRED,
-						trx_no: STRING_REQUIRED,
+						trx_no: STRING.nullable(),
 						amount: NUMBER_DOUBLE_REQUIRED.min(
 							1,
 							'Amount must be greater than 0'

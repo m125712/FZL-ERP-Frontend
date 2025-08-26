@@ -1,6 +1,6 @@
 import SectionContainer from '@/ui/Others/SectionContainer';
 import RenderTable from '@/ui/Others/Table/RenderTable';
-import { DateTime, TitleValue } from '@/ui';
+import { DateTime } from '@/ui';
 
 export default function Information({ batch }) {
 	const renderItems = () => {
@@ -39,6 +39,20 @@ export default function Information({ batch }) {
 				label: 'Production Date',
 				value: (
 					<DateTime date={batch?.production_date} isTime={false} />
+				),
+			},
+			{
+				label: 'Yarn Issued',
+				value: (
+					<div className='flex gap-1'>
+						<span>{batch?.yarn_issued}</span>
+						(
+						<DateTime
+							date={batch?.yarn_issued_date}
+							isTime={false}
+						/>
+						)
+					</div>
 				),
 			},
 		];

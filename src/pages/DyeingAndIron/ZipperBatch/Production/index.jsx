@@ -102,6 +102,11 @@ export default function Index() {
 				batch_status: data.batch_status,
 				batch_status_date:
 					data?.batch_status !== 'pending' ? GetDateTime() : null,
+				yarn_issued: data.yarn_issued,
+				yarn_issued_date:
+					data.yarn_issued === getValues('yarn_issued')
+						? data.yarn_issued_date
+						: GetDateTime(),
 				updated_at: GetDateTime(),
 				updated_by: user?.uuid,
 			},

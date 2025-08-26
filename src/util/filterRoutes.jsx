@@ -1,3 +1,5 @@
+import { IS_ADMIN, IS_PRODUCTION } from '@/lib/secret';
+
 const getUserAccessList = () => {
 	const can_access = localStorage.getItem('can_access');
 
@@ -20,6 +22,7 @@ function filterRoutes(routes) {
 
 	//* Recursive function to filter routes and their children
 	function filterRecursive(routes) {
+		if (IS_ADMIN && !IS_PRODUCTION) return routes;
 		return routes.filter((route) => {
 			if (route.children) {
 				//* Recursively filter children and keep only those with read access

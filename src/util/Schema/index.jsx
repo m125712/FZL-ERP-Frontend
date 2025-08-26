@@ -2955,6 +2955,10 @@ export const DYEING_THREAD_BATCH_NULL = {
 // * Dyeing Planning Batch production schema*//
 
 export const DYEING_BATCH_PRODUCTION_SCHEMA = {
+	yarn_issued: NUMBER_REQUIRED.moreThan(
+		0,
+		'Yarn Issued should be more than 0'
+	),
 	dyeing_batch_entry: yup.array().of(
 		yup.object().shape({
 			production_quantity: NUMBER.nullable() // Allows the field to be null

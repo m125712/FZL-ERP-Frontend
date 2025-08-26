@@ -15,27 +15,6 @@ export const getPageHeader = (batch) => {
 	const created_at = batch?.created_at
 		? getDateFormate(batch?.created_at)
 		: '';
-	const updated_at = batch?.updated_at
-		? getDateFormate(batch?.updated_at)
-		: '';
-	const conning_created_at = batch?.conning_created_at
-		? getDateFormate(batch?.conning_created_at)
-		: '';
-	const conning_updated_at = batch?.conning_updated_at
-		? getDateFormate(batch?.conning_updated_at)
-		: '';
-	const yarn_issue_created_at = batch?.yarn_issue_created_at
-		? getDateFormate(batch?.yarn_issue_created_at)
-		: '';
-	const yarn_issue_updated_at = batch?.yarn_issue_updated_at
-		? getDateFormate(batch?.yarn_issue_updated_at)
-		: '';
-	const dyeing_created_at = batch?.dyeing_created_at
-		? getDateFormate(batch?.dyeing_created_at)
-		: '';
-	const dyeing_updated_at = batch?.dyeing_updated_at
-		? getDateFormate(batch?.dyeing_updated_at)
-		: '';
 	const buyer = new Set();
 	const order_ref_no = new Set();
 	const shade = new Set();
@@ -126,7 +105,7 @@ export const getPageHeader = (batch) => {
 				{
 					colSpan: 4,
 					table: {
-						widths: [60, 200, 60, 160],
+						widths: [70, 200, 70, 160],
 						headerRows: 1,
 						body: [
 							[
@@ -186,7 +165,23 @@ export const getPageHeader = (batch) => {
 									text: `${Array.from(color).join(', ')}`,
 								},
 								{
-									text: 'Batch Weight',
+									text: 'Yarn Issue',
+									bold: true,
+								},
+								{
+									text: batch?.yarn_issued + ' (KG)',
+								},
+							],
+							[
+								{
+									text: 'Machine No',
+									bold: true,
+								},
+								{
+									text: batch?.machine_name,
+								},
+								{
+									text: 'Prod. Batch wgt ',
 									bold: true,
 								},
 								{
@@ -199,11 +194,11 @@ export const getPageHeader = (batch) => {
 							],
 							[
 								{
-									text: 'Machine No',
+									text: 'Slot',
 									bold: true,
 								},
 								{
-									text: batch?.machine_name,
+									text: 'Slot ' + batch?.slot,
 								},
 								{
 									text: 'Volume',
@@ -217,19 +212,15 @@ export const getPageHeader = (batch) => {
 							],
 							[
 								{
-									text: 'Slot',
+									text: 'Water Capacity',
 									bold: true,
 								},
+
 								{
-									text: 'Slot ' + batch?.slot,
+									text: batch.water_capacity,
 								},
-								{
-									text: 'Light Source',
-									bold: true,
-								},
-								{
-									text: '',
-								},
+								{},
+								{},
 							],
 						],
 					},

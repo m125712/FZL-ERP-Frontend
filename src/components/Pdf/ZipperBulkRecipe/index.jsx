@@ -20,7 +20,7 @@ const node = [
 ];
 const node2 = [
 	getTable('material_name', 'Dyes Name'),
-	getTable('quantity', 'Lab'),
+	getTable('quantity', 'Lab (g/l)'),
 	getTable('bulk', 'Bulk'),
 	getTable('first', '1st'),
 	getTable('second', '2nd'),
@@ -233,12 +233,18 @@ export default function Index(batch, shade_recipes_entries, programs) {
 				text: '\n',
 			},
 			{
-				text: 'Dyes',
-				Style: 'tableTitle',
+				text: [
+					{
+						text: 'Dyes ',
+						style: 'tableTitle',
+						fontSize: DEFAULT_FONT_SIZE + 4,
+						bold: true,
+					},
+					{ text: '(Bulk = Lab x Yarn Issue x 10)' },
+				],
 				alignment: 'left',
-				bold: true,
-				fontSize: DEFAULT_FONT_SIZE + 4,
 			},
+
 			{
 				table: {
 					headerRows: 1,
@@ -264,11 +270,16 @@ export default function Index(batch, shade_recipes_entries, programs) {
 			},
 			{
 				...(programs?.chemicalDark?.length > 0 && {
-					text: 'Chemicals Dark',
-					style: 'tableTitle',
+					text: [
+						{
+							text: 'Chemicals Dark',
+							style: 'tableTitle',
+							fontSize: DEFAULT_FONT_SIZE + 4,
+							bold: true,
+						},
+						{ text: '(Bulk = Lab x Water Capacity)' },
+					],
 					alignment: 'left',
-					bold: true,
-					fontSize: DEFAULT_FONT_SIZE + 4,
 				}),
 			},
 			{
@@ -297,11 +308,16 @@ export default function Index(batch, shade_recipes_entries, programs) {
 				text: '\n',
 			},
 			{
-				text: 'Chemicals',
-				Style: 'tableTitle',
+				text: [
+					{
+						text: 'Chemicals ',
+						style: 'tableTitle',
+						fontSize: DEFAULT_FONT_SIZE + 4,
+						bold: true,
+					},
+					{ text: '(Bulk = Lab x Water Capacity)' },
+				],
 				alignment: 'left',
-				bold: true,
-				fontSize: DEFAULT_FONT_SIZE + 4,
 			},
 			{
 				table: {
@@ -327,11 +343,16 @@ export default function Index(batch, shade_recipes_entries, programs) {
 				text: '\n',
 			},
 			{
-				text: 'Neutralizer',
-				Style: 'tableTitle',
+				text: [
+					{
+						text: 'Neutralizer ',
+						style: 'tableTitle',
+						fontSize: DEFAULT_FONT_SIZE + 4,
+						bold: true,
+					},
+					{ text: '(Bulk = Lab x Water Capacity)' },
+				],
 				alignment: 'left',
-				bold: true,
-				fontSize: DEFAULT_FONT_SIZE + 4,
 			},
 			{
 				table: {

@@ -40,6 +40,12 @@ export const orderTypes = [
 	{ value: 'sample', label: 'Sample' },
 	{ value: 'bulk', label: 'Bulk' },
 ];
+export const orderStatuses = [
+	{ value: 'all', label: 'All' },
+	{ value: 'pending', label: 'Pending' },
+	{ value: 'complete', label: 'Complete' },
+	{ value: 'processing', label: 'Processing' },
+];
 
 export const ProductionStatus = ({ className, status, setStatus, page }) => {
 	let options;

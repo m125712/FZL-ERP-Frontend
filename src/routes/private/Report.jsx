@@ -75,7 +75,7 @@ const MetalTeethColoring = lazy(
 const MetalFinishing = lazy(
 	() => import('@/pages/Report/Production/MetalFinishing')
 );
-const OrderWise = lazy(() => import('@/pages/Report/OrderWise'));
+const OrderWise = lazy(() => import('@/pages/Report/OrderTImeLength'));
 
 export const ReportRoutes = [
 	{
@@ -299,10 +299,10 @@ export const ReportRoutes = [
 				actions: ['read'],
 			},
 			{
-				name: 'Order Wise',
-				path: '/report/order-wise',
+				name: 'Order Time Length',
+				path: '/report/order-time-length',
 				element: <OrderWise />,
-				page_name: 'report__order_wise',
+				page_name: 'report__time_length',
 				actions: ['read'],
 			},
 			{

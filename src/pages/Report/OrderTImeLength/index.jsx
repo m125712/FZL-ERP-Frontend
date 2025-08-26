@@ -7,13 +7,19 @@ import { CustomLink, DateTime, ReactSelect } from '@/ui';
 import { cn } from '@/lib/utils';
 import PageInfo from '@/util/PageInfo';
 
-import { itemTypes, orderTypes } from '../utils';
+import {
+	itemTypes,
+	orderStatuses,
+	orderTypes,
+	REPORT_DATE_FORMATE,
+} from '../utils';
 
 export default function Index() {
 	const [orderType, setOrderType] = useState('all');
 	const [itemType, setItemType] = useState('all');
-	const { data, isLoading, url } = useOrderWise(itemType, orderType);
-	const info = new PageInfo('Order Wise', url, 'report__order_wise');
+	const [status, setStatus] = useState('all');
+	const { data, isLoading, url } = useOrderWise(itemType, orderType, status);
+	const info = new PageInfo('Order Time Length', url, 'report__time_length');
 
 	useEffect(() => {
 		document.title = info.getTabName();
@@ -62,12 +68,16 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'issue_date',
-				header: 'Issue Date',
+				accessorFn: (row) => REPORT_DATE_FORMATE(row.issue_date),
+				header: 'Created At',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => (
-					<DateTime date={info.getValue()} isTime={false} />
+					<DateTime
+						date={info.getValue()}
+						isTime={false}
+						customizedDateFormate='dd MMM, yyyy'
+					/>
 				),
 			},
 			{
@@ -85,13 +95,18 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'delivery_last_date',
+				accessorFn: (row) =>
+					REPORT_DATE_FORMATE(row.delivery_last_date),
 				header: 'Delivery last Date',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) =>
 					info.getValue() ? (
-						<DateTime date={info.getValue()} isTime={false} />
+						<DateTime
+							date={info.getValue()}
+							isTime={false}
+							customizedDateFormate='dd MMM, yyyy'
+						/>
 					) : null,
 			},
 		],
@@ -131,6 +146,17 @@ export default function Index() {
 						)}
 						onChange={(e) => {
 							setOrderType(e.value);
+						}}
+					/>
+					<ReactSelect
+						className={cn('h-4 min-w-36 text-sm')}
+						placeholder='Select Order Type'
+						options={orderStatuses}
+						value={orderStatuses?.filter(
+							(item) => item.value == status
+						)}
+						onChange={(e) => {
+							setStatus(e.value);
 						}}
 					/>
 				</div>

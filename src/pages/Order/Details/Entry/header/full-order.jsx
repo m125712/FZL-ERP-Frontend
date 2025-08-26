@@ -52,6 +52,7 @@ export default function Header({
 	is_logo_body,
 	is_logo_puller,
 	setType,
+	setValue,
 }) {
 	const { order_number, order_description_uuid } = useParams();
 	const isUpdate =
@@ -100,6 +101,7 @@ export default function Header({
 
 	const [sp_req, setSpReq] = useState({});
 	const [garmentsWash, setGramentsWash] = useState({});
+	console.log(watch('hand'));
 
 	useEffect(() => {
 		if (order_description_uuid !== undefined) {
@@ -314,6 +316,7 @@ export default function Header({
 												)}
 												onChange={(e) => {
 													onChange(e.value);
+													setValue('hand', null);
 													setEndType(e.label);
 												}}
 											/>

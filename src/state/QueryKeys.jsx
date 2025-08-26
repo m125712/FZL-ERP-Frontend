@@ -2032,11 +2032,12 @@ export const reportQK = {
 		to,
 		nylon_stopper || '',
 	],
-	orderWise: (item_type, order_type, query) => [
+	orderWise: (item_type, order_type, status, query) => [
 		...reportQK.all(),
 		'order-wise',
 		item_type,
 		order_type,
+		status,
 		query,
 	],
 };

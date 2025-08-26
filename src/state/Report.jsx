@@ -470,11 +470,11 @@ export const useProductionSectionReport = (
 			: `/zipper/finishing-batch-production/by/${section}?item_name=${item_name}&from=${from}&to=${to}`,
 	});
 //*Order Wise
-export const useOrderWise = (item_type, order_type, query) =>
+export const useOrderWise = (item_type, order_type, status, query) =>
 	createGlobalState({
-		queryKey: reportQK.orderWise(item_type, order_type, query),
+		queryKey: reportQK.orderWise(item_type, order_type, status, query),
 		url: query
-			? `/report/order-item-type-wise-status?item_type=${item_type}&order_type=${order_type}` +
+			? `/report/order-item-type-wise-status?item_type=${item_type}&order_type=${order_type}&status=${status}` +
 				query
-			: `/report/order-item-type-wise-status?item_type=${item_type}&order_type=${order_type}`,
+			: `/report/order-item-type-wise-status?item_type=${item_type}&order_type=${order_type}&status=${status}`,
 	});

@@ -35,6 +35,14 @@ export const useDyeingSwatch = (query) =>
 		url: query ? `/zipper/sfg-swatch?${query}` : '/zipper/sfg-swatch',
 	});
 
+export const useDyeingSwatchBulk = (query) =>
+	createGlobalState({
+		queryKey: dyeingQK.swatchBulk(query),
+		url: query
+			? `/zipper/sfg-swatch-bulk?${query}`
+			: '/zipper/sfg-swatch-bulk',
+	});
+
 // *  Swatch Approval (Zipper)
 export const useSwatchApprovalZipper = (query) =>
 	createGlobalState({

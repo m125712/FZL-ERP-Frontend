@@ -26,22 +26,22 @@ const Header = ({ title, subTitle, onClose }) => {
 	const { isMutating, isSubmitting } = useSubmitDisabled();
 
 	return (
-		<div className='modal-header mb-2 flex items-center justify-between'>
-			<div className='flex flex-col'>
+		<div className='modal-header relative mb-2'>
+			<button
+				disabled={isSubmitting || isMutating}
+				type='button'
+				onClick={onClose}
+				className='group btn btn-circle btn-outline btn-error btn-sm absolute right-0 top-0'
+			>
+				<X className='size-5 text-error group-hover:text-primary-content' />
+			</button>
+
+			<div className='pr-12'>
 				<p className='text-2xl font-semibold text-primary'>{title}</p>
 				{subTitle && (
 					<p className='font-semibold text-gray-400'>{subTitle}</p>
 				)}
 			</div>
-
-			<button
-				disabled={isSubmitting || isMutating}
-				type='button'
-				onClick={onClose}
-				className='group btn btn-circle btn-outline btn-error btn-sm'
-			>
-				<X className='size-5 text-error group-hover:text-primary-content' />
-			</button>
 		</div>
 	);
 };

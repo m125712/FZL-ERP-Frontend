@@ -2986,6 +2986,15 @@ export const DYEING_BATCH_PRODUCTION_NULL = {
 		},
 	],
 };
+export const DYEING_BATCH_YARN_ISSUE_SCHEMA = {
+	yarn_issued: NUMBER_REQUIRED.moreThan(
+		0,
+		'Yarn Issued should be more than 0'
+	),
+};
+export const DYEING_BATCH_YARN_ISSUE_NULL = {
+	yarn_issued: 0,
+};
 
 // * Dyeing Thread Batch Yarn schema*//
 export const DYEING_THREAD_BATCH_YARN_SCHEMA = {

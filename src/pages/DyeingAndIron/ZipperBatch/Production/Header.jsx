@@ -120,6 +120,7 @@ export default function Header({
 				<Input
 					label='yarn_issued'
 					type='number'
+					disabled={true}
 					{...{ register, errors }}
 				/>
 				<FormField

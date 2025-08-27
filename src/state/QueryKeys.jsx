@@ -501,6 +501,11 @@ export const dyeingQK = {
 	//* swatch
 	swatch: (query) => [...dyeingQK.all(), 'swatch', ...(query ? [query] : [])],
 	swatchByUUID: (uuid) => [...dyeingQK.swatch(), uuid],
+	swatchBulk: (query) => [
+		...dyeingQK.all(),
+		'swatch-bulk',
+		...(query ? [query] : []),
+	],
 	swatchApprovalZipper: (query) => [
 		...dyeingQK.all(),
 		'swatch',

@@ -67,21 +67,25 @@ export default function Index() {
 	const onSubmit = async (data) => {
 		const created_at = GetDateTime();
 
-		const invalidEntries = data?.dyeing_batch_entry.filter(
-			(item) => item.production_quantity_in_kg <= 0
-		);
+		// const invalidEntries = data?.dyeing_batch_entry.filter(
+		// 	(item) => item.production_quantity_in_kg <= 0
+		// );
 
-		if (invalidEntries.length > 0) {
-			ShowLocalToast({
-				type: 'warning',
-				message:
-					'There should one or more item quantity greater than zero to proceed.',
-			});
-			return;
-		}
+		// if (invalidEntries.length > 0) {
+		// 	ShowLocalToast({
+		// 		type: 'warning',
+		// 		message:
+		// 			'There should one or more item quantity greater than zero to proceed.',
+		// 	});
+		// 	return;
+		// }
 
 		const dyeing_batch_entry = data?.dyeing_batch_entry
-			.filter((item) => item.production_quantity_in_kg > 0)
+			.filter(
+				(item) =>
+					item.production_quantity_in_kg > 0 &&
+					item.production_quantity > 0
+			)
 			.map((item) => ({
 				uuid: nanoid(),
 				dyeing_batch_production_uuid: item.dyeing_batch_production_uuid,
@@ -113,56 +117,50 @@ export default function Index() {
 			isOnCloseNeeded: false,
 		});
 
-		if (dyeing_batch_entry.length === 0) {
-			ShowLocalToast({
-				type: 'warning',
-				message:
-					'There should one or more item quantity greater than zero to proceed.',
-			});
-		} else {
-			let promises = [
-				...dyeing_batch_entry.map(async (item) => {
-					if (item.dyeing_batch_production_uuid) {
-						await updateData.mutateAsync({
-							url: `/zipper/dyeing-batch-production/${item.dyeing_batch_production_uuid}`,
-							updatedData: {
-								dyeing_batch_production_uuid:
-									item.dyeing_batch_production_uuid,
-								dyeing_batch_entry_uuid:
-									item.dyeing_batch_entry_uuid,
-								production_quantity: item.production_quantity,
-								production_quantity_in_kg:
-									item.production_quantity_in_kg,
-								remarks: item.remarks,
-								updated_at: GetDateTime(),
-								updated_by: user?.uuid,
-							},
-							isOnCloseNeeded: false,
-						});
-					} else {
-						await postData.mutateAsync({
-							url: '/zipper/dyeing-batch-production',
-							newData: item,
-							isOnCloseNeeded: false,
-						});
-					}
-				}),
-			];
+		// if (dyeing_batch_entry.length === 0) {
+		// 	ShowLocalToast({
+		// 		type: 'warning',
+		// 		message:
+		// 			'There should one or more item quantity greater than zero to proceed.',
+		// 	});
+		// } else {
+		let promises = [
+			...dyeing_batch_entry.map(async (item) => {
+				if (item.dyeing_batch_production_uuid) {
+					await updateData.mutateAsync({
+						url: `/zipper/dyeing-batch-production/${item.dyeing_batch_production_uuid}`,
+						updatedData: {
+							dyeing_batch_production_uuid:
+								item.dyeing_batch_production_uuid,
+							dyeing_batch_entry_uuid:
+								item.dyeing_batch_entry_uuid,
+							production_quantity: item.production_quantity,
+							production_quantity_in_kg:
+								item.production_quantity_in_kg,
+							remarks: item.remarks,
+							updated_at: GetDateTime(),
+							updated_by: user?.uuid,
+						},
+						isOnCloseNeeded: false,
+					});
+				} else {
+					await postData.mutateAsync({
+						url: '/zipper/dyeing-batch-production',
+						newData: item,
+						isOnCloseNeeded: false,
+					});
+				}
+			}),
+		];
 
-			await Promise.all(promises)
-				.then(() =>
-					reset(Object.assign({}, DYEING_BATCH_PRODUCTION_NULL))
-				)
-				.then(() => {
-					invalidateDyeingZipperBatch();
-					navigate(
-						`/dyeing-and-iron/zipper-batch/${batch_prod_uuid}`
-					);
-				})
-				.catch((err) => console.log(err));
+		await Promise.all(promises)
+			.then(() => reset(Object.assign({}, DYEING_BATCH_PRODUCTION_NULL)))
+			.then(() => {
+				invalidateDyeingZipperBatch();
+				navigate(`/dyeing-and-iron/zipper-batch/${batch_prod_uuid}`);
+			})
+			.catch((err) => console.log(err));
 
-			return;
-		}
 		return;
 	};
 

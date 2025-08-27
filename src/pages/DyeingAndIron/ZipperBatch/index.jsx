@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, useEffect, useMemo, useState } from 'react';
 import { useDyeingBatch } from '@/state/Dyeing';
 import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
+import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import {
@@ -18,6 +19,8 @@ import {
 import { cn } from '@/lib/utils';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
+
+const Yarn = lazy(() => import('./Yarn'));
 
 export default function Index() {
 	const options = [
@@ -217,13 +220,27 @@ export default function Index() {
 				enableColumnFilter: false,
 				width: 'w-24',
 				cell: (info) => {
+					const { batch_status } = info.row.original;
 					return (
-						<div className='flex flex-col gap-1'>
-							<span>{info.getValue()}</span>
-							<DateTime
-								date={info.row.original.yarn_issued_date}
-								isTime={false}
-							/>
+						<div className='flex gap-2'>
+							<div className='py-1'>
+								<Transfer
+									onClick={() =>
+										handelYarnIssued(info.row.index)
+									}
+									disabled={
+										batch_status === 'completed' ||
+										!haveAccess.includes('click_production')
+									}
+								/>
+							</div>
+							<div className='flex flex-col gap-1'>
+								<span>{info.getValue()}</span>
+								<DateTime
+									date={info.row.original.yarn_issued_date}
+									isTime={false}
+								/>
+							</div>
 						</div>
 					);
 				},
@@ -247,7 +264,7 @@ export default function Index() {
 				enableSorting: false,
 				hidden: !haveAccess.includes('create'),
 				cell: (info) => {
-					const { uuid, received } = info.row.original;
+					const { uuid, batch_status } = info.row.original;
 					return (
 						<Transfer
 							onClick={() =>
@@ -256,7 +273,7 @@ export default function Index() {
 								)
 							}
 							disabled={
-								received === 1 ||
+								batch_status === 'completed' ||
 								!haveAccess.includes('click_production')
 							}
 						/>
@@ -423,7 +440,19 @@ export default function Index() {
 			isOnCloseNeeded: false,
 		});
 	};
+	// Update
+	const [updatedData, setUpdatedData] = useState({
+		uuid: null,
+	});
 
+	const handelYarnIssued = (idx) => {
+		setUpdatedData((prev) => ({
+			...prev,
+			uuid: data[idx].uuid,
+			batch_id: data[idx].batch_id,
+		}));
+		window[info.getAddOrUpdateModalId()].showModal();
+	};
 	useEffect(() => {
 		document.title = info.getTabName();
 	}, []);
@@ -454,6 +483,15 @@ export default function Index() {
 					</>
 				}
 			/>
+			<Suspense>
+				<Yarn
+					modalId={info.getAddOrUpdateModalId()}
+					{...{
+						updatedData,
+						setUpdatedData,
+					}}
+				/>
+			</Suspense>
 		</div>
 	);
 }

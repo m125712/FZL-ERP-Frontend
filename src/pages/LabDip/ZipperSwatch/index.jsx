@@ -188,7 +188,6 @@ export default function Index() {
 					</>
 				}
 			/>
-			<hr className='my-6 border-2 border-dashed border-secondary-content bg-black' />
 			<ReactTable
 				title={'Log'}
 				data={data}

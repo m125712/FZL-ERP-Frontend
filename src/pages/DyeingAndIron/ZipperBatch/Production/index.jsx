@@ -273,7 +273,6 @@ export default function Index() {
 							<input
 								type='button'
 								className='btn btn-primary btn-xs'
-								disabled={isUpdate}
 								value={'Copy'}
 								onClick={() =>
 									setValue(

@@ -62,6 +62,8 @@ export default function Index() {
 					? null
 					: GetDateTime(),
 				swatch_approval_received_by: user?.uuid,
+				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			},
 			isOnCloseNeeded: false,
 		});
@@ -326,6 +328,8 @@ export default function Index() {
 			updatedData: {
 				recipe_uuid: e.value,
 				swatch_approval_date: GetDateTime(),
+				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			},
 			isOnCloseNeeded: false,
 		});

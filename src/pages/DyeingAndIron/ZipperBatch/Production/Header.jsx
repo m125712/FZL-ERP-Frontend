@@ -174,11 +174,7 @@ export default function Header({
 						}}
 					/>
 				</FormField>
-				<Textarea
-					label='remarks'
-					{...{ register, errors }}
-					disabled={true}
-				/>
+				<Textarea label='remarks' {...{ register, errors }} />
 
 				{/* </div> */}
 			</SectionEntryBody>

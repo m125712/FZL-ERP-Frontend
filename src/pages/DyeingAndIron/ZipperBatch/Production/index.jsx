@@ -115,6 +115,7 @@ export default function Index() {
 						: GetDateTime(),
 				updated_at: GetDateTime(),
 				updated_by: user?.uuid,
+				remarks: data.remarks,
 			},
 			isOnCloseNeeded: false,
 		});

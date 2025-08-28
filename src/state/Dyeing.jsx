@@ -117,6 +117,7 @@ export const useDyeingBatchDetailsByUUID = (uuid, param = '') =>
 	createGlobalState({
 		queryKey: dyeingQK.batchDetailsByUUID(uuid, param),
 		url: `/zipper/dyeing-batch-details/${uuid}${param}`,
+		enabled: !!uuid,
 	});
 // * Thread Batch
 export const useDyeingThreadBatch = (query) =>

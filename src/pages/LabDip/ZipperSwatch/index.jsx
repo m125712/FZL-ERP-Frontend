@@ -68,27 +68,29 @@ export default function Index() {
 	const handleSwatchStatus = useCallback(
 		async (e, idx) => {
 			await updateData.mutateAsync({
-				url: `/zipper/sfg-swatch-bulk-update/${data[idx]?.order_description_uuid}/${data[idx]?.style}/${data[idx]?.color}/${data[idx]?.bleaching}`,
+				url: `/zipper/sfg-swatch-bulk-update/${bulkSwatch[idx]?.order_number}`,
 				updatedData: {
+					uuids: bulkSwatch[idx].uuids,
 					recipe_uuid: e.value,
 					swatch_approval_date: GetDateTime(),
 				},
 				isOnCloseNeeded: false,
 			});
 		},
-		[updateData, data]
+		[updateData, bulkSwatch]
 	);
 
 	const handleSwatchApprovalDate = useCallback(
 		async (idx) => {
 			await updateData.mutateAsync({
-				url: `/zipper/swatch-approval-received-bulk-update/${data[idx]?.order_description_uuid}/${data[idx]?.style}/${data[idx]?.color}/${data[idx]?.bleaching}`,
+				url: `/zipper/swatch-approval-received-bulk-update/${bulkSwatch[idx]?.order_number}`,
 				updatedData: {
-					swatch_approval_received: data[idx]
+					uuids: bulkSwatch[idx].uuids,
+					swatch_approval_received: bulkSwatch[idx]
 						?.swatch_approval_received
 						? false
 						: true,
-					swatch_approval_received_date: data[idx]
+					swatch_approval_received_date: bulkSwatch[idx]
 						?.swatch_approval_received
 						? null
 						: GetDateTime(),
@@ -97,7 +99,7 @@ export default function Index() {
 				isOnCloseNeeded: false,
 			});
 		},
-		[updateData, data, user]
+		[updateData, bulkSwatch, user]
 	);
 
 	const handleSwatchApprovalDateLog = useCallback(
@@ -188,27 +190,7 @@ export default function Index() {
 					</>
 				}
 			/>
-			<ReactTable
-				title={'Log'}
-				data={data}
-				columns={columnsLog}
-				extraButton={
-					<>
-						{status2 === 'incomplete_order' && (
-							<StatusSelect
-								options={options}
-								status={status}
-								setStatus={setStatus}
-							/>
-						)}
-						<StatusSelect
-							options={options2}
-							status={status2}
-							setStatus={setStatus2}
-						/>
-					</>
-				}
-			/>
+			<ReactTable title={'Log'} data={data} columns={columnsLog} />
 		</div>
 	);
 }

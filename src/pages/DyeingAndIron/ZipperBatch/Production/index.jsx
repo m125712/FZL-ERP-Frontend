@@ -83,7 +83,7 @@ export default function Index() {
 		const dyeing_batch_entry = data?.dyeing_batch_entry
 			.filter(
 				(item) =>
-					item.production_quantity_in_kg > 0 &&
+					item.production_quantity_in_kg > 0 ||
 					item.production_quantity > 0
 			)
 			.map((item) => ({
@@ -97,8 +97,10 @@ export default function Index() {
 				remarks: item.remarks,
 			}));
 
+		console.log(dyeing_batch_entry);
+
 		// * update the batch status
-		await updateData.mutateAsync({
+		const promise = await updateData.mutateAsync({
 			url: `/zipper/dyeing-batch/${batch_prod_uuid}`,
 			updatedData: {
 				machine_uuid: data.machine_uuid,
@@ -124,36 +126,33 @@ export default function Index() {
 		// 			'There should one or more item quantity greater than zero to proceed.',
 		// 	});
 		// } else {
-		let promises = [
-			...dyeing_batch_entry.map(async (item) => {
-				if (item.dyeing_batch_production_uuid) {
-					await updateData.mutateAsync({
-						url: `/zipper/dyeing-batch-production/${item.dyeing_batch_production_uuid}`,
-						updatedData: {
-							dyeing_batch_production_uuid:
-								item.dyeing_batch_production_uuid,
-							dyeing_batch_entry_uuid:
-								item.dyeing_batch_entry_uuid,
-							production_quantity: item.production_quantity,
-							production_quantity_in_kg:
-								item.production_quantity_in_kg,
-							remarks: item.remarks,
-							updated_at: GetDateTime(),
-							updated_by: user?.uuid,
-						},
-						isOnCloseNeeded: false,
-					});
-				} else {
-					await postData.mutateAsync({
-						url: '/zipper/dyeing-batch-production',
-						newData: item,
-						isOnCloseNeeded: false,
-					});
-				}
-			}),
-		];
+		let promises = dyeing_batch_entry.map(async (item) => {
+			if (item.dyeing_batch_production_uuid) {
+				await updateData.mutateAsync({
+					url: `/zipper/dyeing-batch-production/${item.dyeing_batch_production_uuid}`,
+					updatedData: {
+						dyeing_batch_production_uuid:
+							item.dyeing_batch_production_uuid,
+						dyeing_batch_entry_uuid: item.dyeing_batch_entry_uuid,
+						production_quantity: item.production_quantity,
+						production_quantity_in_kg:
+							item.production_quantity_in_kg,
+						remarks: item.remarks,
+						updated_at: GetDateTime(),
+						updated_by: user?.uuid,
+					},
+					isOnCloseNeeded: false,
+				});
+			} else {
+				await postData.mutateAsync({
+					url: '/zipper/dyeing-batch-production',
+					newData: item,
+					isOnCloseNeeded: false,
+				});
+			}
+		});
 
-		await Promise.all(promises)
+		await Promise.all([promise, ...promises])
 			.then(() => reset(Object.assign({}, DYEING_BATCH_PRODUCTION_NULL)))
 			.then(() => {
 				invalidateDyeingZipperBatch();
@@ -355,7 +354,38 @@ export default function Index() {
 						: ((top + bottom + size) * quantity) /
 							100 /
 							dyedMtrPerKg;
-				totalCalTape += itemTotal;
+				// const {
+				// 	top,
+				// 	bottom,
+				// 	size,
+				// 	raw_mtr_per_kg,
+				// 	dyed_mtr_per_kg,
+				// 	order_quantity,
+				// 	order_type,
+				// 	unit,
+				// } = row;
+				const row = {
+					top: item.top,
+					bottom: item.bottom,
+					size: item.size,
+					quantity: item.quantity,
+					dyed_mtr_per_kg: item.dyed_mtr_per_kg,
+					raw_mtr_per_kg: item.raw_mtr_per_kg,
+					order_quantity: item.quantity,
+					order_type: watch(
+						`dyeing_batch_entry[${index}].order_type`
+					),
+					unit: watch(`dyeing_batch_entry[${index}].unit`),
+				};
+				totalCalTape += Number(
+					Number(
+						getRequiredTapeKg({
+							row,
+							type: 'dyed',
+							input_quantity: quantity,
+						})
+					).toFixed(3)
+				);
 				totalProduction += production_quantity_in_kg;
 			});
 

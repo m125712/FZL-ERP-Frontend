@@ -393,10 +393,26 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'total_production_quantity',
-				header: 'B/Kg',
+				accessorKey: 'yarn_issued',
+				header: (
+					<>
+						Yarn <br /> Issued
+					</>
+				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => {
+					const { yarn_issued, yarn_issued_date } = info.row.original;
+					return (
+						<div className='flex items-center gap-2'>
+							<span>
+								{yarn_issued} <br />
+								{yarn_issued_date && (
+									<DateTime date={yarn_issued_date} />
+								)}
+							</span>
+						</div>
+					);
+				},
 			},
 			{
 				accessorKey: 'batch_expected_kg',
@@ -408,34 +424,38 @@ export default function Index() {
 				accessorKey: 'received',
 				header: 'Received',
 				enableColumnFilter: false,
-				width: 'w-24',
+				width: 'w-16',
 				cell: (info) => {
 					const { received, received_date } = info.row.original;
 					return (
-						<div className='flex items-center gap-2'>
+						<span>
 							<StatusButton size='btn-sm' value={received} />
-
+							<br />
 							{received_date && <DateTime date={received_date} />}
-						</div>
+						</span>
 					);
 				},
 			},
 			{
 				accessorKey: 'batch_status',
-				header: 'Batch Status',
+				header: (
+					<>
+						Batch <br /> Status
+					</>
+				),
 				enableColumnFilter: false,
-				width: 'w-24',
+				width: 'w-12',
 				cell: (info) => {
 					const { batch_status, batch_status_date } =
 						info.row.original;
 					return (
-						<div className='flex items-center gap-2'>
+						<span>
 							<StatusButton size='btn-sm' value={batch_status} />
-
+							<br />
 							{batch_status_date && (
 								<DateTime date={batch_status_date} />
 							)}
-						</div>
+						</span>
 					);
 				},
 			},
@@ -446,12 +466,8 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'total_dyeing_quantity',
-				header: (
-					<>
-						Dyeing <br /> QTY
-					</>
-				),
+				accessorKey: 'total_production_quantity',
+				header: 'B/Kg',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

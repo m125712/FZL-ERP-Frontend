@@ -1281,6 +1281,11 @@ export const threadQK = {
 
 	//Swatch
 	swatch: (query) => [...threadQK.all(), 'swatch', ...(query ? [query] : [])],
+	swatchBulk: (query) => [
+		...threadQK.all(),
+		'swatch-bulk',
+		...(query ? [query] : []),
+	],
 	swatchByUUID: (uuid) => [...threadQK.swatch(), uuid],
 
 	//DyesCategory

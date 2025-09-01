@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
+import { REPORT_DATE_FORMATE } from '@/pages/Report/utils';
 import { usePlanningApprovalDate } from '@/state/Planning';
 import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
@@ -168,7 +169,9 @@ export default function Index() {
 				// },
 			},
 			{
-				accessorKey: 'receive_by_factory_time',
+				accessorFn: (row) =>
+					REPORT_DATE_FORMATE(row.receive_by_factory_time),
+				id: 'receive_by_factory_time',
 				header: (
 					<>
 						Factory <br />
@@ -184,7 +187,9 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'swatch_approval_date',
+				accessorFn: (row) =>
+					REPORT_DATE_FORMATE(row.swatch_approval_date),
+				id: 'swatch_approval_date',
 				header: <>Swatch App.</>,
 				width: 'w-24',
 				enableColumnFilter: false,
@@ -196,7 +201,7 @@ export default function Index() {
 				accessorFn: (row) => {
 					if (row.bulk_approval === null) return null;
 
-					return format(row.bulk_approval_date, 'dd/MM/yyyy');
+					return REPORT_DATE_FORMATE(row.bulk_approval_date);
 				},
 				id: 'bulk_approval',
 				header: (

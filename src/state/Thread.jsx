@@ -68,6 +68,13 @@ export const useThreadSwatch = (query) =>
 		queryKey: threadQK.swatch(query),
 		url: query ? `/thread/order-swatch?${query}` : '/thread/order-swatch',
 	});
+export const useThreadSwatchBulk = (query) =>
+	createGlobalState({
+		queryKey: threadQK.swatchBulk(query),
+		url: query
+			? `/thread/order-swatch-bulk?${query}`
+			: '/thread/order-swatch-bulk',
+	});
 export const useThreadSwatchByUUID = (uuid) =>
 	createGlobalState({
 		queryKey: threadQK.swatchByUUID(uuid),

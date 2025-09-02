@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useAuth } from '@/context/auth';
 import { useCommercialLCByQuery } from '@/state/Commercial';
+import { format } from 'date-fns';
 import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
@@ -97,21 +98,28 @@ export default function Index() {
 				},
 			},
 			{
+				accessorFn: (row) => format(row.lc_date, 'dd-MMM-yyyy'),
+				id: 'lc_date',
+				header: 'LC Date',
+				enableColumnFilter: true,
+				width: 'w-32',
+				cell: (info) => (
+					<DateTime date={info.getValue()} isTime={false} />
+				),
+			},
+			{
 				accessorKey: 'lc_number',
 				header: 'LC',
 				enableColumnFilter: true,
 				cell: (info) => {
-					const { uuid, lc_date } = info.row.original;
+					const { uuid } = info.row.original;
 					const url = `/commercial/lc/details/${uuid}`;
 					return (
-						<div className='flex flex-col gap-1'>
-							<CustomLink
-								label={info.getValue()}
-								url={url}
-								openInNewTab={true}
-							/>
-							<DateTime date={lc_date} isTime={false} />
-						</div>
+						<CustomLink
+							label={info.getValue()}
+							url={url}
+							openInNewTab={true}
+						/>
 					);
 				},
 			},

@@ -149,8 +149,8 @@ export default function Index() {
 		<div className='flex flex-col gap-2'>
 			<ReactTable
 				title={info.getTitle()}
-				data={bulkSwatch}
-				columns={columns}
+				data={data}
+				columns={columnLog}
 				extraButton={
 					<>
 						{status2 === 'incomplete_order' && (
@@ -168,7 +168,6 @@ export default function Index() {
 					</>
 				}
 			/>
-			<ReactTable title={'Log'} data={data} columns={columnLog} />
 		</div>
 	);
 }

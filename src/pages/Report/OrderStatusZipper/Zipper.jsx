@@ -445,19 +445,30 @@ export default function Index() {
 				),
 				enableColumnFilter: false,
 				width: 'w-12',
-				cell: (info) => {
-					const { batch_status, batch_status_date } =
-						info.row.original;
-					return (
-						<span>
-							<StatusButton size='btn-sm' value={batch_status} />
-							<br />
-							{batch_status_date && (
-								<DateTime date={batch_status_date} />
-							)}
-						</span>
-					);
-				},
+				cell: (info) => (
+					<StatusButton
+						size='btn-sm'
+						value={info.row.original.batch_status}
+					/>
+				),
+			},
+			{
+				accessorFn: (row) => REPORT_DATE_FORMATE(row.batch_status_date),
+				id: 'batch_status_date',
+				header: (
+					<>
+						Batch Sta. <br /> Date
+					</>
+				),
+				enableColumnFilter: false,
+				width: 'w-16',
+				cell: (info) => (
+					<DateTime
+						date={info.row.original.batch_status_date}
+						isTime={false}
+						customizedDateFormate='dd MMM,yyyy'
+					/>
+				),
 			},
 			{
 				accessorKey: 'dyeing_machine',
@@ -476,6 +487,17 @@ export default function Index() {
 				header: (
 					<>
 						Slider <br /> QTY
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			// total_coloring_quantity_weight
+			{
+				accessorKey: 'total_coloring_quantity_weight',
+				header: (
+					<>
+						Slider <br /> KG
 					</>
 				),
 				enableColumnFilter: false,

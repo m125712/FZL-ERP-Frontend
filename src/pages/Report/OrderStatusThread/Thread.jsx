@@ -114,14 +114,14 @@ export default function Index() {
 			{
 				accessorKey: 'marketing_name',
 				header: 'Marketing',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'party_name',
 				header: 'Party',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
@@ -194,7 +194,7 @@ export default function Index() {
 			{
 				accessorKey: 'count_length_name',
 				header: 'Count Length',
-				enableColumnFilter: false,
+				enableColumnFilter: true,
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
@@ -334,41 +334,66 @@ export default function Index() {
 				accessorKey: 'status',
 				header: 'Status',
 				enableColumnFilter: false,
-				width: 'w-24',
+				width: 'w-12',
 				cell: (info) => {
-					const { status, status_date } = info.row.original;
+					const { status } = info.row.original;
 					return (
 						<div className='flex items-center gap-2'>
 							<StatusButton size='btn-sm' value={status} />
-
-							{status_date && <DateTime date={status_date} />}
 						</div>
 					);
 				},
 			},
 			{
-				accessorKey: 'is_drying_complete',
-				header: 'D/C',
+				accessorFn: (row) =>
+					row.status_date && REPORT_DATE_FORMATE(row.status_date),
+				id: 'status_date',
+				header: (
+					<>
+						Status <br />
+						Date
+					</>
+				),
 				enableColumnFilter: false,
-				width: 'w-24',
+				width: 'w-16',
+				cell: (info) => (
+					<DateTime date={info.row.original.status_date} />
+				),
+			},
+			{
+				accessorKey: 'is_drying_complete',
+				header: 'D/C', // Drying Complete
+				enableColumnFilter: false,
+				width: 'w-12',
 				cell: (info) => {
-					const { is_drying_complete, drying_created_at } =
-						info.row.original;
+					const { is_drying_complete } = info.row.original;
 					return (
 						<div className='flex items-center gap-2'>
 							<StatusButton
 								size='btn-sm'
 								value={is_drying_complete}
 							/>
-
-							{drying_created_at && (
-								<DateTime date={drying_created_at} />
-							)}
 						</div>
 					);
 				},
 			},
-
+			{
+				accessorFn: (row) =>
+					row.drying_created_at &&
+					REPORT_DATE_FORMATE(row.drying_created_at),
+				id: 'drying_created_at',
+				header: (
+					<>
+						Drying <br />
+						Com. Date
+					</>
+				),
+				enableColumnFilter: false,
+				width: 'w-16',
+				cell: (info) => (
+					<DateTime date={info.row.original.drying_created_at} />
+				),
+			},
 			{
 				accessorKey: 'machine',
 				header: 'D/M',
@@ -416,7 +441,7 @@ export default function Index() {
 						QTY
 					</>
 				),
-				enableColumnFilter: true,
+				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
 			{

@@ -478,3 +478,21 @@ export const useOrderWise = (item_type, order_type, status, query) =>
 				query
 			: `/report/order-item-type-wise-status?item_type=${item_type}&order_type=${order_type}&status=${status}`,
 	});
+
+//* LC Payment
+export const useLcPayment = (date, type) => {
+	return createGlobalState({
+		queryKey: reportQK.lcPayment(date, type),
+		url: `/report/lc-payment-report?date=${date}&report_type=${type}`,
+		enabled: !!date && !!type,
+	});
+};
+
+//* LC Fort Night
+export const useLcFortNight = (query) => {
+	return createGlobalState({
+		queryKey: reportQK.lcFortNight(query),
+		url: `/report/lc-fortnight-report?${query}`,
+		enabled: !!query,
+	});
+};

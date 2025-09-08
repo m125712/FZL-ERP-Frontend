@@ -77,6 +77,10 @@ const MetalFinishing = lazy(
 );
 const OrderWise = lazy(() => import('@/pages/Report/OrderTImeLength'));
 
+const LcPayment = lazy(() => import('@/pages/Report/LcPayment'));
+
+const LcFortNight = lazy(() => import('@/pages/Report/LcFortNight'));
+
 export const ReportRoutes = [
 	{
 		name: 'Report',
@@ -303,6 +307,20 @@ export const ReportRoutes = [
 				path: '/report/order-time-length',
 				element: <OrderWise />,
 				page_name: 'report__time_length',
+				actions: ['read'],
+			},
+			{
+				name: 'LC Payment',
+				path: '/report/lc-payment',
+				element: <LcPayment />,
+				page_name: 'report__lc_payment',
+				actions: ['read'],
+			},
+			{
+				name: 'LC Fort Night',
+				path: '/report/lc-fort-night',
+				element: <LcFortNight />,
+				page_name: 'report__lc_fortnight',
 				actions: ['read'],
 			},
 			{

@@ -97,10 +97,12 @@ export default function Index(data, date, type) {
 							return node.map((col) => {
 								if (col.field.split('_').at(-1) === 'date') {
 									return {
-										text: format(
-											item[col.field],
-											'dd-MM-yyyy'
-										),
+										text: item[col.field]
+											? format(
+													item[col.field],
+													'dd-MM-yyyy'
+												)
+											: '-',
 										style: 'tableCell',
 										alignment: 'left',
 									};

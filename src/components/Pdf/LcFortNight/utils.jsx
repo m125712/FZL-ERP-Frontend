@@ -1,4 +1,5 @@
 import { FZL_LOGO } from '@/assets/img/base64';
+import { types } from '@/pages/Report/LcFortNight/Header';
 import { format } from 'date-fns';
 
 import { DEFAULT_FONT_SIZE } from '../ui';
@@ -43,7 +44,7 @@ export const getPageHeader = (data, type) => {
 							fontSize: DEFAULT_FONT_SIZE + 4,
 							bold: true,
 						},
-						`Type: ${type.split('=')[0].toUpperCase()}\n`,
+						`Type: ${types?.find((item) => item.value == type)?.label}\n`,
 						``,
 						``,
 					],

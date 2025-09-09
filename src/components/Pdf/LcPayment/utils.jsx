@@ -1,4 +1,5 @@
 import { FZL_LOGO } from '@/assets/img/base64';
+import { types } from '@/pages/Report/LcPayment/Header';
 import { format } from 'date-fns';
 
 import { DEFAULT_FONT_SIZE } from '../ui';
@@ -44,7 +45,7 @@ export const getPageHeader = (data, date, type) => {
 							bold: true,
 						},
 						`From: ${getDateFormate(date)}\n`,
-						`Type: ${type}\n`,
+						`Type: ${types.find((item) => item.value == type)?.label}\n`,
 						``,
 					],
 					alignment: 'right',

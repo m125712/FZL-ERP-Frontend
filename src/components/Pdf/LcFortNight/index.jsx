@@ -11,40 +11,42 @@ const node = [
 	getTable('lc_number', 'LC No.'),
 	getTable('lc_date', 'LC Date'),
 	getTable('party_name', 'Party'),
-	getTable('commercial_executive', 'Commercial Exc.'),
-	getTable('handover_date', 'Handover Date'),
-	getTable('document_receive_date', 'Document Rcv. Date'),
+	getTable('total_value', 'LC Value'),
+	getTable('amount', 'Amount'),
 	getTable('acceptance_date', 'Acceptance Date'),
 	getTable('maturity_date', 'Maturity Date'),
-	getTable('payment_date', 'Payment Date'),
 	getTable('ldbc_fdbc', 'LDBC/FDBC'),
-	getTable('shipment_date', 'Shipment Date'),
-	getTable('expiry_date', 'Expiry Date'),
-	getTable('amount', 'Amount'),
-	getTable('payment_value', 'Payment Value'),
-	getTable('total_value', 'Total Value'),
 	getTable('marketing_name', 'Marketing'),
-	getTable('bank_name', 'Bank Ref.'),
+	getTable('commercial_executive', 'Commercial Exc.'),
+	getTable('order_number', 'Order No.'),
+	getTable('handover_date', 'Handover Date'),
+	getTable('remarks', 'Remarks'),
 	getTable('party_bank', 'Party Bank'),
+	// getTable('document_receive_date', 'Document Rcv. Date'),
+	// getTable('payment_date', 'Payment Date'),
+	// getTable('shipment_date', 'Shipment Date'),
+	// getTable('expiry_date', 'Expiry Date'),
+	// getTable('payment_value', 'Payment Value'),
 ];
 
 export default function Index(data, type) {
 	const headerHeight = 100;
-	let footerHeight = 50;
-	const FONT_SIZE = 5;
+	let footerHeight = 45;
 
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
-			xMargin: 0,
+			xMargin: 10,
 			headerHeight,
 			footerHeight,
 		}),
+
+		pageOrientation: 'landscape',
 
 		// * Page Header
 		header: {
 			table: getPageHeader(data, type),
 			layout: 'noBorders',
-			margin: [xMargin, 30, xMargin, 0],
+			margin: [10, 45, 10, 0],
 		},
 		// * Page Footer
 		footer: (currentPage, pageCount) => ({
@@ -52,7 +54,7 @@ export default function Index(data, type) {
 				currentPage,
 				pageCount,
 			}),
-			margin: [xMargin, 2],
+			margin: [10, 2],
 			fontSize: DEFAULT_FONT_SIZE,
 		}),
 
@@ -61,13 +63,46 @@ export default function Index(data, type) {
 			{
 				table: {
 					headerRows: 1,
+					widths: [150, 'auto'],
+					body: [
+						[
+							{
+								text: 'Total due amount of Company',
+								bold: true,
+								style: 'tableHeader',
+							},
+							{
+								text: `${data.reduce((acc, cur) => acc + cur.total_value, 0)}`,
+								style: 'tableHeader',
+								alignment: 'right',
+							},
+						],
+						[
+							{
+								text: 'Number of Pending documents',
+								bold: true,
+								style: 'tableHeader',
+							},
+							{
+								text: `${data.length}`,
+								style: 'tableHeader',
+								alignment: 'right',
+							},
+						],
+					],
+				},
+			},
+			{ text: '\n' },
+			{
+				table: {
+					headerRows: 1,
 					widths: [
-						25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
-						25, 25, 25, 25, 25,
+						45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45, 45,
+						45,
 					],
 					body: [
 						// * Header
-						TableHeader(node, FONT_SIZE),
+						TableHeader(node, DEFAULT_FONT_SIZE - 2),
 						// * Body
 						...(data ?? []).map((item) => {
 							return node.map((col) => {
@@ -78,15 +113,13 @@ export default function Index(data, type) {
 											'dd-MM-yyyy'
 										),
 										style: 'tableCell',
-										alignment: 'left',
-										fontSize: FONT_SIZE,
+										fontSize: DEFAULT_FONT_SIZE - 2,
 									};
 								}
 								return {
 									text: item[col.field],
 									style: 'tableCell',
-									alignment: 'left',
-									fontSize: FONT_SIZE,
+									fontSize: DEFAULT_FONT_SIZE - 2,
 								};
 							});
 						}),

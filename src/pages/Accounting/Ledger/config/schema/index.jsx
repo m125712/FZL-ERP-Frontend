@@ -50,6 +50,7 @@ export {
 
 export const LEDGER_SCHEMA = {
 	is_bank_ledger: BOOLEAN_REQUIRED,
+	identifier: STRING_REQUIRED,
 	table_name: STRING.nullable(),
 	table_uuid: STRING.when('table_name', {
 		is: (value) => value != null && value !== '',
@@ -77,6 +78,7 @@ export const LEDGER_NULL = {
 	table_name: null,
 	table_uuid: null,
 	name: '',
+	identifier: 'none',
 	// category: '',
 	account_no: null,
 	type: 'asset',

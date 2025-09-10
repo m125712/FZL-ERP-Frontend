@@ -394,13 +394,15 @@ export const PURCHASE_RECEIVE_SCHEMA = {
 	is_local: NUMBER_REQUIRED.default(0),
 	lc_number: STRING.nullable(),
 	challan_number: STRING.nullable().when('lc_number', {
-		is: (value) => value !== '',
-		then: (Schema) =>
-			Schema.matches(/^$/, 'Enter Challan Number or L/C Number'),
+		is: (value) => value === null,
+		then: (Schema) => Schema.required('Enter Challan Number or LC Number'),
 		otherwise: (Schema) => Schema,
 	}),
 	transport_cost: NUMBER_DOUBLE_REQUIRED.default(0),
 	misc_cost: NUMBER_DOUBLE_REQUIRED.default(0),
+	// currency_uuid: STRING_REQUIRED,
+	// conversion_rate: NUMBER_DOUBLE_REQUIRED.default(1),
+
 	file: yup
 		.mixed()
 		.test(
@@ -429,10 +431,12 @@ export const PURCHASE_RECEIVE_NULL = {
 	uuid: null,
 	vendor_uuid: null,
 	is_local: null,
-	lc_number: '',
+	lc_number: null,
 	challan_number: null,
 	transport_cost: 0,
 	misc_cost: 0,
+	currency_uuid: null,
+	conversion_rate: 1,
 	file: null,
 	remarks: '',
 	purchase: [

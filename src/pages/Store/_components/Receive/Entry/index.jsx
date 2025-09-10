@@ -95,6 +95,7 @@ export default function Index() {
 		Controller,
 		useFieldArray,
 		getValues,
+		setValue,
 		watch,
 		context: form,
 	} = useRHF(PURCHASE_RECEIVE_SCHEMA, PURCHASE_RECEIVE_NULL);
@@ -335,6 +336,7 @@ export default function Index() {
 								control,
 								getValues,
 								Controller,
+								setValue,
 								watch,
 								isUpdate,
 								type: extractedPart,

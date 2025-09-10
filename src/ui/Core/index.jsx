@@ -78,10 +78,7 @@ export const File = ({ field, isUpdate, IframeClassName, ...props }) => {
 		maxSize: 10000000,
 	});
 	return (
-		<FormField
-			{...props}
-			className='relative flex w-full flex-col space-y-1.5'
-		>
+		<FormField {...props} className='relative flex h-full w-full flex-col'>
 			{preview && (
 				<div className='absolute bottom-10 right-10 z-50 size-10'>
 					<button

@@ -1,12 +1,11 @@
 import { ReactSelect, SectionEntryBody, SimpleDatePicker } from '@/ui';
 
+export const types = [
+	{ label: 'Over Due', value: 'over_due' },
+	{ label: 'Current', value: 'current' },
+	{ label: 'Push', value: 'push' },
+];
 export default function Header({ date, setDate, type, setType }) {
-	const types = [
-		{ label: 'Over Due', value: 'over_due' },
-		{ label: 'Current', value: 'current' },
-		{ label: 'Push', value: 'push' },
-	];
-
 	return (
 		<div className='mb-5 flex flex-col gap-4'>
 			<SectionEntryBody title={'Select Date & Type'}>

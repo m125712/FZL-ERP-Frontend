@@ -10,7 +10,7 @@ const node = [
 	getTable('file_number', 'File No.'),
 	getTable('lc_number', 'LC No.'),
 	getTable('lc_date', 'LC Date'),
-	getTable('lc_value', 'LC Value'),
+	getTable('total_value', 'LC Value'),
 	getTable('ldbc_fdbc', 'LDBC/FDBC'),
 	getTable('acceptance_date', 'Acceptance Date'),
 	getTable('maturity_date', 'Maturity Date'),
@@ -28,9 +28,11 @@ export default function Index(data, date, type) {
 	const pdfDocGenerator = pdfMake.createPdf({
 		...DEFAULT_A4_PAGE({
 			xMargin,
+
 			headerHeight,
 			footerHeight,
 		}),
+		pageOrientation: 'landscape',
 
 		// * Page Header
 		header: {
@@ -53,7 +55,40 @@ export default function Index(data, date, type) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40],
+					widths: [150, 'auto'],
+					body: [
+						[
+							{
+								text: 'Total due amount of Company',
+								bold: true,
+								style: 'tableHeader',
+							},
+							{
+								text: `${data.reduce((acc, cur) => acc + cur.total_value, 0)}`,
+								style: 'tableHeader',
+								alignment: 'right',
+							},
+						],
+						[
+							{
+								text: 'Number of Pending documents',
+								bold: true,
+								style: 'tableHeader',
+							},
+							{
+								text: `${data.length}`,
+								style: 'tableHeader',
+								alignment: 'right',
+							},
+						],
+					],
+				},
+			},
+			{ text: '\n' },
+			{
+				table: {
+					headerRows: 1,
+					widths: [40, 70, 50, 50, 50, 50, 50, 80, 50, 50, '*', 50],
 					body: [
 						// * Header
 						TableHeader(node),
@@ -62,10 +97,12 @@ export default function Index(data, date, type) {
 							return node.map((col) => {
 								if (col.field.split('_').at(-1) === 'date') {
 									return {
-										text: format(
-											item[col.field],
-											'dd-MM-yyyy'
-										),
+										text: item[col.field]
+											? format(
+													item[col.field],
+													'dd-MM-yyyy'
+												)
+											: '-',
 										style: 'tableCell',
 										alignment: 'left',
 									};

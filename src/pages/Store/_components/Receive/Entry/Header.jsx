@@ -1,3 +1,4 @@
+import { useOtherCurrency } from '@/pages/Accounting/Currency/config/query';
 import { useOtherVendor } from '@/state/Other';
 import { useParams } from 'react-router';
 
@@ -17,10 +18,12 @@ export default function Header({
 	getValues,
 	Controller,
 	isUpdate,
+	setValue,
 	type,
 }) {
 	const { purchase_description_uuid } = useParams();
 	const { data: vendor } = useOtherVendor(type);
+	const { data: currencyOptions } = useOtherCurrency();
 
 	const purchaseOptions = [
 		{ label: 'Import', value: 0 },
@@ -82,6 +85,43 @@ export default function Header({
 				</FormField>
 				<Input label='lc_number' {...{ register, errors }} />
 				<Input label='challan_number' {...{ register, errors }} />
+				{/* <FormField
+					label='currency_uuid'
+					title='Currency'
+					errors={errors}>
+					<Controller
+						name={'currency_uuid'}
+						control={control}
+						render={({ field: { onChange, value } }) => {
+							// Find the selected option or fall back to default
+							const selectedOption =
+								currencyOptions?.find(
+									(item) => item.value === value
+								) ||
+								currencyOptions?.find(
+									(item) => item.default === true
+								);
+
+							return (
+								<ReactSelect
+									placeholder='Select Currency'
+									options={currencyOptions}
+									value={selectedOption || null}
+									onChange={(selectedOption) => {
+										if (selectedOption) {
+											setValue(
+												'conversion_rate',
+												selectedOption.conversion_rate
+											);
+											onChange(selectedOption.value);
+										}
+									}}
+								/>
+							);
+						}}
+					/>
+				</FormField>
+				<Input label='conversion_rate' {...{ register, errors }} /> */}
 				<Textarea label='remarks' {...{ register, errors }} />
 			</div>
 			<FormField label='file' title='File' errors={errors}>

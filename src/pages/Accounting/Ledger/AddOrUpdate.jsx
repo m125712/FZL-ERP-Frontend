@@ -18,7 +18,7 @@ import {
 	useOtherTableNameBy,
 } from './config/query';
 import { LEDGER_NULL, LEDGER_SCHEMA } from './config/schema';
-import { restrictionOptions, typeOptions } from './utils';
+import { restrictionOptions } from './utils';
 
 export default function Index({
 	modalId = '',
@@ -151,25 +151,6 @@ export default function Index({
 			<div className='grid grid-cols-2 gap-4'>
 				<Input label='name' {...{ register, errors }} />
 				<div className='flex gap-2'>
-					<FormField label='type' title='Type' errors={errors}>
-						<Controller
-							name={'type'}
-							control={control}
-							render={({ field: { onChange } }) => {
-								return (
-									<ReactSelect
-										placeholder='Select Type'
-										options={typeOptions}
-										value={typeOptions?.filter(
-											(item) =>
-												item.value == getValues('type')
-										)}
-										onChange={(e) => onChange(e.value)}
-									/>
-								);
-							}}
-						/>
-					</FormField>
 					<FormField label='group_uuid' title='Group' errors={errors}>
 						<Controller
 							name={'group_uuid'}

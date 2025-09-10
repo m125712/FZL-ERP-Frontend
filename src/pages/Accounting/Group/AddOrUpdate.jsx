@@ -10,6 +10,7 @@ import nanoid from '@/lib/nanoid';
 import { DevTool } from '@/lib/react-hook-devtool';
 import GetDateTime from '@/util/GetDateTime';
 
+import { typeOptions } from '../Ledger/utils';
 import {
 	useAccGroup,
 	useAccGroupByUUID,
@@ -118,6 +119,24 @@ export default function Index({
 								value={headOptions?.filter(
 									(item) =>
 										item.value == getValues('head_uuid')
+								)}
+								onChange={(e) => onChange(e.value)}
+							/>
+						);
+					}}
+				/>
+			</FormField>
+			<FormField label='type' title='Type' errors={errors}>
+				<Controller
+					name={'type'}
+					control={control}
+					render={({ field: { onChange } }) => {
+						return (
+							<ReactSelect
+								placeholder='Select Type'
+								options={typeOptions}
+								value={typeOptions?.filter(
+									(item) => item.value == getValues('type')
 								)}
 								onChange={(e) => onChange(e.value)}
 							/>

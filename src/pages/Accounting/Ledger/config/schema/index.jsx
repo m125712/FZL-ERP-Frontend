@@ -63,7 +63,6 @@ export const LEDGER_SCHEMA = {
 		then: (schema) => schema.required('Required'),
 		otherwise: (schema) => schema.nullable(),
 	}),
-	type: STRING_REQUIRED.default('asset'),
 	is_active: BOOLEAN_DEFAULT_VALUE(true),
 	restrictions: STRING_REQUIRED.default('none'),
 	group_uuid: STRING_REQUIRED,

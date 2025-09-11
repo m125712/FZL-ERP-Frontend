@@ -1,10 +1,9 @@
 import { ReactSelect, SectionEntryBody } from '@/ui';
 
 export const types = [
-	{ label: 'Handover', value: 'handover=true' },
-	{ label: 'Acceptance', value: 'acceptance=true' },
-	{ label: 'Maturity', value: 'maturity=true' },
-	{ label: 'Production', value: 'all=true' },
+	{ label: 'Acceptance Due', value: 'acceptance=true' },
+	{ label: 'Maturity Due', value: 'maturity=true' },
+	{ label: 'In Production', value: 'all=true' },
 ];
 export default function Header({ type, setType }) {
 	return (

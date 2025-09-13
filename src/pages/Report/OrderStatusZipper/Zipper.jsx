@@ -13,7 +13,7 @@ import {
 	StatusButton,
 } from '@/ui';
 
-import { REPORT_DATE_FORMATE, REPORT_DATE_TIME_FORMAT } from '../utils';
+import { REPORT_DATE_FORMATE } from '../utils';
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
@@ -153,7 +153,7 @@ export default function Index() {
 				),
 				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
-				width: 'w-24',
+				width: 'w-16',
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},
@@ -166,23 +166,21 @@ export default function Index() {
 						App.
 					</>
 				),
+				width: 'w-12',
 				enableColumnFilter: false,
 				cell: (info) => <Status status={info.getValue()} />,
 			},
 			{
-				accessorFn: (row) =>
-					row.swatch_approval_date &&
-					REPORT_DATE_FORMATE(row.swatch_approval_date),
-				id: 'swatch_approval_date',
-				header: 'Swatch App. Date',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<DateTime
-						date={info.row.original.swatch_approval_date}
-						isTime={false}
-						customizedDateFormate='dd MMM,yyyy'
-					/>
+				accessorKey: 'swatch_approval_date',
+				header: (
+					<>
+						Swatch <br />
+						App. Date
+					</>
 				),
+				width: 'w-16',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'item_description',
@@ -305,18 +303,16 @@ export default function Index() {
 				cell: (info) => <Status status={info.getValue()} />,
 			},
 			{
-				accessorFn: (row) =>
-					row.bulk_approval_date &&
-					REPORT_DATE_TIME_FORMAT(row.bulk_approval_date),
-				id: 'bulk_approval_date',
-				header: 'Bulk App. Date',
-				enableColumnFilter: false,
-				cell: (info) => (
-					<DateTime
-						date={info.row.original.bulk_approval_date}
-						customizedDateFormate='dd MMM,yyyy'
-					/>
+				accessorKey: 'bulk_approval_date',
+				header: (
+					<>
+						Bulk <br />
+						App. Date
+					</>
 				),
+				width: 'w-16',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'total_slider_required',
@@ -358,33 +354,18 @@ export default function Index() {
 				},
 			},
 			{
-				accessorFn: (row) =>
-					row.batch_created_at &&
-					REPORT_DATE_TIME_FORMAT(row.batch_created_at),
-				id: 'batch_created_at',
+				accessorKey: 'batch_created_at',
 				header: 'B/D',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<DateTime
-						date={info.row.original.batch_created_at}
-						customizedDateFormate='dd MMM,yyyy'
-					/>
-				),
+				width: 'w-16',
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
-				accessorFn: (row) =>
-					row.production_date &&
-					REPORT_DATE_FORMATE(row.production_date),
-				id: 'production_date',
+				accessorKey: 'production_date',
 				header: 'P/D',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<DateTime
-						date={info.row.original.production_date}
-						isTime={false}
-						customizedDateFormate='dd MMM,yyyy'
-					/>
-				),
+				width: 'w-16',
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'total_quantity',
@@ -453,8 +434,7 @@ export default function Index() {
 				),
 			},
 			{
-				accessorFn: (row) => REPORT_DATE_FORMATE(row.batch_status_date),
-				id: 'batch_status_date',
+				accessorKey: 'batch_status_date',
 				header: (
 					<>
 						Batch Sta. <br /> Date
@@ -462,13 +442,7 @@ export default function Index() {
 				),
 				enableColumnFilter: false,
 				width: 'w-16',
-				cell: (info) => (
-					<DateTime
-						date={info.row.original.batch_status_date}
-						isTime={false}
-						customizedDateFormate='dd MMM,yyyy'
-					/>
-				),
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorKey: 'dyeing_machine',
@@ -557,64 +531,32 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) =>
-					row.first_production_date &&
-					REPORT_DATE_FORMATE(row.first_production_date),
-				id: 'first_production_date',
+				accessorKey: 'first_production_date',
 				header: 'F/P/D',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<DateTime
-						date={info.row.original.first_production_date}
-						isTime={false}
-						customizedDateFormate='dd MMM,yyyy'
-					/>
-				),
+				width: 'w-16',
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
-				accessorFn: (row) =>
-					row.last_production_date &&
-					REPORT_DATE_FORMATE(row.last_production_date),
-				id: 'last_production_date',
+				accessorKey: 'last_production_date',
 				header: 'L/P/D',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<DateTime
-						date={info.row.original.last_production_date}
-						isTime={false}
-						customizedDateFormate='dd MMM,yyyy'
-					/>
-				),
+				width: 'w-16',
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
-				accessorFn: (row) =>
-					row.first_delivery_date &&
-					REPORT_DATE_FORMATE(row.first_delivery_date),
-				id: 'first_delivery_date',
+				accessorKey: 'first_delivery_date',
 				header: 'F/D/D',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<DateTime
-						date={info.row.original.first_delivery_date}
-						isTime={false}
-						customizedDateFormate='dd MMM,yyyy'
-					/>
-				),
+				width: 'w-16',
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
-				accessorFn: (row) =>
-					row.last_delivery_date &&
-					REPORT_DATE_FORMATE(row.last_delivery_date),
-				id: 'last_delivery_date',
+				accessorKey: 'last_delivery_date',
 				header: 'L/D/D',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<DateTime
-						date={info.row.original.last_delivery_date}
-						isTime={false}
-						customizedDateFormate='dd MMM,yyyy'
-					/>
-				),
+				width: 'w-16',
+				cell: (info) => <DateTime date={info.getValue()} />,
 			},
 			{
 				accessorFn: (row) =>
@@ -648,12 +590,14 @@ export default function Index() {
 				accessorKey: 'created_by_name',
 				header: 'Created By',
 				enableColumnFilter: false,
+				width: 'w-20',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'updated_by_name',
 				header: 'Updated By',
 				enableColumnFilter: false,
+				width: 'w-20',
 				cell: (info) => info.getValue(),
 			},
 			{
@@ -665,7 +609,7 @@ export default function Index() {
 				),
 				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
-				width: 'w-24',
+				width: 'w-16',
 				cell: (info) => {
 					return <DateTime date={info.getValue()} />;
 				},

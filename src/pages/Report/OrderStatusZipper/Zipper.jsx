@@ -13,7 +13,7 @@ import {
 	StatusButton,
 } from '@/ui';
 
-import { REPORT_DATE_FORMATE } from '../utils';
+import { REPORT_DATE_FORMATE, REPORT_DATE_TIME_FORMAT } from '../utils';
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
@@ -154,9 +154,7 @@ export default function Index() {
 				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
 				width: 'w-16',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
+				cell: (info) => REPORT_DATE_TIME_FORMAT(info.getValue()),
 			},
 			{
 				accessorKey: 'swatch_approval_received',
@@ -180,7 +178,7 @@ export default function Index() {
 				),
 				width: 'w-16',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => REPORT_DATE_TIME_FORMAT(info.getValue()),
 			},
 			{
 				accessorKey: 'item_description',
@@ -277,7 +275,7 @@ export default function Index() {
 				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
 				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
+					return REPORT_DATE_TIME_FORMAT(info.getValue());
 				},
 			},
 
@@ -312,7 +310,7 @@ export default function Index() {
 				),
 				width: 'w-16',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => REPORT_DATE_TIME_FORMAT(info.getValue()),
 			},
 			{
 				accessorKey: 'total_slider_required',
@@ -358,14 +356,14 @@ export default function Index() {
 				header: 'B/D',
 				enableColumnFilter: false,
 				width: 'w-16',
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => REPORT_DATE_TIME_FORMAT(info.getValue()),
 			},
 			{
 				accessorKey: 'production_date',
 				header: 'P/D',
 				enableColumnFilter: false,
 				width: 'w-16',
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => REPORT_DATE_FORMATE(info.getValue()),
 			},
 			{
 				accessorKey: 'total_quantity',
@@ -442,7 +440,7 @@ export default function Index() {
 				),
 				enableColumnFilter: false,
 				width: 'w-16',
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => REPORT_DATE_TIME_FORMAT(info.getValue()),
 			},
 			{
 				accessorKey: 'dyeing_machine',
@@ -535,28 +533,28 @@ export default function Index() {
 				header: 'F/P/D',
 				enableColumnFilter: false,
 				width: 'w-16',
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => REPORT_DATE_TIME_FORMAT(info.getValue()),
 			},
 			{
 				accessorKey: 'last_production_date',
 				header: 'L/P/D',
 				enableColumnFilter: false,
 				width: 'w-16',
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => REPORT_DATE_TIME_FORMAT(info.getValue()),
 			},
 			{
 				accessorKey: 'first_delivery_date',
 				header: 'F/D/D',
 				enableColumnFilter: false,
 				width: 'w-16',
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => REPORT_DATE_TIME_FORMAT(info.getValue()),
 			},
 			{
 				accessorKey: 'last_delivery_date',
 				header: 'L/D/D',
 				enableColumnFilter: false,
 				width: 'w-16',
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => REPORT_DATE_TIME_FORMAT(info.getValue()),
 			},
 			{
 				accessorFn: (row) =>
@@ -610,9 +608,7 @@ export default function Index() {
 				filterFn: 'isWithinRange',
 				enableColumnFilter: false,
 				width: 'w-16',
-				cell: (info) => {
-					return <DateTime date={info.getValue()} />;
-				},
+				cell: (info) => REPORT_DATE_TIME_FORMAT(info.getValue()),
 			},
 		],
 		[data]

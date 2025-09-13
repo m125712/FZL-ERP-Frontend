@@ -171,7 +171,7 @@ export default function Index() {
 				cell: (info) => <Status status={info.getValue()} />,
 			},
 			{
-				accessorKey: 'swatch_approval_date',
+				accessorKey: 'swatch_approval_received_date',
 				header: (
 					<>
 						Swatch <br />

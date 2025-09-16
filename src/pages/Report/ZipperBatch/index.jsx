@@ -167,7 +167,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'bulk_approval_date',
-				header: () => (
+				header: (
 					<>
 						Bulk <br />
 						App.
@@ -189,7 +189,8 @@ export default function Index() {
 				),
 			},
 			{
-				accessorKey: 'total_quantity',
+				accessorFn: (row) => row.total_quantity,
+				id: 'total_quantity',
 				header: (
 					<>
 						Total Qty <br />
@@ -200,8 +201,9 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'yarn_issued',
-				header: () => (
+				accessorFn: (row) => row.yarn_issued,
+				id: 'yarn_issued',
+				header: (
 					<>
 						Yarn <br />
 						Issued (KG)
@@ -244,7 +246,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'batch_status',
+				accessorKey: 'batch_status_date',
 				header: 'Dyeing Status',
 				enableColumnFilter: false,
 				cell: (info) => {
@@ -259,10 +261,10 @@ export default function Index() {
 							<span
 								className={cn(
 									'badge badge-sm uppercase',
-									res[info.getValue()]
+									res[info.row.original.batch_status]
 								)}
 							>
-								{info.getValue()}
+								{info.row.original.batch_status}
 							</span>
 							<DateTime
 								date={info.row.original.batch_status_date}
@@ -273,7 +275,7 @@ export default function Index() {
 				},
 			},
 			{
-				accessorKey: 'received',
+				accessorKey: 'received_date',
 				header: 'Stock Received',
 				enableColumnFilter: false,
 				cell: (info) => {
@@ -281,7 +283,7 @@ export default function Index() {
 						<div className='flex gap-2'>
 							<StatusButton
 								size='btn-xs'
-								value={info.getValue()}
+								value={info.row.original.received}
 							/>
 							<DateTime
 								date={info.row.original.received_date}

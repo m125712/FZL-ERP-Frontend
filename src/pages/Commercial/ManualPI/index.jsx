@@ -52,6 +52,26 @@ export default function Index() {
 				},
 			},
 			{
+				accessorFn: (row) => row?.lc_number || '--',
+				id: 'lc_number',
+				header: 'LC Number',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { lc_uuid } = info.row.original;
+
+					return (
+						<CustomLink
+							label={
+								info.getValue() === '--'
+									? null
+									: info.getValue()
+							}
+							url={`/commercial/lc/details/${lc_uuid}`}
+						/>
+					);
+				},
+			},
+			{
 				accessorKey: 'pi_ids',
 				header: 'PI Numbers',
 				width: 'w-28',

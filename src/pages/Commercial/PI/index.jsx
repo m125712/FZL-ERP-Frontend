@@ -51,6 +51,25 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'actions',
+				header: 'Actions',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden:
+					!haveAccess.includes('update') ||
+					!haveAccess.includes('delete'),
+				width: 'w-24',
+				cell: (info) => (
+					<EditDelete
+						idx={info.row.index}
+						handelUpdate={handelUpdate}
+						handelDelete={handelDelete}
+						showDelete={haveAccess.includes('delete')}
+						showUpdate={haveAccess.includes('update')}
+					/>
+				),
+			},
+			{
 				accessorKey: 'id',
 				header: 'PI ID',
 				enableColumnFilter: true,
@@ -265,25 +284,6 @@ export default function Index() {
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'actions',
-				header: 'Actions',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden:
-					!haveAccess.includes('update') ||
-					!haveAccess.includes('delete'),
-				width: 'w-24',
-				cell: (info) => (
-					<EditDelete
-						idx={info.row.index}
-						handelUpdate={handelUpdate}
-						handelDelete={handelDelete}
-						showDelete={haveAccess.includes('delete')}
-						showUpdate={haveAccess.includes('update')}
-					/>
-				),
-			},
 		],
 		[data]
 	);
@@ -292,7 +292,7 @@ export default function Index() {
 
 	const handelUpdate = (idx) => {
 		const uuid = data[idx]?.uuid;
-		navigate(`/commercial/pi/${uuid}/update`);
+		window.open(`/commercial/pi/${uuid}/update`, '_blank');
 	};
 
 	// Delete

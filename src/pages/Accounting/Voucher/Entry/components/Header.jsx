@@ -41,7 +41,6 @@ export default function Header({
 						name={'currency_uuid'}
 						control={control}
 						render={({ field: { onChange, value } }) => {
-							// Find the selected option or fall back to default
 							const selectedOption =
 								currencyOptions?.find(
 									(item) => item.value === value

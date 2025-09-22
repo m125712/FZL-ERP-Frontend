@@ -2,7 +2,11 @@ import { useEffect } from 'react';
 
 import { useOtherAccLedger } from '../../../CostCenter/config/query';
 import { useOtherCurrency } from '../../../Currency/config/query';
-import { useVoucher, useVoucherByUUID } from '../../config/query';
+import {
+	useOtherCostCenter,
+	useVoucher,
+	useVoucherByUUID,
+} from '../../config/query';
 
 export function useVoucherData(uuid) {
 	const { url: voucherURL, deleteData } = useVoucher();
@@ -17,6 +21,7 @@ export function useVoucherData(uuid) {
 		useOtherAccLedger();
 	const { data: currencyOptions, isLoading: isCurrencyLoading } =
 		useOtherCurrency();
+	const { data: costCenterOptions = [] } = useOtherCostCenter();
 
 	// Set document title
 	useEffect(() => {
@@ -39,5 +44,6 @@ export function useVoucherData(uuid) {
 		isCurrencyLoading,
 		invalidateLedger,
 		isUpdate: uuid !== undefined,
+		costCenterOptions,
 	};
 }

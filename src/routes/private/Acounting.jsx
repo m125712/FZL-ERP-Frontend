@@ -21,6 +21,7 @@ export const AccountingRoutes = [
 				page_name: 'accounting__need_to_accept',
 				actions: ['read', 'create', 'update', 'delete'],
 			},
+
 			{
 				name: 'Voucher',
 				path: '/accounting/voucher',
@@ -31,6 +32,14 @@ export const AccountingRoutes = [
 			{
 				name: 'Voucher Entry',
 				path: '/accounting/voucher/entry',
+				element: <VoucherEntry />,
+				page_name: 'accounting__voucher_entry',
+				hidden: true,
+				actions: ['read', 'create', 'update', 'delete'],
+			},
+			{
+				name: 'Voucher Entry',
+				path: '/accounting/voucher/entry/:store_type/:vendor_name/:purchase_id/:amount',
 				element: <VoucherEntry />,
 				page_name: 'accounting__voucher_entry',
 				hidden: true,

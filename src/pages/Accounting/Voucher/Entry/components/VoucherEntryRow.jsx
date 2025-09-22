@@ -30,6 +30,9 @@ function VoucherEntryRow({
 	invalidateLedger,
 	setUpdateItem,
 	children,
+	vendor_name,
+	purchase_id,
+	amount,
 }) {
 	// Force re-render state
 	const [renderKey, setRenderKey] = useState(0);
@@ -95,7 +98,7 @@ function VoucherEntryRow({
 					subIdx: j,
 					id: `payment-${idx}-${j}-${renderKey}`,
 				}));
-			} else if (type === 'dr' && selectedLedger?.cost_center_count > 0) {
+			} else if (selectedLedger?.cost_center_count > 0) {
 				subRows = costCenters.map((_, j) => ({
 					type: 'costCenter',
 					parent: idx,
@@ -351,7 +354,7 @@ function VoucherEntryRow({
 													</FormField>
 
 													<div className='flex w-full flex-col justify-items-end gap-2 py-2'>
-														{showCostCenterButton && (
+														{
 															<button
 																type='button'
 																onClick={() => {
@@ -377,7 +380,7 @@ function VoucherEntryRow({
 																CC
 																<Plus className='h-3 w-3' />
 															</button>
-														)}
+														}
 														{!showPaymentButton &&
 															type === 'dr' && (
 																<button
@@ -557,6 +560,10 @@ function VoucherEntryRow({
 													Controller={Controller}
 													subIdx={row.subIdx}
 													watch={watch}
+													register={register}
+													vendor_name={vendor_name}
+													purchase_id={purchase_id}
+													amount={amount}
 												></CostCenter>
 											)}
 										</td>

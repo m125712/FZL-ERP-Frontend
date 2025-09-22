@@ -1,21 +1,18 @@
-import { lazy, useEffect, useMemo, useState } from 'react';
-import { ArrowRight, ArrowRightCircle } from 'lucide-react';
-import { useNavigate, useNavigation } from 'react-router';
+import { useEffect, useMemo } from 'react';
+import { ArrowRightCircle } from 'lucide-react';
+import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
-import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete } from '@/ui';
+import { DateTime } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
 import { useAccNeedToAccept } from './config/query';
 import { storeType } from './utils';
 
-const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
-
 export default function Index() {
-	const { data, isLoading, deleteData } = useAccNeedToAccept();
+	const { data, isLoading } = useAccNeedToAccept();
 	const navigate = useNavigate();
 
 	const info = new PageInfo(
@@ -76,7 +73,11 @@ export default function Index() {
 				hidden: !haveAccess.includes('update'),
 				width: 'w-20',
 				cell: (info) => {
-					return <ArrowRightCircle onClick={() => handelUpdate()} />;
+					return (
+						<ArrowRightCircle
+							onClick={() => handelUpdate(info.row.index)}
+						/>
+					);
 				},
 			},
 		],
@@ -88,8 +89,10 @@ export default function Index() {
 		document.title = info.getTabName();
 	}, []);
 
-	const handelUpdate = () => {
-		navigate('/accounting/voucher/entry');
+	const handelUpdate = (index) => {
+		navigate(
+			`/accounting/voucher/entry/${data?.[index]?.store_type}/${data?.[index]?.vendor_name.split(' ').join('_')}/${data?.[index]?.purchase_id}/${data?.[index]?.total_price}`
+		);
 	};
 
 	if (isLoading)

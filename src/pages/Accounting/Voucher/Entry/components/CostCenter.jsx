@@ -1,6 +1,6 @@
 import { useWatch } from 'react-hook-form';
 
-import { FormField, ReactSelect } from '@/ui';
+import { FormField, Input, ReactSelect } from '@/ui';
 
 import { useOtherCostCenter } from '../../config/query';
 
@@ -12,6 +12,10 @@ export default function CostCenter({
 	Controller,
 	subIdx,
 	watch,
+	register,
+	vendor_name,
+	purchase_id,
+	amount,
 }) {
 	const filterCostOptions = (options, index) => {
 		return options?.filter((option) => {
@@ -27,39 +31,52 @@ export default function CostCenter({
 	const { data: costCenterOptions = [] } = useOtherCostCenter(
 		watchedLedgers ? `ledger_uuid=${watchedLedgers}` : ''
 	);
+	console.log(vendor_name, purchase_id, amount);
 	return (
 		<div className='flex gap-2'>
 			<p className='justify-center py-4 align-baseline text-sm font-medium text-gray-900'>
 				{p + 1}.{subIdx + 1}
 			</p>
-
-			<FormField
-				label={`${entryPath}.voucher_entry_cost_center[${subIdx}].cost_center_uuid`}
-				is_title_needed='false'
-				dynamicerror={
-					errors?.voucher_entry?.[p]?.voucher_entry_cost_center?.[
-						subIdx
-					]?.cost_center_uuid
-				}
-			>
-				<Controller
-					name={`${entryPath}.voucher_entry_cost_center[${subIdx}].cost_center_uuid`}
-					control={control}
-					render={({ field: { onChange, value } }) => (
-						<ReactSelect
-							placeholder='Select Cost Center'
-							options={filterCostOptions(costCenterOptions, p)}
-							value={
-								costCenterOptions.find(
-									(o) => o.value === value
-								) ?? null
-							}
-							onChange={(e) => onChange(e?.value)}
-							menuPortalTarget={document.body}
-						/>
-					)}
+			<div className='flex gap-2'>
+				<FormField
+					label={`${entryPath}.voucher_entry_cost_center[${subIdx}].cost_center_uuid`}
+					is_title_needed='false'
+					dynamicerror={
+						errors?.voucher_entry?.[p]?.voucher_entry_cost_center?.[
+							subIdx
+						]?.cost_center_uuid
+					}
+				>
+					<Controller
+						name={`${entryPath}.voucher_entry_cost_center[${subIdx}].cost_center_uuid`}
+						control={control}
+						render={({ field: { onChange, value } }) => (
+							<ReactSelect
+								placeholder='Select Cost Center'
+								options={filterCostOptions(
+									costCenterOptions,
+									p
+								)}
+								value={
+									costCenterOptions.find(
+										(o) => o.value === value
+									) ?? null
+								}
+								onChange={(e) => onChange(e?.value)}
+								menuPortalTarget={document.body}
+							/>
+						)}
+					/>
+				</FormField>
+				<Input
+					title='price'
+					label={`${entryPath}.voucher_entry_cost_center[${subIdx}].invoice_no`}
+					placeholder='Enter Invoice No'
+					is_title_needed='false'
+					dynamicerror={errors?.purchase?.[index]?.price}
+					register={register}
 				/>
-			</FormField>
+			</div>
 		</div>
 	);
 }

@@ -1,4 +1,4 @@
-import { lazy, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
@@ -21,7 +21,7 @@ const CostCenterAdd = lazy(() => import('./components/CostCenterAdd'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { uuid } = useParams();
+	const { uuid, store_type, vendor_name, purchase_id, amount } = useParams();
 
 	// State
 	const [deleteItem, setDeleteItem] = useState({
@@ -43,6 +43,7 @@ export default function Index() {
 		currencyOptions,
 		isCurrencyLoading,
 		isUpdate,
+		costCenterOptions,
 	} = useVoucherData(uuid);
 
 	// Form management
@@ -87,6 +88,80 @@ export default function Index() {
 		setValue,
 		setDeleteItem,
 	});
+	useEffect(() => {
+		if (
+			store_type &&
+			vendor_name &&
+			purchase_id &&
+			ledgerOptions.length > 0 &&
+			costCenterOptions.length > 0 &&
+			amount
+		) {
+			const CrLedger = ledgerOptions.find(
+				(l) => l.label.split('(')[0].trim() === 'Trade Payable'
+			);
+			const DrLedger = ledgerOptions.find(
+				(l) => l.identifier === `store_${store_type}`
+			);
+
+			const vendorCostCenter = costCenterOptions.find(
+				(cc) => cc.label.split(' ')[0] === vendor_name.replace('_', ' ')
+			);
+			const purchaseCostCenter = costCenterOptions.find(
+				(cc) => cc.label.split(' ')[0] == purchase_id
+			);
+
+			if (DrLedger && CrLedger) {
+				const formData = {
+					...VOUCHER_NULLABLE,
+					category: 'journal',
+					date: new Date(),
+					voucher_entry: [
+						{
+							ledger_uuid: DrLedger.value,
+							amount: Number(amount),
+							type: 'dr',
+							voucher_entry_cost_center: purchaseCostCenter
+								? [
+										{
+											cost_center_uuid:
+												purchaseCostCenter.value,
+											amount: Number(amount),
+										},
+									]
+								: [],
+							voucher_entry_payment: [],
+						},
+						{
+							ledger_uuid: CrLedger.value,
+							amount: Number(amount),
+							type: 'cr',
+							voucher_entry_cost_center: vendorCostCenter
+								? [
+										{
+											cost_center_uuid:
+												vendorCostCenter.value,
+											amount: Number(amount),
+										},
+									]
+								: [],
+							voucher_entry_payment: [],
+						},
+					],
+				};
+
+				reset(formData);
+			}
+		}
+	}, [
+		store_type,
+		vendor_name,
+		purchase_id,
+		amount,
+		ledgerOptions,
+		costCenterOptions,
+		reset,
+	]);
 
 	// Form submission
 	const onSubmit = useVoucherSubmission({
@@ -139,6 +214,9 @@ export default function Index() {
 					invalidateLedger={invalidateLedger}
 					voucherFields={voucherFields}
 					currencyOptions={currencyOptions}
+					vendor_name={vendor_name}
+					purchase_id={purchase_id}
+					amount={amount}
 					{...entryProps}
 					{...nestedEntryProps}
 					setUpdateItem={setUpdateItem}

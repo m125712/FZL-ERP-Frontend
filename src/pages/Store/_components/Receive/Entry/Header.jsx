@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useOtherCurrency } from '@/pages/Accounting/Currency/config/query';
 import { useOtherVendor } from '@/state/Other';
 import { useParams } from 'react-router';
@@ -29,10 +30,24 @@ export default function Header({
 		{ label: 'Import', value: 0 },
 		{ label: 'Local', value: 1 },
 	];
+	useEffect(() => {
+		if (!isUpdate) {
+			setValue(
+				'currency_uuid',
+				currencyOptions?.find((item) => item.default === true)?.value
+			);
+			setValue(
+				'conversion_rate',
+				currencyOptions?.find(
+					(item) => item.value == getValues('currency_uuid')
+				)?.conversion_rate
+			);
+		}
+	}, [isUpdate, currencyOptions, getValues('currency_uuid')]);
 
 	return (
 		<SectionEntryBody
-			title='Information'
+			title={`${isUpdate ? `${getValues('purchase_id')} (LC Number: ${getValues('lc_number')})` : 'Information'} `}
 			className='grid grid-cols-3 gap-4'
 		>
 			<div className='col-span-2 grid grid-cols-2 gap-2 text-secondary-content'>
@@ -85,22 +100,19 @@ export default function Header({
 				</FormField>
 				<Input label='lc_number' {...{ register, errors }} />
 				<Input label='challan_number' {...{ register, errors }} />
-				{/* <FormField
+				<FormField
 					label='currency_uuid'
 					title='Currency'
-					errors={errors}>
+					errors={errors}
+				>
 					<Controller
 						name={'currency_uuid'}
 						control={control}
 						render={({ field: { onChange, value } }) => {
 							// Find the selected option or fall back to default
-							const selectedOption =
-								currencyOptions?.find(
-									(item) => item.value === value
-								) ||
-								currencyOptions?.find(
-									(item) => item.default === true
-								);
+							const selectedOption = currencyOptions?.find(
+								(item) => item.value === value
+							);
 
 							return (
 								<ReactSelect
@@ -121,7 +133,7 @@ export default function Header({
 						}}
 					/>
 				</FormField>
-				<Input label='conversion_rate' {...{ register, errors }} /> */}
+				<Input label='conversion_rate' {...{ register, errors }} />
 				<Textarea label='remarks' {...{ register, errors }} />
 			</div>
 			<FormField label='file' title='File' errors={errors}>

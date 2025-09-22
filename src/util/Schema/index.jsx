@@ -400,8 +400,8 @@ export const PURCHASE_RECEIVE_SCHEMA = {
 	}),
 	transport_cost: NUMBER_DOUBLE_REQUIRED.default(0),
 	misc_cost: NUMBER_DOUBLE_REQUIRED.default(0),
-	// currency_uuid: STRING_REQUIRED,
-	// conversion_rate: NUMBER_DOUBLE_REQUIRED.default(1),
+	currency_uuid: STRING_REQUIRED,
+	conversion_rate: NUMBER_DOUBLE_REQUIRED.default(1),
 
 	file: yup
 		.mixed()

@@ -64,7 +64,7 @@ export default function Index(data, date, type) {
 								style: 'tableHeader',
 							},
 							{
-								text: `${data.reduce((acc, cur) => acc + cur.total_value, 0).toFixed(2)}`,
+								text: `${data.reduce((acc, cur) => acc + cur?.total_value || 0, 0)?.toFixed(2)}`,
 								style: 'tableHeader',
 								alignment: 'right',
 							},

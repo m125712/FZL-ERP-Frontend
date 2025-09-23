@@ -8,7 +8,7 @@ export const types = [
 export default function Header({ type, setType }) {
 	return (
 		<div className='mb-5 flex flex-col gap-4'>
-			<SectionEntryBody title={'Select Date & Type'}>
+			<SectionEntryBody title={'LC Fort Night'}>
 				<ReactSelect
 					placeholder='Select Type'
 					options={types}

@@ -64,7 +64,7 @@ export default function Index(data, date, type) {
 								style: 'tableHeader',
 							},
 							{
-								text: `${data.reduce((acc, cur) => acc + cur.total_value, 0)}`,
+								text: `${data.reduce((acc, cur) => acc + cur.total_value, 0).toFixed(2)}`,
 								style: 'tableHeader',
 								alignment: 'right',
 							},
@@ -105,6 +105,22 @@ export default function Index(data, date, type) {
 											: '-',
 										style: 'tableCell',
 										alignment: 'left',
+									};
+								}
+								if (
+									col.field === 'total_value' ||
+									col.field === 'amount' ||
+									col.field === 'payment_value'
+								) {
+									return {
+										text: item[col.field]
+											? parseFloat(
+													item[col.field]
+												).toFixed(2)
+											: '0.00',
+										style: 'tableCell',
+										fontSize: DEFAULT_FONT_SIZE - 2,
+										alignment: 'right',
 									};
 								}
 								return {

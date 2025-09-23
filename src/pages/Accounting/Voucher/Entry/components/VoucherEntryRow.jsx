@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Plus } from 'lucide-react';
 import { useWatch } from 'react-hook-form';
 
@@ -8,6 +8,9 @@ import { FormField, Input, ReactSelect, RemoveButton } from '@/ui';
 import { useOtherCostCenter } from '../../config/query';
 import { paymentTypeOption, typeOptions } from '../../utils';
 import CostCenter from './CostCenter';
+import EmptyState from './EmptyState';
+import TableHead from './TableHead';
+import VoucherEntryHeader from './VoucherEntryHeader';
 
 function VoucherEntryRow({
 	control,
@@ -30,14 +33,9 @@ function VoucherEntryRow({
 	invalidateLedger,
 	setUpdateItem,
 	children,
-	vendor_name,
-	purchase_id,
-	amount,
 }) {
-	// Force re-render state
 	const [renderKey, setRenderKey] = useState(0);
 
-	// Watch all form data
 	const allFormData = watch();
 	const voucherEntries = useWatch({
 		control,
@@ -45,21 +43,6 @@ function VoucherEntryRow({
 		defaultValue: [],
 	});
 	const category = watch('category');
-
-	// Force re-render when data changes
-	useEffect(() => {
-		setRenderKey((prev) => prev + 1);
-	}, [
-		voucherEntries.length,
-		JSON.stringify(
-			voucherEntries.map((entry) => ({
-				type: entry?.type,
-				ledger: entry?.ledger_uuid,
-				paymentCount: entry?.voucher_entry_payment?.length || 0,
-				costCenterCount: entry?.voucher_entry_cost_center?.length || 0,
-			}))
-		),
-	]);
 	const [index, setIndex] = useState(0);
 
 	const { invalidateQuery: invalidQueryCostCenter } = useOtherCostCenter(
@@ -67,6 +50,7 @@ function VoucherEntryRow({
 	);
 	const selectedLedgers =
 		watch('voucher_entry')?.map((e) => e?.ledger_uuid) || [];
+
 	const filteredLedgerOptions = React.useMemo(() => {
 		return ledgerOptions?.filter(
 			(opt) =>
@@ -74,6 +58,7 @@ function VoucherEntryRow({
 				opt.value === selectedLedgers
 		);
 	}, [ledgerOptions, selectedLedgers, selectedLedgers]);
+
 	const allRows = useMemo(() => {
 		const rows = [];
 
@@ -84,28 +69,48 @@ function VoucherEntryRow({
 			const type = voucherEntry.type;
 			const payments = voucherEntry.voucher_entry_payment || [];
 			const costCenters = voucherEntry.voucher_entry_cost_center || [];
+			const entryOrder = voucherEntry.entry_order || []; // Track creation order
 			const ledgerUuid = voucherEntry.ledger_uuid;
 			const selectedLedger = ledgerOptions.find(
 				(l) => l.value === ledgerUuid
 			);
 
-			// Calculate sub-rows
+			// Calculate sub-rows based on entry order
 			let subRows = [];
-			if (type === 'cr' && category === 'payment') {
-				subRows = payments.map((_, j) => ({
-					type: 'payment',
-					parent: idx,
-					subIdx: j,
-					id: `payment-${idx}-${j}-${renderKey}`,
-				}));
-			} else if (selectedLedger?.cost_center_count > 0) {
-				subRows = costCenters.map((_, j) => ({
-					type: 'costCenter',
-					parent: idx,
-					subIdx: j,
-					id: `costCenter-${idx}-${j}-${renderKey}`,
-				}));
-			}
+
+			entryOrder.forEach((orderEntry, displayIndex) => {
+				if (
+					orderEntry.type === 'payment' &&
+					type === 'cr' &&
+					category === 'payment'
+				) {
+					const paymentIndex = orderEntry.index;
+					if (payments[paymentIndex]) {
+						subRows.push({
+							type: 'payment',
+							parent: idx,
+							subIdx: paymentIndex,
+							displayIndex: displayIndex,
+							id: `payment-${idx}-${paymentIndex}-${renderKey}`,
+						});
+					}
+				} else if (
+					orderEntry.type === 'costCenter' &&
+					selectedLedger?.cost_center_count > 0
+				) {
+					const costCenterIndex = orderEntry.index;
+					if (costCenters[costCenterIndex]) {
+						subRows.push({
+							type: 'costCenter',
+							parent: idx,
+							subIdx: costCenterIndex,
+							displayIndex: displayIndex,
+							mainType: type,
+							id: `costCenter-${idx}-${costCenterIndex}-${renderKey}`,
+						});
+					}
+				}
+			});
 
 			const mainRow = {
 				type: 'main',
@@ -131,6 +136,7 @@ function VoucherEntryRow({
 	]);
 
 	const rowClass = 'border px-3 py-2 text-sm align-top';
+
 	const handelUpdate = async (idx, amount) => {
 		setIndex(idx);
 		const currentCostCenters =
@@ -140,6 +146,7 @@ function VoucherEntryRow({
 			...prev,
 			leader_uuid: watch(`voucher_entry.${idx}.ledger_uuid`),
 			voucher_entry_set_value: setValue,
+			voucher_entry_get_values: watch,
 			currentCostCenters: currentCostCenters,
 			amount: amount,
 			index: idx,
@@ -152,97 +159,19 @@ function VoucherEntryRow({
 	return (
 		<div className=''>
 			{/* Header */}
-			<div className='flex items-center justify-between rounded-lg border bg-primary p-4 text-white shadow-sm'>
-				<div>
-					<h2 className='text-lg font-semibold text-white'>
-						Voucher Entry
-					</h2>
-					<p className='mt-1 text-sm text-white'>
-						Add debit and credit entries for your voucher
-					</p>
-				</div>
-				<div className='flex items-center gap-3'>
-					<button
-						type='button'
-						onClick={appendDrEntry}
-						className='btn btn-accent btn-sm flex items-center gap-2 rounded-lg px-4 py-2'
-					>
-						<Plus className='h-4 w-4' /> DR
-					</button>
-					<button
-						type='button'
-						onClick={appendCrEntry}
-						className='btn btn-error btn-sm flex items-center gap-2 rounded-lg px-4 py-2'
-					>
-						<Plus className='h-4 w-4' /> CR
-					</button>
-				</div>
-			</div>
-
+			<VoucherEntryHeader
+				appendCrEntry={appendCrEntry}
+				appendDrEntry={appendDrEntry}
+			/>
 			{/* Table */}
 			<div className='overflow-scroll rounded-lg border bg-white shadow-sm'>
 				<div className='overflow-x-auto'>
 					<table className='w-full border-collapse'>
-						<thead>
-							<tr className='bg-secondary text-secondary-content'>
-								<th
-									className={`${rowClass} text-left font-semibold`}
-								>
-									No.
-								</th>
-								<th
-									className={`${rowClass} text-left font-semibold`}
-								>
-									Type
-								</th>
-								<th
-									className={`${rowClass} text-left font-semibold`}
-								>
-									Ledger
-								</th>
-								<th
-									className={`${rowClass} text-left font-semibold`}
-								>
-									Txn No.
-								</th>
-								<th
-									className={`${rowClass} text-left font-semibold`}
-								>
-									Date
-								</th>
-								<th
-									className={`${rowClass} text-right font-semibold`}
-								>
-									Debit (
-									{
-										currencyOptions.find(
-											(c) =>
-												c.value ===
-												watch('currency_uuid')
-										)?.symbol
-									}
-									)
-								</th>
-								<th
-									className={`${rowClass} text-right font-semibold`}
-								>
-									Credit (
-									{
-										currencyOptions.find(
-											(c) =>
-												c.value ===
-												watch('currency_uuid')
-										)?.symbol
-									}
-									)
-								</th>
-								<th
-									className={`${rowClass} text-center font-semibold`}
-								>
-									Action
-								</th>
-							</tr>
-						</thead>
+						<TableHead
+							rowClass={rowClass}
+							watch={watch}
+							currencyOptions={currencyOptions}
+						/>
 						<tbody>
 							{allRows.map((row) => {
 								const p = row.parent;
@@ -261,19 +190,13 @@ function VoucherEntryRow({
 									type === 'cr' &&
 									category === 'payment' &&
 									selectedLedger?.is_cash_ledger === false;
-								const showCostCenterButton =
-									type === 'dr' &&
-									selectedLedger?.cost_center_count > 0;
-
-								const remainingCostAmount =
+								const remainingAmount =
 									voucherEntry.amount -
 									voucherEntry.voucher_entry_cost_center.reduce(
 										(sum, entry) =>
 											sum + Number(entry.amount),
 										0
-									);
-								const remainingPaymentAmount =
-									voucherEntry.amount -
+									) -
 									voucherEntry.voucher_entry_payment.reduce(
 										(sum, entry) =>
 											sum + Number(entry.amount),
@@ -360,19 +283,27 @@ function VoucherEntryRow({
 																onClick={() => {
 																	handleCostCenterAppend(
 																		p,
-																		remainingCostAmount
+																		remainingAmount >=
+																			0
+																			? remainingAmount
+																			: 0
 																	);
 																}}
 																disabled={
 																	watch(
 																		`voucher_entry.${p}.voucher_entry_cost_center`
 																	)?.length >=
-																	ledgerOptions.find(
-																		(l) =>
-																			l.value ===
-																			ledgerUuid
+																		ledgerOptions.find(
+																			(
+																				l
+																			) =>
+																				l.value ===
+																				ledgerUuid
+																		)
+																			?.cost_center_count ||
+																	!watch(
+																		`voucher_entry.${p}.ledger_uuid`
 																	)
-																		?.cost_center_count
 																}
 																className='btn btn-outline btn-sm flex items-center justify-center gap-1 rounded'
 																title='Add Cost Center Entry'
@@ -381,46 +312,50 @@ function VoucherEntryRow({
 																<Plus className='h-3 w-3' />
 															</button>
 														}
-														{!showPaymentButton &&
-															type === 'dr' && (
-																<button
-																	type='button'
-																	onClick={() => {
-																		handelUpdate(
-																			p,
-																			remainingCostAmount
-																		);
+														{
+															<button
+																type='button'
+																onClick={() => {
+																	handelUpdate(
+																		p,
+																		remainingAmount >=
+																			0
+																			? remainingAmount
+																			: 0
+																	);
 
-																		setIndex(
-																			p
-																		);
+																	setIndex(p);
 
-																		setValue(
-																			`voucher_entry[${p}].voucher_entry_cost_center`,
+																	setValue(
+																		`voucher_entry[${p}].voucher_entry_cost_center`,
 
-																			watch(
-																				`voucher_entry[${p}].voucher_entry_cost_center`
-																			).filter(
-																				(
-																					item
-																				) =>
-																					item.cost_center_uuid !==
-																						null &&
-																					item.cost_center_uuid !==
-																						undefined &&
-																					item.cost_center_uuid !==
-																						''
-																			) ||
-																				[]
-																		);
-																	}}
-																	className='btn btn-outline btn-sm flex items-center justify-center gap-1 rounded bg-accent text-white'
-																	title='Add Cost Center Entry'
-																>
-																	New CC
-																	<Plus className='h-3 w-3' />
-																</button>
-															)}
+																		watch(
+																			`voucher_entry[${p}].voucher_entry_cost_center`
+																		).filter(
+																			(
+																				item
+																			) =>
+																				item.cost_center_uuid !==
+																					null &&
+																				item.cost_center_uuid !==
+																					undefined &&
+																				item.cost_center_uuid !==
+																					''
+																		) || []
+																	);
+																}}
+																disabled={
+																	!watch(
+																		`voucher_entry.${p}.ledger_uuid`
+																	)
+																}
+																className='btn btn-outline btn-sm flex items-center justify-center gap-1 rounded bg-accent text-white'
+																title='Add Cost Center Entry'
+															>
+																New CC
+																<Plus className='h-3 w-3' />
+															</button>
+														}
 													</div>
 
 													{showPaymentButton && (
@@ -430,7 +365,10 @@ function VoucherEntryRow({
 																onClick={() => {
 																	handlePaymentAppend(
 																		p,
-																		remainingPaymentAmount
+																		remainingAmount >=
+																			0
+																			? remainingAmount
+																			: 0
 																	);
 																}}
 																className='btn btn-outline btn-sm flex flex-shrink-0 items-center gap-1 rounded'
@@ -496,7 +434,8 @@ function VoucherEntryRow({
 											{row.type === 'payment' && (
 												<div className='flex gap-2'>
 													<p className='justify-center py-4 align-baseline text-sm font-medium text-gray-900'>
-														{p + 1}.{row.subIdx + 1}
+														{p + 1}.
+														{row.displayIndex + 1}
 													</p>
 													<FormField
 														label={`${entryPath}.voucher_entry_payment[${row.subIdx}].payment_type`}
@@ -561,9 +500,10 @@ function VoucherEntryRow({
 													subIdx={row.subIdx}
 													watch={watch}
 													register={register}
-													vendor_name={vendor_name}
-													purchase_id={purchase_id}
-													amount={amount}
+													displayIndex={
+														row.displayIndex + 1
+													}
+													setValue={setValue}
 												></CostCenter>
 											)}
 										</td>
@@ -625,23 +565,25 @@ function VoucherEntryRow({
 														}
 													/>
 												)}
-											{row.type === 'costCenter' && (
-												<Input
-													title='Debit'
-													label={`${entryPath}.voucher_entry_cost_center[${row.subIdx}].amount`}
-													type='number'
-													is_title_needed='false'
-													register={register}
-													dynamicerror={
-														errors.voucher_entry?.[
-															p
-														]
-															?.voucher_entry_cost_center?.[
-															row.subIdx
-														]?.amount
-													}
-												/>
-											)}
+											{row.type === 'costCenter' &&
+												row.mainType == 'dr' && (
+													<Input
+														title='Debit'
+														label={`${entryPath}.voucher_entry_cost_center[${row.subIdx}].amount`}
+														type='number'
+														is_title_needed='false'
+														register={register}
+														dynamicerror={
+															errors
+																.voucher_entry?.[
+																p
+															]
+																?.voucher_entry_cost_center?.[
+																row.subIdx
+															]?.amount
+														}
+													/>
+												)}
 										</td>
 
 										{/* Credit Amount */}
@@ -681,6 +623,25 @@ function VoucherEntryRow({
 													}
 												/>
 											)}
+											{row.type === 'costCenter' &&
+												row.mainType == 'cr' && (
+													<Input
+														title='Debit'
+														label={`${entryPath}.voucher_entry_cost_center[${row.subIdx}].amount`}
+														type='number'
+														is_title_needed='false'
+														register={register}
+														dynamicerror={
+															errors
+																.voucher_entry?.[
+																p
+															]
+																?.voucher_entry_cost_center?.[
+																row.subIdx
+															]?.amount
+														}
+													/>
+												)}
 										</td>
 
 										{/* Action Column */}
@@ -741,30 +702,10 @@ function VoucherEntryRow({
 
 			{/* Empty State */}
 			{voucherFields.length === 0 && (
-				<div className='rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 py-12 text-center'>
-					<h3 className='mb-2 text-lg font-medium text-gray-700'>
-						No voucher entries yet
-					</h3>
-					<p className='mb-4 text-gray-500'>
-						Start by adding your first debit or credit entry
-					</p>
-					<div className='flex items-center justify-center gap-3'>
-						<button
-							type='button'
-							onClick={appendDrEntry}
-							className='btn btn-accent btn-sm flex items-center gap-2 rounded-lg'
-						>
-							<Plus className='h-4 w-4' /> Add Debit Entry
-						</button>
-						<button
-							type='button'
-							onClick={appendCrEntry}
-							className='btn btn-error btn-sm flex items-center gap-2 rounded-lg'
-						>
-							<Plus className='h-4 w-4' /> Add Credit Entry
-						</button>
-					</div>
-				</div>
+				<EmptyState
+					appendCrEntry={appendCrEntry}
+					appendDrEntry={appendDrEntry}
+				/>
 			)}
 		</div>
 	);

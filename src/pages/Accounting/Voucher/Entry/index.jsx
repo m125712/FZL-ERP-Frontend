@@ -1,4 +1,5 @@
 import { lazy, useEffect, useState } from 'react';
+import { formatDate } from 'date-fns';
 import { FormProvider } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
@@ -21,7 +22,7 @@ const CostCenterAdd = lazy(() => import('./components/CostCenterAdd'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { uuid, store_type, vendor_name, purchase_id, amount } = useParams();
+	const { uuid, vendor_name, purchase_id, amount } = useParams();
 
 	// State
 	const [deleteItem, setDeleteItem] = useState({
@@ -90,7 +91,6 @@ export default function Index() {
 	});
 	useEffect(() => {
 		if (
-			store_type &&
 			vendor_name &&
 			purchase_id &&
 			ledgerOptions.length > 0 &&
@@ -100,22 +100,28 @@ export default function Index() {
 			const CrLedger = ledgerOptions.find(
 				(l) => l.label.split('(')[0].trim() === 'Trade Payable'
 			);
-			const DrLedger = ledgerOptions.find(
-				(l) => l.identifier === `store_${store_type}`
-			);
 
 			const vendorCostCenter = costCenterOptions.find(
-				(cc) => cc.label.split(' ')[0] === vendor_name.replace('_', ' ')
+				(cc) => cc.value === vendor_name
 			);
+
 			const purchaseCostCenter = costCenterOptions.find(
-				(cc) => cc.label.split(' ')[0] == purchase_id
+				(cc) => cc.value === purchase_id
+			);
+			const DrLedger = ledgerOptions.find(
+				(l) => l.identifier === purchaseCostCenter?.identifier
 			);
 
 			if (DrLedger && CrLedger) {
 				const formData = {
 					...VOUCHER_NULLABLE,
+					currency_uuid:
+						currencyOptions.find((c) => c.default)?.value ?? null,
+					conversion_rate:
+						currencyOptions.find((c) => c.default)
+							?.conversion_rate ?? 1,
 					category: 'journal',
-					date: new Date(),
+					date: formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss'),
 					voucher_entry: [
 						{
 							ledger_uuid: DrLedger.value,
@@ -127,6 +133,8 @@ export default function Index() {
 											cost_center_uuid:
 												purchaseCostCenter.value,
 											amount: Number(amount),
+											invoice_no:
+												purchaseCostCenter.invoice_no,
 										},
 									]
 								: [],
@@ -142,6 +150,8 @@ export default function Index() {
 											cost_center_uuid:
 												vendorCostCenter.value,
 											amount: Number(amount),
+											invoice_no:
+												vendorCostCenter.invoice_no,
 										},
 									]
 								: [],
@@ -154,7 +164,6 @@ export default function Index() {
 			}
 		}
 	}, [
-		store_type,
 		vendor_name,
 		purchase_id,
 		amount,

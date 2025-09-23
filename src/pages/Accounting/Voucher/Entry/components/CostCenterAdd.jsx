@@ -69,8 +69,8 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
+		console.log('Before update:', updateItem.currentCostCenters);
 		const new_uuid = nanoid();
-		// Add new item
 		const updatedData = {
 			...data,
 			uuid: new_uuid,
@@ -88,21 +88,47 @@ export default function Index({
 		await invalidateQuery();
 		await updateItem?.invalidQueryCostCenter();
 		await updateItem?.invalidateLedger();
+
+		// Update cost centers array
+		const filteredCostCenters = updateItem.currentCostCenters.filter(
+			(item) =>
+				item.cost_center_uuid !== null &&
+				item.cost_center_uuid !== undefined &&
+				item.cost_center_uuid !== ''
+		);
+
 		updateItem?.voucher_entry_set_value(
-			`voucher_entry[${updateItem.index}].voucher_entry_cost_center`,
+			`voucher_entry.${updateItem.index}.voucher_entry_cost_center`,
 			[
-				...updateItem.currentCostCenters.filter(
-					(item) =>
-						item.cost_center_uuid !== null &&
-						item.cost_center_uuid !== undefined &&
-						item.cost_center_uuid !== ''
-				),
+				...filteredCostCenters,
 				{
 					cost_center_uuid: new_uuid,
 					amount: updateItem?.amount || 0,
 				},
 			]
 		);
+
+		// Update entry order if you're using the order tracking approach
+		const currentOrder =
+			updateItem?.voucher_entry_get_values(
+				`voucher_entry.${updateItem.index}.entry_order`
+			) || [];
+		updateItem?.voucher_entry_set_value(
+			`voucher_entry.${updateItem.index}.entry_order`,
+			[
+				...currentOrder,
+				{
+					type: 'costCenter',
+					index: filteredCostCenters.length,
+				},
+			]
+		);
+		setTimeout(() => {
+			const verifyData = updateItem?.voucher_entry_get_values(
+				`voucher_entry.${updateItem.index}.voucher_entry_cost_center`
+			);
+			console.log('Verification after set:', verifyData);
+		}, 100);
 	};
 
 	return (

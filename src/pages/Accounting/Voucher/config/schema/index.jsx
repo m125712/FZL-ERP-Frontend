@@ -71,7 +71,7 @@ export const VOUCHER_SCHEMA = {
 				.of(
 					yup.object().shape({
 						cost_center_uuid: STRING_REQUIRED,
-						invoice_no: STRING_REQUIRED,
+						invoice_no: STRING.nullable(),
 						amount: NUMBER_DOUBLE_REQUIRED.min(
 							1,
 							'Amount must be greater than 0'

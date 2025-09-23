@@ -10,6 +10,9 @@ const Voucher = lazy(() => import('@/pages/Accounting/Voucher'));
 const VoucherEntry = lazy(() => import('@/pages/Accounting/Voucher/Entry'));
 const VoucherDetails = lazy(() => import('@/pages/Accounting/Voucher/Details'));
 const NeedToAccept = lazy(() => import('@/pages/Accounting/NeedToAccept'));
+const AccountingReport = lazy(
+	() => import('@/pages/Accounting/Report/Accounting')
+);
 export const AccountingRoutes = [
 	{
 		name: 'Accounting',
@@ -38,8 +41,8 @@ export const AccountingRoutes = [
 				actions: ['read', 'create', 'update', 'delete'],
 			},
 			{
-				name: 'Voucher Entry',
-				path: '/accounting/voucher/entry/:store_type/:vendor_name/:purchase_id/:amount',
+				name: 'Voucher Entry (Automatic)',
+				path: '/accounting/voucher/entry/:vendor_name/:purchase_id/:amount',
 				element: <VoucherEntry />,
 				page_name: 'accounting__voucher_entry',
 				hidden: true,
@@ -105,11 +108,16 @@ export const AccountingRoutes = [
 				actions: ['read', 'create', 'update', 'delete'],
 			},
 			{
-				name: '',
-				path: '/accounting/currency',
-				element: <Currency />,
-				page_name: 'accounting__currency',
-				actions: ['read', 'create', 'update', 'delete'],
+				name: 'Report',
+				children: [
+					{
+						name: 'Accounting',
+						path: '/accounting/report/accounting',
+						element: <AccountingReport />,
+						page_name: 'accounting__report__accounting',
+						actions: ['read'],
+					},
+				],
 			},
 		],
 	},

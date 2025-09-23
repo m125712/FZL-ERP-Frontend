@@ -43,6 +43,13 @@ export const useVoucherSubmission = ({
 				},
 				isOnCloseNeeded: false,
 			});
+			await updateData.mutateAsync({
+				url: `/acc/cost-center/${cc?.cost_center_uuid}`,
+				updatedData: {
+					invoice_no: cc?.invoice_no || '',
+				},
+				isOnCloseNeeded: false,
+			});
 		}
 
 		// Update existing cost centers with correct index
@@ -55,6 +62,13 @@ export const useVoucherSubmission = ({
 					index: costCenters.findIndex((item) => item === cc),
 					updated_by: user?.uuid,
 					updated_at: GetDateTime(),
+				},
+				isOnCloseNeeded: false,
+			});
+			await updateData.mutateAsync({
+				url: `/acc/cost-center/${cc?.cost_center_uuid}`,
+				updatedData: {
+					invoice_no: cc?.invoice_no || '',
 				},
 				isOnCloseNeeded: false,
 			});
@@ -135,6 +149,13 @@ export const useVoucherSubmission = ({
 						voucher_entry_uuid: entry.uuid,
 						created_by: user?.uuid,
 						created_at: GetDateTime(),
+					},
+					isOnCloseNeeded: false,
+				});
+				await updateData.mutateAsync({
+					url: `/acc/cost-center/${cc?.cost_center_uuid}`,
+					updatedData: {
+						invoice_no: cc?.invoice_no || '',
 					},
 					isOnCloseNeeded: false,
 				});

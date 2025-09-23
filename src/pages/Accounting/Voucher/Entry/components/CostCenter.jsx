@@ -13,9 +13,8 @@ export default function CostCenter({
 	subIdx,
 	watch,
 	register,
-	vendor_name,
-	purchase_id,
-	amount,
+	displayIndex,
+	setValue,
 }) {
 	const filterCostOptions = (options, index) => {
 		return options?.filter((option) => {
@@ -31,11 +30,11 @@ export default function CostCenter({
 	const { data: costCenterOptions = [] } = useOtherCostCenter(
 		watchedLedgers ? `ledger_uuid=${watchedLedgers}` : ''
 	);
-	console.log(vendor_name, purchase_id, amount);
+
 	return (
 		<div className='flex gap-2'>
 			<p className='justify-center py-4 align-baseline text-sm font-medium text-gray-900'>
-				{p + 1}.{subIdx + 1}
+				{p + 1}.{displayIndex}
 			</p>
 			<div className='flex gap-2'>
 				<FormField
@@ -62,18 +61,28 @@ export default function CostCenter({
 										(o) => o.value === value
 									) ?? null
 								}
-								onChange={(e) => onChange(e?.value)}
+								onChange={(e) => {
+									setValue(
+										`${entryPath}.voucher_entry_cost_center[${subIdx}].invoice_no`,
+										e.invoice_no
+									);
+									onChange(e?.value);
+								}}
 								menuPortalTarget={document.body}
 							/>
 						)}
 					/>
 				</FormField>
 				<Input
-					title='price'
+					title='Narration'
 					label={`${entryPath}.voucher_entry_cost_center[${subIdx}].invoice_no`}
-					placeholder='Enter Invoice No'
+					placeholder='Enter Narration'
 					is_title_needed='false'
-					dynamicerror={errors?.purchase?.[index]?.price}
+					dynamicerror={
+						errors?.voucher_entry?.[p]?.voucher_entry_cost_center?.[
+							subIdx
+						]?.invoice_no
+					}
 					register={register}
 				/>
 			</div>

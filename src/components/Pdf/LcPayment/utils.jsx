@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { DEFAULT_FONT_SIZE } from '../ui';
 import { company, getEmptyColumn } from '../utils';
 
-const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
+// const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 
 const getDateFormate = (date) => {
 	if (date) {

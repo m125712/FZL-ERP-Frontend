@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 
-import { DEFAULT_FONT_SIZE, xMargin } from '@/components/Pdf/ui';
+import { DEFAULT_FONT_SIZE } from '@/components/Pdf/ui';
 import { DEFAULT_A4_PAGE, getTable, TableHeader } from '@/components/Pdf/utils';
 
 import pdfMake from '..';
@@ -72,7 +72,7 @@ export default function Index(data, type) {
 								style: 'tableHeader',
 							},
 							{
-								text: `${data.reduce((acc, cur) => acc + cur.total_value, 0)}`,
+								text: `${data.reduce((acc, cur) => acc + cur.total_value, 0).toFixed(2)}`,
 								style: 'tableHeader',
 								alignment: 'right',
 							},
@@ -116,6 +116,22 @@ export default function Index(data, type) {
 											: '-',
 										style: 'tableCell',
 										fontSize: DEFAULT_FONT_SIZE - 2,
+									};
+								}
+								if (
+									col.field === 'total_value' ||
+									col.field === 'amount' ||
+									col.field === 'payment_value'
+								) {
+									return {
+										text: item[col.field]
+											? parseFloat(
+													item[col.field]
+												).toFixed(2)
+											: '0.00',
+										style: 'tableCell',
+										fontSize: DEFAULT_FONT_SIZE - 2,
+										alignment: 'right',
 									};
 								}
 								return {

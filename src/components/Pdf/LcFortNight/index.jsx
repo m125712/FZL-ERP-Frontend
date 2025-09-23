@@ -18,7 +18,7 @@ const node = [
 	getTable('ldbc_fdbc', 'LDBC/FDBC'),
 	getTable('marketing_name', 'Marketing'),
 	getTable('commercial_executive', 'Commercial Exc.'),
-	getTable('order_number', 'Order No.'),
+	getTable('order_numbers', 'Order No.'),
 	getTable('handover_date', 'Handover Date'),
 	getTable('remarks', 'Remarks'),
 	getTable('party_bank', 'Party Bank'),
@@ -72,7 +72,7 @@ export default function Index(data, type) {
 								style: 'tableHeader',
 							},
 							{
-								text: `${data.reduce((acc, cur) => acc + cur.total_value, 0).toFixed(2)}`,
+								text: `${data.reduce((acc, cur) => acc + cur?.total_value || 0, 0)?.toFixed(2)}`,
 								style: 'tableHeader',
 								alignment: 'right',
 							},
@@ -134,6 +134,50 @@ export default function Index(data, type) {
 										alignment: 'right',
 									};
 								}
+								// if (col.field === 'order_numbers') {
+								// 	// Normalize both arrays
+								// 	const mainOrders = Array.isArray(
+								// 		item?.order_numbers
+								// 	)
+								// 		? item.order_numbers
+								// 		: [];
+								// 	const threadOrdersRaw = Array.isArray(
+								// 		item?.thread_order_numbers
+								// 	)
+								// 		? item.order_numbers
+								// 		: [];
+
+								// 	// Extract order numbers safely
+								// 	const mainOrderNums = mainOrders
+								// 		.map(
+								// 			(o) =>
+								// 				o?.order_number ?? o?.order_no
+								// 		)
+								// 		.filter(Boolean);
+
+								// 	const threadOrderNums = threadOrdersRaw
+								// 		.map(
+								// 			(o) =>
+								// 				o?.order_number ?? o?.order_no
+								// 		)
+								// 		.filter(Boolean);
+
+								// 	// Merge & dedupe
+								// 	const merged = [
+								// 		...new Set([
+								// 			...mainOrderNums,
+								// 			...threadOrderNums,
+								// 		]),
+								// 	];
+
+								// 	return {
+								// 		text: merged.length
+								// 			? merged.join(', ')
+								// 			: '-',
+								// 		style: 'tableCell',
+								// 		fontSize: DEFAULT_FONT_SIZE - 2,
+								// 	};
+								// }
 								return {
 									text: item[col.field],
 									style: 'tableCell',

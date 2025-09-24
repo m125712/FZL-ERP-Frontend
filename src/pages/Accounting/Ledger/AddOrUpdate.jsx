@@ -252,31 +252,33 @@ export default function Index({
 						}}
 					/>
 				</FormField>
-
-				<FormField
-					label='identifier'
-					title='Identifier'
-					errors={errors}
-				>
-					<Controller
-						name={'identifier'}
-						control={control}
-						render={({ field: { onChange } }) => {
-							return (
-								<ReactSelect
-									placeholder='Select Identifier'
-									options={identifierOptions}
-									value={identifierOptions?.filter(
-										(item) =>
-											item.value ==
-											getValues('identifier')
-									)}
-									onChange={(e) => onChange(e.value)}
-								/>
-							);
-						}}
-					/>
-				</FormField>
+				<div className='flex gap-2'>
+					<FormField
+						label='identifier'
+						title='Identifier'
+						errors={errors}
+					>
+						<Controller
+							name={'identifier'}
+							control={control}
+							render={({ field: { onChange } }) => {
+								return (
+									<ReactSelect
+										placeholder='Select Identifier'
+										options={identifierOptions}
+										value={identifierOptions?.filter(
+											(item) =>
+												item.value ==
+												getValues('identifier')
+										)}
+										onChange={(e) => onChange(e.value)}
+									/>
+								);
+							}}
+						/>
+					</FormField>
+					<Input label='initial_amount' {...{ register, errors }} />
+				</div>
 				<div className='flex gap-2'>
 					<Input label='vat_deduction' {...{ register, errors }} />
 					<Input label='tax_deduction' {...{ register, errors }} />

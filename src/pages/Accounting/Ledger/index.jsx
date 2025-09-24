@@ -101,6 +101,11 @@ export default function Index() {
 				enableColumnFilter: false,
 			},
 			{
+				accessorKey: 'initial_amount',
+				header: 'Initial Amount',
+				enableColumnFilter: false,
+			},
+			{
 				accessorKey: 'vat_deduction',
 				header: 'VAT Deduction',
 				enableColumnFilter: false,

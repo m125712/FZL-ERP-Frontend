@@ -91,7 +91,7 @@ export default function Index() {
 
 	const handelUpdate = (index) => {
 		navigate(
-			`/accounting/voucher/entry/${data?.[index]?.store_type}/${data?.[index]?.vendor_name.split(' ').join('_')}/${data?.[index]?.purchase_id}/${data?.[index]?.total_price}`
+			`/accounting/voucher/entry/${data?.[index]?.vendor_cost_center_uuid}/${data?.[index]?.purchase_cost_center_uuid}/${data?.[index]?.total_price}`
 		);
 	};
 

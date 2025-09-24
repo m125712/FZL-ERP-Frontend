@@ -48,47 +48,23 @@ export {
 	STRING_REQUIRED,
 };
 
-export const LEDGER_SCHEMA = {
-	is_bank_ledger: BOOLEAN_REQUIRED,
-	identifier: STRING_REQUIRED,
+export const COST_CENTER_SCHEMA = {
+	name: STRING_REQUIRED,
+	ledger_uuid: STRING_REQUIRED,
+	invoice_no: STRING_REQUIRED,
 	table_name: STRING.nullable(),
 	table_uuid: STRING.when('table_name', {
 		is: (value) => value != null && value !== '',
 		then: (schema) => schema.required('Required'),
 		otherwise: (schema) => schema.nullable(),
 	}),
-	name: STRING_REQUIRED,
-	// category: STRING_REQUIRED,
-	account_no: STRING.when('is_bank_ledger', {
-		is: (value) => value === true,
-		then: (schema) => schema.required('Required'),
-		otherwise: (schema) => schema.nullable(),
-	}),
-	is_active: BOOLEAN_DEFAULT_VALUE(true),
-	restrictions: STRING_REQUIRED.default('none'),
-	group_uuid: STRING_REQUIRED,
-	initial_amount: NUMBER_DOUBLE.default(0),
-	vat_deduction: NUMBER_DOUBLE_REQUIRED.default(0),
-	tax_deduction: NUMBER_DOUBLE_REQUIRED.default(0),
-	old_ledger_id: NUMBER.default(0),
 	remarks: STRING.nullable(),
 };
 
-export const LEDGER_NULL = {
-	is_bank_ledger: false,
-	table_name: null,
-	table_uuid: null,
+export const COST_CENTER_NULL = {
 	name: '',
-	identifier: 'none',
-	// category: '',
-	account_no: null,
-	type: 'asset',
-	is_active: true,
-	restrictions: 'none',
-	group_uuid: '',
-	initial_amount: 0,
-	vat_deduction: 0,
-	tax_deduction: 0,
-	old_ledger_id: 0,
-	remarks: null,
+	ledger_uuid: '',
+	invoice_no: '',
+	table_name: '',
+	table_uuid: '',
 };

@@ -1,9 +1,20 @@
+import { useState } from 'react';
+import { format } from 'date-fns';
+import { usePdfGenerator } from '@/hooks/usePdfGenerator';
+
 import { generateDetailedBalanceSheetPDF } from '@/components/Pdf/BalanceSheet';
+import PdfGeneratorButton from '@/components/ui/generate-pdf-button';
 
 import { useAccReport } from '../config/query';
+import Header from './Header';
 
 export default function index() {
-	const { data } = useAccReport();
+	const [from, setFrom] = useState(() => new Date());
+	const [to, setTo] = useState(() => new Date());
+	const { data, isFetching } = useAccReport(
+		format(from, 'yyyy-MM-dd'),
+		format(to, 'yyyy-MM-dd')
+	);
 
 	const handleGeneratePDF = async () => {
 		try {
@@ -12,10 +23,10 @@ export default function index() {
 			// Generate PDF when button is clicked, not during render
 			const balanceSheetPDF = await generateDetailedBalanceSheetPDF(
 				data,
-				'Gunze United Limited',
-				'01-Jan-2024',
-				'31-Dec-2024',
-				'2024'
+				'Balance Sheet',
+				from,
+				to,
+				format(from, 'yyyy')
 			);
 			balanceSheetPDF.open();
 			// Open the PDF
@@ -24,15 +35,30 @@ export default function index() {
 		}
 	};
 
+	const {
+		isGenerating,
+		progress,
+		status,
+		pdfUrl,
+		error,
+		generatePdf,
+		reset,
+	} = usePdfGenerator();
 	return (
 		<div>
-			<button
-				className='btn items-center justify-center bg-black text-cyan-100'
-				onClick={handleGeneratePDF} // Call function in onClick handler
-				disabled={!data} // Disable if no data
-			>
-				{data ? 'Generate' : 'Loading...'}
-			</button>
+			<Header from={from} setFrom={setFrom} to={to} setTo={setTo} />
+			<PdfGeneratorButton
+				handleGenerateClick={handleGeneratePDF}
+				isFetching={isFetching}
+				isGenerating={isGenerating}
+				pdfUrl={pdfUrl}
+				status={status}
+				download={false}
+				viewPdf={true}
+				progress={progress}
+				pdf_name={`Balance Sheet(${format(from, 'yyyy-MM-dd')}-${format(to, 'yyyy-MM-dd')})`}
+				error={error}
+			/>
 		</div>
 	);
 }

@@ -1,443 +1,363 @@
 import { format } from 'date-fns';
 
 import { DEFAULT_FONT_SIZE } from '@/components/Pdf/ui';
-import { CUSTOM_PAGE } from '@/components/Pdf/utils';
 
 import pdfMake from '..';
 
-// Safe constants
-const SAFE_FONT_SIZE = 12; // Fallback if DEFAULT_FONT_SIZE is invalid
-const BASE_FONT_SIZE = safeNumber(DEFAULT_FONT_SIZE) || SAFE_FONT_SIZE;
+const PDF_CONFIG = {
+	SAFE_FONT_SIZE: 12,
+	PAGE_SIZE: 'A4',
+	ORIENTATION: 'landscape',
+	MARGINS: [15, 15, 15, 15],
+	COLUMN_WIDTHS: ['45%', '18%', '18%', '19%'],
+};
 
-// Your existing safeNumber function (keep this)
-function safeNumber(value) {
-	if (
-		value === null ||
-		value === undefined ||
-		value === '' ||
-		value === 'null' ||
-		value === 'undefined'
-	) {
-		return 0;
-	}
+const COLORS = {
+	HEADER: '#F8F8F8',
+	CATEGORY: '#E8E8E8',
+	HEAD: '#D8D8D8',
+	HEAD_SUBTOTAL: '#C8C8C8',
+	GROUP: '#F0F0F0',
+	BORDER: '#A0A0A0',
+};
 
-	if (typeof value === 'number') {
-		return isNaN(value) ? 0 : value;
-	}
+const INDENTATION = {
+	HEAD: 10,
+	HEAD_SUBTOTAL: 10,
+	GROUP: 15,
+	LEADER: 25,
+	TOTAL: 20,
+};
 
-	if (typeof value === 'string') {
-		const cleanValue = value.replace(/[^\d.-]/g, '');
-		if (cleanValue === '' || cleanValue === '-' || cleanValue === '.') {
-			return 0;
-		}
-		const num = parseFloat(cleanValue);
-		return isNaN(num) ? 0 : num;
-	}
-
-	const num = Number(value);
-	return isNaN(num) ? 0 : num;
+function formatAmount(amount) {
+	if (typeof amount !== 'number' || isNaN(amount)) return '0.00';
+	return amount.toLocaleString('en-US', {
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
+	});
 }
 
-// Your existing safeCurrency function (keep this)
-function safeCurrency(amount) {
-	const num = safeNumber(amount);
-	if (!isFinite(num) || isNaN(num) || num === 0) return '-';
+function calculateGroupTotals(leaders) {
+	return leaders.reduce(
+		(totals, leader) => ({
+			currentPeriod: totals.currentPeriod + (leader.currentPeriod || 0),
+			yearToDate: totals.yearToDate + (leader.yearToDate || 0),
+			lastYear: totals.lastYear + (leader.lastYear || 0),
+		}),
+		{ currentPeriod: 0, yearToDate: 0, lastYear: 0 }
+	);
+}
 
-	try {
-		return num.toLocaleString('en-US', {
-			minimumFractionDigits: 2,
-			maximumFractionDigits: 2,
+function calculateHeadSubtotals(groups) {
+	return groups.reduce(
+		(totals, group) => {
+			const groupTotals = calculateGroupTotals(group.leaders);
+			return {
+				currentPeriod: totals.currentPeriod + groupTotals.currentPeriod,
+				yearToDate: totals.yearToDate + groupTotals.yearToDate,
+				lastYear: totals.lastYear + groupTotals.lastYear,
+			};
+		},
+		{ currentPeriod: 0, yearToDate: 0, lastYear: 0 }
+	);
+}
+
+function createTableCell(text, options = {}) {
+	return {
+		text: String(text),
+		bold: !!options.bold,
+		fontSize: options.fontSize,
+		fillColor: options.fillColor,
+		margin: options.margin || [5, 2, 5, 2],
+		alignment: options.alignment || 'left',
+	};
+}
+
+function createEmptyCell(fillColor) {
+	return { text: '', fillColor };
+}
+
+function getCategoryDisplayName(type) {
+	return type.charAt(0).toUpperCase() + type.slice(1);
+}
+
+function transformLeader(leader) {
+	return {
+		leaderName: leader?.leader_name || 'Unnamed Account',
+		currentPeriod: leader?.total_net_current_amount || 0,
+		yearToDate: leader?.total_net_ytd_amount || 0,
+		lastYear: leader?.total_net_last_year_amount || 0,
+	};
+}
+
+function transformGroup(group) {
+	return {
+		groupName: group?.group_name || 'Unnamed Group',
+		leaders: (group?.leader_list || []).map(transformLeader),
+	};
+}
+
+function transformHead(head) {
+	return {
+		headName: head?.head_name || 'Unnamed Head',
+		groups: (head?.groupe_list || []).map(transformGroup),
+	};
+}
+
+function transformCategory(category) {
+	return {
+		typeName: getCategoryDisplayName(category.type),
+		heads: (category?.headList || []).map(transformHead),
+	};
+}
+
+function createHeaderRow(baseFontSize) {
+	return [
+		createTableCell('Particulars', {
+			bold: true,
+			fontSize: baseFontSize,
+			fillColor: COLORS.HEADER,
+			margin: [5, 4, 5, 4],
+		}),
+		createTableCell('Current Period', {
+			bold: true,
+			fontSize: baseFontSize,
+			fillColor: COLORS.HEADER,
+			alignment: 'center',
+			margin: [5, 4, 5, 4],
+		}),
+		createTableCell('Year To Date', {
+			bold: true,
+			fontSize: baseFontSize,
+			fillColor: COLORS.HEADER,
+			alignment: 'center',
+			margin: [5, 4, 5, 4],
+		}),
+		createTableCell('Last Year', {
+			bold: true,
+			fontSize: baseFontSize,
+			fillColor: COLORS.HEADER,
+			alignment: 'center',
+			margin: [5, 4, 5, 4],
+		}),
+	];
+}
+
+function createCategoryHeaderRow(category, baseFontSize) {
+	return [
+		createTableCell(category.typeName, {
+			bold: true,
+			fontSize: baseFontSize + 1,
+			fillColor: COLORS.CATEGORY,
+			margin: [5, 5, 5, 5],
+		}),
+		createEmptyCell(COLORS.CATEGORY),
+		createEmptyCell(COLORS.CATEGORY),
+		createEmptyCell(COLORS.CATEGORY),
+	];
+}
+
+function createHeadHeaderRow(head, baseFontSize) {
+	return [
+		createTableCell(head.headName, {
+			bold: true,
+			fontSize: baseFontSize,
+			fillColor: COLORS.HEAD,
+			margin: [INDENTATION.HEAD, 3, 5, 3],
+		}),
+		createEmptyCell(COLORS.HEAD),
+		createEmptyCell(COLORS.HEAD),
+		createEmptyCell(COLORS.HEAD),
+	];
+}
+
+function createHeadSubtotalRow(head, totals, baseFontSize) {
+	return [
+		createTableCell(`Subtotal`, {
+			bold: true,
+			fontSize: baseFontSize - 1,
+			fillColor: COLORS.HEAD_SUBTOTAL,
+			margin: [INDENTATION.HEAD_SUBTOTAL, 3, 5, 3],
+		}),
+		createTableCell(formatAmount(totals.currentPeriod), {
+			bold: true,
+			fontSize: baseFontSize - 1,
+			alignment: 'right',
+			fillColor: COLORS.HEAD_SUBTOTAL,
+			margin: [5, 3, 8, 3],
+		}),
+		createTableCell(formatAmount(totals.yearToDate), {
+			bold: true,
+			fontSize: baseFontSize - 1,
+			alignment: 'right',
+			fillColor: COLORS.HEAD_SUBTOTAL,
+			margin: [5, 3, 8, 3],
+		}),
+		createTableCell(formatAmount(totals.lastYear), {
+			bold: true,
+			fontSize: baseFontSize - 1,
+			alignment: 'right',
+			fillColor: COLORS.HEAD_SUBTOTAL,
+			margin: [5, 3, 8, 3],
+		}),
+	];
+}
+
+function createGroupHeaderRow(group, baseFontSize) {
+	return [
+		createTableCell(group.groupName, {
+			bold: true,
+			fontSize: baseFontSize - 1,
+			fillColor: COLORS.GROUP,
+			margin: [INDENTATION.GROUP, 2, 5, 2],
+		}),
+		createEmptyCell(COLORS.GROUP),
+		createEmptyCell(COLORS.GROUP),
+		createEmptyCell(COLORS.GROUP),
+	];
+}
+
+function createLeaderRow(leader, baseFontSize) {
+	return [
+		createTableCell(leader.leaderName, {
+			fontSize: baseFontSize - 2,
+			margin: [INDENTATION.LEADER, 2, 5, 2],
+		}),
+		createTableCell(formatAmount(leader.currentPeriod), {
+			fontSize: baseFontSize - 2,
+			alignment: 'right',
+			margin: [5, 2, 8, 2],
+		}),
+		createTableCell(formatAmount(leader.yearToDate), {
+			fontSize: baseFontSize - 2,
+			alignment: 'right',
+			margin: [5, 2, 8, 2],
+		}),
+		createTableCell(formatAmount(leader.lastYear), {
+			fontSize: baseFontSize - 2,
+			alignment: 'right',
+			margin: [5, 2, 8, 2],
+		}),
+	];
+}
+
+function createGroupTotalRow(totals, baseFontSize) {
+	return [
+		createTableCell('Total', {
+			bold: true,
+			fontSize: baseFontSize - 2,
+			margin: [INDENTATION.TOTAL, 2, 5, 2],
+			fillColor: COLORS.HEADER,
+		}),
+		createTableCell(formatAmount(totals.currentPeriod), {
+			bold: true,
+			fontSize: baseFontSize - 2,
+			alignment: 'right',
+			margin: [5, 2, 8, 2],
+			fillColor: COLORS.HEADER,
+		}),
+		createTableCell(formatAmount(totals.yearToDate), {
+			bold: true,
+			fontSize: baseFontSize - 2,
+			alignment: 'right',
+			margin: [5, 2, 8, 2],
+			fillColor: COLORS.HEADER,
+		}),
+		createTableCell(formatAmount(totals.lastYear), {
+			bold: true,
+			fontSize: baseFontSize - 2,
+			alignment: 'right',
+			margin: [5, 2, 8, 2],
+			fillColor: COLORS.HEADER,
+		}),
+	];
+}
+
+function generateTableBody(categories, baseFontSize) {
+	const rows = [];
+	rows.push(createHeaderRow(baseFontSize));
+
+	categories.forEach((category) => {
+		rows.push(createCategoryHeaderRow(category, baseFontSize));
+
+		category.heads.forEach((head) => {
+			rows.push(createHeadHeaderRow(head, baseFontSize));
+
+			head.groups.forEach((group) => {
+				rows.push(createGroupHeaderRow(group, baseFontSize));
+
+				group.leaders.forEach((leader) => {
+					rows.push(createLeaderRow(leader, baseFontSize));
+				});
+
+				if (group.leaders.length) {
+					const groupTotals = calculateGroupTotals(group.leaders);
+					rows.push(createGroupTotalRow(groupTotals, baseFontSize));
+				}
+			});
+
+			if (head.groups.length > 0) {
+				const headSubtotals = calculateHeadSubtotals(head.groups);
+				rows.push(
+					createHeadSubtotalRow(head, headSubtotals, baseFontSize)
+				);
+			}
 		});
-	} catch (error) {
-		return num.toString();
-	}
+	});
+
+	return rows;
 }
 
-// Your existing calculateBalance function (keep this)
-function calculateBalance(debit, credit) {
-	const debitAmount = safeNumber(debit);
-	const creditAmount = safeNumber(credit);
-	const balance = debitAmount - creditAmount;
-	return isFinite(balance) && !isNaN(balance) ? balance : 0;
+function createPDFLayout() {
+	return {
+		fillColor: () => null,
+		hLineWidth: (i, node) =>
+			i === 0 || i === node.table.body.length ? 1 : 0.5,
+		vLineWidth: (i, node) =>
+			i === 0 || i === node.table.widths.length ? 1 : 0.5,
+		hLineColor: () => COLORS.BORDER,
+		vLineColor: () => COLORS.BORDER,
+	};
 }
 
 export async function generateDetailedBalanceSheetPDF(
 	data,
-	companyName = 'Gunze United Limited',
-	startDate = '01-Jan-2024',
-	endDate = '31-Dec-2024',
-	year = '2024'
+	companyName,
+	startDate,
+	endDate,
+	year
 ) {
-	try {
-		console.log('Starting PDF generation...', data);
-		console.log('Base font size:', BASE_FONT_SIZE);
-		await data;
+	const processedCategories = data.map(transformCategory);
+	const baseFontSize = DEFAULT_FONT_SIZE || PDF_CONFIG.SAFE_FONT_SIZE;
 
-		if (!data || !Array.isArray(data ? data : [])) {
-			throw new Error('Data must be an array');
-		}
-
-		// Process your data (keep your existing logic but add safety)
-		const organizedData = data.map((category) => {
-			if (
-				!category ||
-				!category.headList ||
-				!Array.isArray(category.headList)
-			) {
-				return {
-					type: category?.type || 'unknown',
-					typeName: 'Unknown',
-					heads: [],
-				};
-			}
-
-			return {
-				type: category.type,
-				typeName: category.type === 'assets' ? 'Asset' : 'Liability',
-				heads: category.headList.map((head) => {
-					if (!head) return { headName: 'Unknown Head', groups: [] };
-
-					return {
-						headName: head.head_name || 'Unnamed Head',
-						groups: head.groupe_list
-							? head.groupe_list.map((group) => {
-									if (!group)
-										return {
-											groupName: 'Unknown Group',
-											leaders: [],
-										};
-
-									return {
-										groupName:
-											group.group_name || 'Unnamed Group',
-										leaders: group.leader_list
-											? group.leader_list.map(
-													(leader) => {
-														if (!leader) {
-															return {
-																leaderId:
-																	'0000000000',
-																leaderName:
-																	'Unknown Leader',
-																currentPeriod: 0,
-																yearToDate: 0,
-																lastYear: 0,
-															};
-														}
-
-														const currentBalance =
-															calculateBalance(
-																leader.total_debit_amount,
-																leader.total_credit_amount
-															);
-
-														return {
-															leaderId:
-																(
-																	leader.uuid ||
-																	''
-																).replace(
-																	/[^0-9]/g,
-																	''
-																) ||
-																'0000000000',
-															leaderName:
-																leader.leader_name ||
-																'Unnamed Account',
-															currentPeriod:
-																currentBalance,
-															yearToDate:
-																safeNumber(
-																	currentBalance *
-																		1.2
-																),
-															lastYear:
-																safeNumber(
-																	currentBalance *
-																		0.85
-																),
-														};
-													}
-												)
-											: [],
-									};
-								})
-							: [],
-					};
-				}),
-			};
-		});
-
-		const assetsData = organizedData.find((cat) => cat.type === 'assets');
-
-		// Create PDF with completely safe values
-		const pdfDocGenerator = pdfMake.createPdf({
-			pageSize: 'A4',
-			pageOrientation: 'landscape',
-			pageMargins: [15, 15, 15, 15], // Use simple array instead of CUSTOM_PAGE
-
-			content: [
-				// Company Header
-				{
-					text: String(companyName),
-					fontSize: BASE_FONT_SIZE + 6,
-					bold: true,
-					alignment: 'center',
-					margin: [0, 0, 0, 8],
+	const documentDefinition = {
+		pageSize: PDF_CONFIG.PAGE_SIZE,
+		pageOrientation: PDF_CONFIG.ORIENTATION,
+		pageMargins: PDF_CONFIG.MARGINS,
+		content: [
+			{
+				text: companyName.trim(),
+				fontSize: baseFontSize + 6,
+				bold: true,
+				alignment: 'center',
+				margin: [0, 0, 0, 8],
+			},
+			{
+				text: `Balance Sheet Detail For ${format(startDate, 'dd MMM, yyyy')} To ${format(endDate, 'dd MMM, yyyy')}, Year - ${year}`,
+				fontSize: baseFontSize + 1,
+				alignment: 'center',
+				margin: [0, 0, 0, 15],
+			},
+			{
+				table: {
+					headerRows: 1,
+					widths: PDF_CONFIG.COLUMN_WIDTHS,
+					body: generateTableBody(processedCategories, baseFontSize),
 				},
+				layout: createPDFLayout(),
+			},
+		],
+	};
 
-				// Report Title
-				{
-					text: `Balance Sheet Detail For ${startDate} To ${endDate}, Year - ${year}`,
-					fontSize: BASE_FONT_SIZE + 1,
-					alignment: 'center',
-					margin: [0, 0, 0, 15],
-				},
-
-				// Main Table
-				{
-					table: {
-						headerRows: 1,
-						widths: ['45%', '18%', '18%', '19%'],
-						body: [
-							// Header Row
-							[
-								{
-									text: 'Particulars',
-									bold: true,
-									fontSize: BASE_FONT_SIZE,
-									fillColor: '#F5F5F5',
-									margin: [5, 4, 5, 4],
-								},
-								{
-									text: 'Current Period',
-									bold: true,
-									fontSize: BASE_FONT_SIZE,
-									alignment: 'center',
-									fillColor: '#F5F5F5',
-									margin: [5, 4, 5, 4],
-								},
-								{
-									text: 'Year To Date',
-									bold: true,
-									fontSize: BASE_FONT_SIZE,
-									alignment: 'center',
-									fillColor: '#F5F5F5',
-									margin: [5, 4, 5, 4],
-								},
-								{
-									text: 'Last Year',
-									bold: true,
-									fontSize: BASE_FONT_SIZE,
-									alignment: 'center',
-									fillColor: '#F5F5F5',
-									margin: [5, 4, 5, 4],
-								},
-							],
-
-							// Asset Type Header
-							...(assetsData
-								? [
-										[
-											{
-												text: String(
-													assetsData.typeName
-												),
-												bold: true,
-												fontSize: BASE_FONT_SIZE,
-												fillColor: '#E0E0E0',
-												margin: [5, 3, 5, 3],
-											},
-											{ text: '', fillColor: '#E0E0E0' },
-											{ text: '', fillColor: '#E0E0E0' },
-											{ text: '', fillColor: '#E0E0E0' },
-										],
-									]
-								: []),
-
-							// Data rows (simplified to avoid complex nesting)
-							...(assetsData && assetsData.heads
-								? assetsData.heads.flatMap((head) => {
-										const rows = [];
-
-										// Head row
-										rows.push([
-											{
-												text: String(head.headName),
-												bold: true,
-												fontSize: BASE_FONT_SIZE - 1,
-												decoration: 'underline',
-												fillColor: '#FFFFCC',
-												margin: [8, 3, 5, 3],
-											},
-											{ text: '', fillColor: '#FFFFCC' },
-											{ text: '', fillColor: '#FFFFCC' },
-											{ text: '', fillColor: '#FFFFCC' },
-										]);
-
-										// Add groups and leaders
-										if (
-											head.groups &&
-											head.groups.length > 0
-										) {
-											head.groups.forEach((group) => {
-												// Group header
-												rows.push([
-													{
-														text: String(
-															group.groupName
-														),
-														bold: true,
-														fontSize:
-															BASE_FONT_SIZE - 2,
-														fillColor: '#90EE90',
-														margin: [15, 2, 5, 2],
-													},
-													{
-														text: '',
-														fillColor: '#90EE90',
-													},
-													{
-														text: '',
-														fillColor: '#90EE90',
-													},
-													{
-														text: '',
-														fillColor: '#90EE90',
-													},
-												]);
-
-												// Leaders
-												if (
-													group.leaders &&
-													group.leaders.length > 0
-												) {
-													group.leaders.forEach(
-														(leader) => {
-															rows.push([
-																{
-																	text: `  ${leader.leaderId} ${leader.leaderName}`,
-																	fontSize:
-																		BASE_FONT_SIZE -
-																		3,
-																	margin: [
-																		25, 2,
-																		5, 2,
-																	],
-																},
-																{
-																	text: safeCurrency(
-																		leader.currentPeriod
-																	),
-																	fontSize:
-																		BASE_FONT_SIZE -
-																		3,
-																	alignment:
-																		'right',
-																	margin: [
-																		5, 2, 8,
-																		2,
-																	],
-																},
-																{
-																	text: safeCurrency(
-																		leader.yearToDate
-																	),
-																	fontSize:
-																		BASE_FONT_SIZE -
-																		3,
-																	alignment:
-																		'right',
-																	margin: [
-																		5, 2, 8,
-																		2,
-																	],
-																},
-																{
-																	text: safeCurrency(
-																		leader.lastYear
-																	),
-																	fontSize:
-																		BASE_FONT_SIZE -
-																		3,
-																	alignment:
-																		'right',
-																	margin: [
-																		5, 2, 8,
-																		2,
-																	],
-																},
-															]);
-														}
-													);
-
-													// Group total
-													const groupTotal =
-														group.leaders.reduce(
-															(sum, leader) =>
-																safeNumber(
-																	sum
-																) +
-																safeNumber(
-																	leader.currentPeriod
-																),
-															0
-														);
-
-													rows.push([
-														{
-															text: 'Total',
-															bold: true,
-															fontSize:
-																BASE_FONT_SIZE -
-																2,
-															margin: [
-																25, 2, 5, 2,
-															],
-														},
-														{
-															text: safeCurrency(
-																groupTotal
-															),
-															bold: true,
-															fontSize:
-																BASE_FONT_SIZE -
-																2,
-															alignment: 'right',
-															margin: [
-																5, 2, 8, 2,
-															],
-														},
-														{
-															text: '',
-															margin: [
-																5, 2, 8, 2,
-															],
-														},
-														{
-															text: '',
-															margin: [
-																5, 2, 8, 2,
-															],
-														},
-													]);
-												}
-											});
-										}
-
-										return rows;
-									})
-								: []),
-						],
-					},
-				},
-			],
-		});
-
-		console.log('PDF generation completed successfully');
-		return pdfDocGenerator; // or .download('BalanceSheet.pdf');
-	} catch (error) {
-		console.error('PDF generation error:', error);
-		throw error;
-	}
+	return pdfMake.createPdf(documentDefinition);
 }

@@ -120,6 +120,9 @@ export const OrderRoutes = [
 					'update',
 					'delete',
 					'show_own_orders',
+					'edit_md_price',
+					'edit_mkt_price',
+					'click_price_lock',
 				],
 			},
 			{

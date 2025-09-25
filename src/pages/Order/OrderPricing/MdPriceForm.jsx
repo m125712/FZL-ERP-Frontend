@@ -1,13 +1,12 @@
 import { useAuth } from '@/context/auth';
-import { Circle, Undo, Undo2Icon } from 'lucide-react';
 import { useRHF } from '@/hooks';
 
 import JoinMultiInputButton from '@/components/ui/join-multi-input-buton';
 
 import GetDateTime from '@/util/GetDateTime';
-import { MD_PRICE_NULL, MD_PRICE_SCHEMA } from '@/util/Schema';
+import { MD_PRICE_SCHEMA } from '@/util/Schema';
 
-export function MDPriceForm({ rowData, updateData, invalidQuery }) {
+export function MDPriceForm({ rowData, updateData, disabled }) {
 	const { user } = useAuth();
 
 	const { register, getValues, watch, control, setValue } = useRHF(
@@ -29,7 +28,9 @@ export function MDPriceForm({ rowData, updateData, invalidQuery }) {
 			isOnCloseNeeded: false,
 		});
 	};
-
+	const handleUndoButton = () => {
+		setValue('md_price', rowData.md_price);
+	};
 	const currentValue =
 		watch('md_price') > 0 ? watch('md_price') : rowData.md_price;
 	const hasChanges = currentValue !== rowData.md_price;
@@ -42,22 +43,14 @@ export function MDPriceForm({ rowData, updateData, invalidQuery }) {
 				getValues={getValues}
 				control={control}
 				type='number'
+				disabled={disabled}
 				numberOfInputFields={1}
 				showSubmitButton={hasChanges}
 				placeholder={`${rowData.md_price || 'Enter price'}`}
+				showUndoButton={hasChanges}
+				handleUndoButton={handleUndoButton}
 				onSubmit={handleSubmit}
 			/>
-			{hasChanges && (
-				<span className='pl-2 text-xs font-semibold text-gray-700'>
-					{/* Modified (not saved){' '} */}
-					<span
-						className='text-gray underline'
-						onClick={() => setValue('md_price', rowData.md_price)}
-					>
-						undo
-					</span>
-				</span>
-			)}
 		</div>
 	);
 }

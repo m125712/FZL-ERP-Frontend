@@ -196,10 +196,12 @@ export const MD_PRICE_NULL = {
 	md_price: 0,
 };
 export const MKT_PRICE_SCHEMA = {
-	md_price: NUMBER,
+	mkt_party_price: NUMBER,
+	mkt_company_price: NUMBER,
 };
 export const MKT_PRICE_NULL = {
-	md_price: 0,
+	mkt_party_price: 0,
+	mkt_company_price: 0,
 };
 
 // Material

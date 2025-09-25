@@ -1,4 +1,4 @@
-import { Check } from 'lucide-react';
+import { Check, Undo } from 'lucide-react';
 import { Controller } from 'react-hook-form';
 
 export default function JoinMultiInputButton({
@@ -11,8 +11,9 @@ export default function JoinMultiInputButton({
 	onSubmit: customOnSubmit,
 	getValues,
 	type = 'text',
-	values = [],
+	showUndoButton = true,
 	showSubmitButton = true,
+	handleUndoButton,
 }) {
 	const fieldNames = Array.isArray(names)
 		? names
@@ -49,12 +50,13 @@ export default function JoinMultiInputButton({
 						control={control}
 						render={({ field: { value, onChange, onBlur } }) => (
 							<input
-								type={type}
-								className={`input input-sm join-item w-24 border border-gray-300 ${
+								className={`input input-sm join-item w-16 border border-gray-300 ${
 									index === 0 ? 'rounded-sm' : ''
 								} ${index === numberOfInputFields - 1 && numberOfInputFields > 1 ? 'rounded-r-none' : ''}`}
 								placeholder={placeholders[index]}
-								value={value} // Now properly controlled
+								value={
+									type === 'number' ? Number(value) : value
+								}
 								onChange={onChange}
 								onBlur={onBlur}
 								disabled={disabled}
@@ -63,16 +65,23 @@ export default function JoinMultiInputButton({
 					/>
 				);
 			})}
-			{showSubmitButton && (
-				<button
-					className='btn join-item btn-sm rounded-r-full border border-gray-300'
-					type='button'
-					onClick={handleSubmit}
-					disabled={disabled}
-				>
-					<Check size={16} />
-				</button>
-			)}
+			<button
+				className='btn join-item btn-sm rounded-r-full border border-gray-300 bg-red-100'
+				type='button'
+				onClick={handleUndoButton}
+				disabled={disabled || !showUndoButton}
+			>
+				<Undo size={16} />
+			</button>
+
+			<button
+				className='btn join-item btn-sm rounded-r-full border border-gray-300'
+				type='button'
+				onClick={handleSubmit}
+				disabled={disabled || !showSubmitButton}
+			>
+				<Check size={16} />
+			</button>
 		</div>
 	);
 }

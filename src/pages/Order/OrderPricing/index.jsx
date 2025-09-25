@@ -13,9 +13,9 @@ import { cn } from '@/lib/utils';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
+import SimpleTooltip from '../../../components/simpleToolpit';
 import { MarketingPriceForm } from './MarketingPriceForm';
 import { MDPriceForm } from './MdPriceForm';
-import SimpleTooltip from './simpleToolpit';
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {

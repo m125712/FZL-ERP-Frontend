@@ -28,6 +28,7 @@ const Merchandiser = lazy(() => import('@/pages/Order/Merchandiser'));
 const Party = lazy(() => import('@/pages/Order/Party'));
 const Properties = lazy(() => import('@/pages/Order/Properties'));
 const Settings = lazy(() => import('@/pages/Order/Settings'));
+const OrderPricing = lazy(() => import('@/pages/Order/OrderPricing'));
 
 export const OrderRoutes = [
 	{
@@ -65,6 +66,7 @@ export const OrderRoutes = [
 				actions: ['read', 'update'],
 				isDynamic: true,
 			},
+
 			{
 				name: 'Product Description',
 				path: '/order/details/:order_number/:order_description_uuid',
@@ -104,6 +106,19 @@ export const OrderRoutes = [
 					'click_status_production_paused',
 					'click_status_sno_from_head_office',
 					'click_status_receive_by_factory',
+					'show_own_orders',
+				],
+			},
+			{
+				name: 'Order Pricing',
+				path: '/order/order-pricing',
+				element: <OrderPricing />,
+				page_name: 'order__order_pricing',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
 					'show_own_orders',
 				],
 			},

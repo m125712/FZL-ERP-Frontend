@@ -67,6 +67,7 @@ export const orderQK = {
 	//properties
 	properties: () => [...orderQK.all(), 'properties'],
 	propertiesByUUID: (uuid) => [...orderQK.party(), uuid],
+	zipperOrderPrice: (query) => [...orderQK.all(), 'zipperOrderPrice', query],
 };
 
 export const adminQK = {

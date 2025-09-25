@@ -189,6 +189,18 @@ export const MARKETING_NULL = {
 	short_name: '',
 	remarks: '',
 };
+export const MD_PRICE_SCHEMA = {
+	md_price: NUMBER,
+};
+export const MD_PRICE_NULL = {
+	md_price: 0,
+};
+export const MKT_PRICE_SCHEMA = {
+	md_price: NUMBER,
+};
+export const MKT_PRICE_NULL = {
+	md_price: 0,
+};
 
 // Material
 export const MATERIAL_SCHEMA = {

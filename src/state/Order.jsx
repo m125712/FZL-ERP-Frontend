@@ -164,3 +164,9 @@ export const useOrderInfoByUUID = (uuid) =>
 		queryKey: orderQK.infoByUUID(uuid),
 		url: `/zipper/order-info/${uuid}`,
 	});
+export const useOrderPrice = (query) =>
+	createGlobalState({
+		queryKey: orderQK.zipperOrderPrice(query),
+		url: '/report/zipper-production-status-report-v2?' + query,
+		enabled: true,
+	});

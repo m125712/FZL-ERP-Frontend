@@ -31,8 +31,7 @@ export function MDPriceForm({ rowData, updateData, disabled }) {
 	const handleUndoButton = () => {
 		setValue('md_price', rowData.md_price);
 	};
-	const currentValue =
-		watch('md_price') > 0 ? watch('md_price') : rowData.md_price;
+	const currentValue = watch('md_price');
 	const hasChanges = currentValue !== rowData.md_price;
 
 	return (

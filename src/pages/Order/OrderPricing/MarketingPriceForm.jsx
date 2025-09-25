@@ -31,14 +31,9 @@ export function MarketingPriceForm({ rowData, updateData, disabled = false }) {
 		});
 	};
 
-	const currentPartyValue =
-		watch('mkt_party_price') > 0
-			? watch('mkt_party_price')
-			: rowData.mkt_party_price;
-	const currentCompanyValue =
-		watch('mkt_company_price') > 0
-			? watch('mkt_company_price')
-			: rowData.mkt_company_price;
+	const currentPartyValue = watch('mkt_party_price');
+
+	const currentCompanyValue = watch('mkt_company_price');
 
 	const hasChanges =
 		currentPartyValue !== rowData.mkt_party_price ||

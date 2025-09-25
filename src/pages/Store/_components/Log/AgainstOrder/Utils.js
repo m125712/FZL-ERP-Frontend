@@ -13,7 +13,7 @@ export const sections = [
 	},
 	{
 		value: 'metal_vislon_nylon',
-		label: 'Metal+ Vislon+Nylon',
+		label: 'Metal + Vislon + Nylon',
 	},
 	{
 		value: 'coil_forming_section',
@@ -38,5 +38,36 @@ export const sections = [
 	{
 		value: 'sewing_thread',
 		label: 'Sewing Thread',
+	},
+	{
+		label: 'Vislon Open Section',
+		value: 'vislon_open_section',
+	},
+	{ label: 'Vislon Injection Section', value: 'vislon_injection_section' },
+	{ label: 'Vislon Finishing Section', value: 'vislon_finishing_section' },
+	{ label: 'Soft Coning Section', value: 'soft_coning_section' },
+	{
+		value: 'all_utility',
+		label: 'All Utility',
+	},
+	{
+		value: 'die_casting_section',
+		label: 'Die-casting Section',
+	},
+	{
+		value: 'metal_finishing_section',
+		label: 'Metal Finishing Section',
+	},
+	{
+		value: 'metal_teeth_color_section',
+		label: 'Metal Teeth Color Section',
+	},
+	{
+		value: 'nylon_finishing_section',
+		label: 'Nylon Finishing Section',
+	},
+	{
+		value: 'painting',
+		label: 'Painting',
 	},
 ];

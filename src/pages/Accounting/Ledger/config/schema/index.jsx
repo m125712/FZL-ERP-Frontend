@@ -1,3 +1,4 @@
+import index from '@/pages/Accounting/Report/BalanceSheetAndProftLoss';
 import * as yup from 'yup';
 
 import {
@@ -51,6 +52,8 @@ export {
 export const LEDGER_SCHEMA = {
 	is_bank_ledger: BOOLEAN_REQUIRED,
 	identifier: STRING_REQUIRED,
+	group_number: STRING_REQUIRED,
+	index: NUMBER_REQUIRED,
 	table_name: STRING.nullable(),
 	table_uuid: STRING.when('table_name', {
 		is: (value) => value != null && value !== '',

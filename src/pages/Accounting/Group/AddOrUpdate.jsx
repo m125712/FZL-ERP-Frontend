@@ -146,6 +146,10 @@ export default function Index({
 			</FormField> */}
 			<Input label='name' {...{ register, errors }} />
 			<Input label='code' {...{ register, errors }} />
+			<div className='grid grid-cols-2 gap-4'>
+				<Input label='index' {...{ register, errors }} />
+				<Input label='group_number' {...{ register, errors }} />
+			</div>
 
 			<FormField label='is_fixed' title='Fixed' errors={errors}>
 				<Controller

@@ -21,6 +21,16 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
+				accessorKey: 'index',
+				header: 'Index',
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'group_number',
+				header: 'Group Number',
+				enableColumnFilter: false,
+			},
+			{
 				accessorKey: 'type',
 				header: 'Type',
 				enableColumnFilter: false,

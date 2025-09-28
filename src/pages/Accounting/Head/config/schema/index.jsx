@@ -49,6 +49,8 @@ export {
 };
 
 export const HEAD_SCHEMA = {
+	group_number: STRING_REQUIRED,
+	index: NUMBER_REQUIRED,
 	name: STRING_REQUIRED,
 	// title: STRING_REQUIRED,
 	type: STRING_REQUIRED,

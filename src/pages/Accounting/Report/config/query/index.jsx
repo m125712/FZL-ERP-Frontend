@@ -3,16 +3,9 @@ import createGlobalState from '@/state';
 import { accQK } from './QueryKeys';
 
 //* Accounting cost center
-export const useAccReport = (from, to) =>
+export const useAccReport = (from, to, type) =>
 	createGlobalState({
-		queryKey: accQK.costCenter(),
-		url: `/report/acc-balance-report?from=${from}&to=${to}`,
+		queryKey: accQK.accReport(from, to, type),
+		url: `/report/acc-balance-report?from=${from}&to=${to}&type=${type}`,
 		enabled: !!from && !!to,
-	});
-
-export const useAccReportByUUID = (uuid) =>
-	createGlobalState({
-		queryKey: accQK.costCenterByUUID(uuid),
-		url: `/report/acc-balance-report/${uuid}`,
-		enabled: !!uuid,
 	});

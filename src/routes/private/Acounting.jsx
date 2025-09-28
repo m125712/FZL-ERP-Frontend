@@ -11,7 +11,7 @@ const VoucherEntry = lazy(() => import('@/pages/Accounting/Voucher/Entry'));
 const VoucherDetails = lazy(() => import('@/pages/Accounting/Voucher/Details'));
 const NeedToAccept = lazy(() => import('@/pages/Accounting/NeedToAccept'));
 const AccountingReport = lazy(
-	() => import('@/pages/Accounting/Report/Accounting')
+	() => import('@/pages/Accounting/Report/BalanceSheetAndProftLoss')
 );
 export const AccountingRoutes = [
 	{
@@ -111,10 +111,17 @@ export const AccountingRoutes = [
 				name: 'Report',
 				children: [
 					{
-						name: 'Accounting',
-						path: '/accounting/report/accounting',
-						element: <AccountingReport />,
-						page_name: 'accounting__report__accounting',
+						name: 'Balance Sheet',
+						path: '/accounting/report/balance-sheet',
+						element: <AccountingReport type='balance_sheet' />,
+						page_name: 'accounting__report__balance_sheet',
+						actions: ['read'],
+					},
+					{
+						name: 'Profit and Loss',
+						path: '/accounting/report/profit-and-loss',
+						element: <AccountingReport type='profit_and_loss' />,
+						page_name: 'accounting__report__profit_and_loss',
 						actions: ['read'],
 					},
 				],

@@ -125,6 +125,15 @@ export function OrderInformation({
 		factory_address,
 		pi_numbers,
 		revision_no,
+		sno_from_head_office,
+		sno_from_head_office_time,
+		sno_from_head_office_by_name,
+		receive_by_factory,
+		receive_by_factory_time,
+		receive_by_factory_by_name,
+		production_pause,
+		production_pause_time,
+		production_pause_by_name,
 	} = order;
 
 	const renderItems = () => {
@@ -210,9 +219,73 @@ export function OrderInformation({
 				value: factory_address,
 			},
 		];
+		const status_details = [
+			{
+				label: 'S/N From Head Office',
+
+				value: (
+					<div className='flex gap-2'>
+						<StatusButton
+							className={'btn-xs'}
+							value={sno_from_head_office}
+						/>
+						<div className='flex flex-col gap-2'>
+							{sno_from_head_office_time &&
+								format(
+									new Date(sno_from_head_office_time),
+									'dd/MM/yyyy hh:mm aaa'
+								)}
+							<span>{sno_from_head_office_by_name}</span>
+						</div>
+					</div>
+				),
+			},
+
+			{
+				label: 'Receive By Factory',
+
+				value: (
+					<div className='flex gap-2'>
+						<StatusButton
+							className={'btn-xs'}
+							value={receive_by_factory}
+						/>
+						<div className='flex flex-col gap-2'>
+							{receive_by_factory_time &&
+								format(
+									new Date(receive_by_factory_time),
+									'dd/MM/yyyy hh:mm aaa'
+								)}
+							<span>{receive_by_factory_by_name}</span>
+						</div>
+					</div>
+				),
+			},
+
+			{
+				label: 'Production Pause',
+				value: (
+					<div className='flex gap-2'>
+						<StatusButton
+							className={'btn-xs'}
+							value={production_pause}
+						/>
+						<div className='flex flex-col gap-2'>
+							{production_pause_time &&
+								format(
+									new Date(production_pause_time),
+									'dd/MM/yyyy hh:mm aaa'
+								)}
+							<span>{production_pause_by_name}</span>
+						</div>
+					</div>
+				),
+			},
+		];
 		return {
 			order_details,
 			buyer_details,
+			status_details,
 		};
 	};
 
@@ -246,7 +319,7 @@ export function OrderInformation({
 			// selector={renderSelector()}
 			className={'mb-8'}
 		>
-			<div className='grid grid-cols-1 bg-base-100 md:grid-cols-2 md:gap-8'>
+			<div className='grid grid-cols-1 bg-base-100 md:grid-cols-3 md:gap-8'>
 				<RenderTable
 					className={
 						'border-b border-secondary/30 md:border-b-0 md:border-r'
@@ -256,9 +329,14 @@ export function OrderInformation({
 				/>
 
 				<RenderTable
-					className={'border-secondary/30 md:border-l'}
+					className={'border-secondary/30 md:border-l md:border-r'}
 					title='Buyer Details'
 					items={renderItems().buyer_details}
+				/>
+				<RenderTable
+					className={'border-secondary/30 md:border-l'}
+					title='Status Details'
+					items={renderItems().status_details}
 				/>
 			</div>
 		</SectionContainer>

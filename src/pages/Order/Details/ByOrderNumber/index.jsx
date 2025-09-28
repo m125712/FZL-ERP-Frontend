@@ -1,5 +1,6 @@
 import { lazy, useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
+import { orderStatuses } from '@/pages/Report/utils';
 import { useOrderDetailsByStyleForPDF } from '@/state/Order';
 import { useParams } from 'react-router';
 import { useAccess, useFetchFunc } from '@/hooks';
@@ -106,6 +107,16 @@ export default function Index() {
 				created_at: orders[0]?.created_at,
 				order_description_updated_at:
 					orders[0]?.order_description_updated_at,
+				sno_from_head_office: orders?.sno_from_head_office,
+				sno_from_head_office_time: orders?.sno_from_head_office_time,
+				sno_from_head_office_by_name:
+					orders?.sno_from_head_office_by_name,
+				receive_by_factory: orders?.receive_by_factory,
+				receive_by_factory_time: orders?.receive_by_factory_time,
+				receive_by_factory_by_name: orders?.receive_by_factory_by_name,
+				production_pause: orders?.production_pause,
+				production_pause_time: orders?.production_pause_time,
+				production_pause_by_name: orders?.production_pause_by_name,
 			};
 
 			const order_sheet = {
@@ -168,6 +179,15 @@ export default function Index() {
 		reference_order: orders[0]?.reference_order,
 		revision_no: orders[0]?.revision_no,
 		print_in: orders[0]?.print_in,
+		sno_from_head_office: orders[0]?.sno_from_head_office,
+		sno_from_head_office_time: orders[0]?.sno_from_head_office_time,
+		sno_from_head_office_by_name: orders[0]?.sno_from_head_office_by_name,
+		receive_by_factory: orders[0]?.receive_by_factory,
+		receive_by_factory_time: orders[0]?.receive_by_factory_time,
+		receive_by_factory_by_name: orders[0]?.receive_by_factory_by_name,
+		production_pause: orders[0]?.production_pause,
+		production_pause_time: orders[0]?.production_pause_time,
+		production_pause_by_name: orders[0]?.production_pause_by_name,
 	};
 
 	// if (!orders) return <Navigate to='/not-found' />;

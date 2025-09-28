@@ -69,7 +69,6 @@ export default function Index({
 	};
 
 	const onSubmit = async (data) => {
-		console.log('Before update:', updateItem.currentCostCenters);
 		const new_uuid = nanoid();
 		const updatedData = {
 			...data,
@@ -103,6 +102,7 @@ export default function Index({
 				...filteredCostCenters,
 				{
 					cost_center_uuid: new_uuid,
+					invoice_no: data?.invoice_no,
 					amount: updateItem?.amount || 0,
 				},
 			]
@@ -123,12 +123,6 @@ export default function Index({
 				},
 			]
 		);
-		setTimeout(() => {
-			const verifyData = updateItem?.voucher_entry_get_values(
-				`voucher_entry.${updateItem.index}.voucher_entry_cost_center`
-			);
-			console.log('Verification after set:', verifyData);
-		}, 100);
 	};
 
 	return (

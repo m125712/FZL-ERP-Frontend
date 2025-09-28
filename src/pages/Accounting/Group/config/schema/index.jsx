@@ -49,6 +49,8 @@ export {
 };
 
 export const GROUP_SCHEMA = {
+	group_number: STRING_REQUIRED,
+	index: NUMBER_REQUIRED,
 	name: STRING_REQUIRED,
 	head_uuid: STRING_REQUIRED,
 	code: STRING_REQUIRED,

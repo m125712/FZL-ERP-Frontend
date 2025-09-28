@@ -118,7 +118,10 @@ export default function Index({
 			</FormField>
 			<Input label='name' {...{ register, errors }} />
 			{/* <Input label='title' {...{ register, errors }} /> */}
-
+			<div className='grid grid-cols-2 gap-4'>
+				<Input label='index' {...{ register, errors }} />
+				<Input label='group_number' {...{ register, errors }} />
+			</div>
 			<div className='flex gap-2'>
 				<FormField label='bs' title='Bs' errors={errors}>
 					<Controller

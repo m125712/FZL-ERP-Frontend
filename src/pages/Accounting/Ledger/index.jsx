@@ -47,6 +47,17 @@ export default function Index() {
 					/>
 				),
 			},
+
+			{
+				accessorKey: 'index',
+				header: 'Index',
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'group_number',
+				header: 'Group Number',
+				enableColumnFilter: false,
+			},
 			{
 				accessorKey: 'id',
 				header: 'ID',

@@ -325,7 +325,8 @@ export async function generateDetailedBalanceSheetPDF(
 	companyName,
 	startDate,
 	endDate,
-	year
+	year,
+	type
 ) {
 	const processedCategories = data.map(transformCategory);
 	const baseFontSize = DEFAULT_FONT_SIZE || PDF_CONFIG.SAFE_FONT_SIZE;
@@ -343,7 +344,7 @@ export async function generateDetailedBalanceSheetPDF(
 				margin: [0, 0, 0, 8],
 			},
 			{
-				text: `Balance Sheet Detail For ${format(startDate, 'dd MMM, yyyy')} To ${format(endDate, 'dd MMM, yyyy')}, Year - ${year}`,
+				text: `${type === 'balance_sheet' ? 'Balance Sheet' : 'Profit and Loss'} Detail For ${format(startDate, 'dd MMM, yyyy')} To ${format(endDate, 'dd MMM, yyyy')}, Year - ${year}`,
 				fontSize: baseFontSize + 1,
 				alignment: 'center',
 				margin: [0, 0, 0, 15],

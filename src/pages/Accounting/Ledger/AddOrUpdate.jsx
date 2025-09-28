@@ -126,6 +126,7 @@ export default function Index({
 							}}
 						/>
 					</FormField>
+
 					<FormField
 						label='is_cash_ledger'
 						title='Cash'
@@ -147,6 +148,10 @@ export default function Index({
 						/>
 					</FormField>
 				</div>
+			</div>
+			<div className='grid grid-cols-2 gap-4'>
+				<Input label='index' {...{ register, errors }} />
+				<Input label='group_number' {...{ register, errors }} />
 			</div>
 			<div className='grid grid-cols-2 gap-4'>
 				<Input label='name' {...{ register, errors }} />

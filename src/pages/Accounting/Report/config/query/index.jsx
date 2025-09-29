@@ -9,3 +9,10 @@ export const useAccReport = (from, to, type) =>
 		url: `/report/acc-balance-report?from=${from}&to=${to}&type=${type}`,
 		enabled: !!from && !!to,
 	});
+//* Charts of Accounts
+export const useChartOfAccounts = () =>
+	createGlobalState({
+		queryKey: accQK.chartOfAccounts(),
+		url: '/report/chart-of-accounts',
+		enabled: true,
+	});

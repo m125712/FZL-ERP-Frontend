@@ -13,6 +13,9 @@ const NeedToAccept = lazy(() => import('@/pages/Accounting/NeedToAccept'));
 const AccountingReport = lazy(
 	() => import('@/pages/Accounting/Report/BalanceSheetAndProftLoss')
 );
+const ChartOfAccounts = lazy(
+	() => import('@/pages/Accounting/ChartOFAccounts')
+);
 export const AccountingRoutes = [
 	{
 		name: 'Accounting',
@@ -106,6 +109,13 @@ export const AccountingRoutes = [
 				element: <Currency />,
 				page_name: 'accounting__currency',
 				actions: ['read', 'create', 'update', 'delete'],
+			},
+			{
+				name: 'Chart of Accounts',
+				path: '/accounting/chart-of-accounts',
+				element: <ChartOfAccounts />,
+				page_name: 'accounting__chart_of_accounts',
+				actions: ['read'],
 			},
 			{
 				name: 'Report',

@@ -11,7 +11,7 @@ const VoucherEntry = lazy(() => import('@/pages/Accounting/Voucher/Entry'));
 const VoucherDetails = lazy(() => import('@/pages/Accounting/Voucher/Details'));
 const NeedToAccept = lazy(() => import('@/pages/Accounting/NeedToAccept'));
 const BalanceReport = lazy(
-	() => import('@/pages/Accounting/Report/BalanceSheetAndProftLoss')
+	() => import('@/pages/Accounting/Report/BalanceSheet')
 );
 const ProfitAndLossReport = lazy(
 	() => import('@/pages/Accounting/Report/ProfitAndLoss')

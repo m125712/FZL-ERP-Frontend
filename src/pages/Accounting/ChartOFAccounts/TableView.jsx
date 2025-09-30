@@ -1,7 +1,4 @@
-import {
-	useChartOfAccounts,
-	useChartOfAccountsTable,
-} from '../Report/config/query';
+import { useChartOfAccountsTable } from '../Report/config/query';
 
 // Table Row Component
 const TableRow = ({ item }) => {

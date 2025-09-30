@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 
-import { useChartOfAccounts } from '../Report/config/query';
-
 // Utility function to flatten tree data for Tree display
 const flattenTreeData = (
 	data,
@@ -103,18 +101,17 @@ const TreeRow = ({ item, onToggleExpand }) => {
 	);
 };
 
-// Main Tree Component - simplified without the problematic useEffect
-const TreeViewV2 = ({ expandAll }) => {
+// Main Tree Component - Updated to accept accountData prop for search
+const TreeViewV2 = ({ expandAll, accountData }) => {
 	const [expandedItems, setExpandedItems] = useState(new Set());
-	const { data: accountData, isLoading } = useChartOfAccounts();
 
-	// Memoized flattened data
+	// Memoized flattened data - now uses prop accountData instead of query
 	const flattenedData = useMemo(() => {
 		if (!accountData) return [];
 		return flattenTreeData(accountData, 0, '', expandedItems);
 	}, [accountData, expandedItems]);
 
-	// Get all expandable paths
+	// Get all expandable paths - now uses prop accountData
 	const getAllExpandablePaths = useMemo(() => {
 		if (!accountData) return new Set();
 
@@ -156,7 +153,8 @@ const TreeViewV2 = ({ expandAll }) => {
 		}
 	}, [expandAll, getAllExpandablePaths]);
 
-	if (isLoading) {
+	// Show loading only if no accountData is provided (fallback)
+	if (!accountData) {
 		return (
 			<div className='flex w-full justify-center p-4'>
 				<span className='loading loading-spinner loading-lg'></span>

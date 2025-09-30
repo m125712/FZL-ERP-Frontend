@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 
-import { useChartOfAccounts } from '../Report/config/query';
-
 const AccountList = ({ node, forceExpanded = false }) => {
 	const [isExpanded, setIsExpanded] = useState(forceExpanded);
 	const hasChildren = node.children && node.children.length > 0;
@@ -70,12 +68,8 @@ const AccountList = ({ node, forceExpanded = false }) => {
 	);
 };
 
-// Tree View Component - receives expandAll as prop
-const TreeView = ({ expandAll }) => {
-	const { data: accountData, isLoading } = useChartOfAccounts();
-
-	if (isLoading) return <span>Loading...</span>;
-
+// Tree View Component - receives expandAll and accountData as props
+const TreeView = ({ expandAll, accountData }) => {
 	return (
 		<div className='menu rounded-box bg-transparent p-2'>
 			<ul className='space-y-2'>

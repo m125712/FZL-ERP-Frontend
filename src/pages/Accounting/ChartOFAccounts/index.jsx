@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Separator } from '@radix-ui/react-select';
+import { useEffect, useState } from 'react';
 import { Book, ChevronDown, ChevronRight } from 'lucide-react';
 
 import { useChartOfAccounts } from '../Report/config/query';
+import AdvancedAccountTable from './TableView';
 
 const AccountList = ({ node, forceExpanded = false }) => {
 	const [isExpanded, setIsExpanded] = useState(forceExpanded);
+
 	const hasChildren = node.children && node.children.length > 0;
 
+	// Update state when forceExpanded prop changes
 	useEffect(() => {
 		setIsExpanded(forceExpanded);
 	}, [forceExpanded]);
@@ -34,8 +36,8 @@ const AccountList = ({ node, forceExpanded = false }) => {
 							)}
 						</div>
 					) : (
-						<div className='flex h-4 w-4 items-center justify-center'>
-							<div className='h-2 w-2 rounded-full bg-accent'></div>
+						<div className='flex h-4 w-2 items-center justify-center'>
+							<div className='h-1 w-1 rounded-full bg-accent'></div>
 						</div>
 					)}
 					<span className='text-sm font-medium capitalize text-base-content'>
@@ -57,9 +59,9 @@ const AccountList = ({ node, forceExpanded = false }) => {
 			</div>
 			{hasChildren && isExpanded && (
 				<ul className='ml-2 mt-2 space-y-1 border-l-2 border-base-300/50 pl-4'>
-					{node.children.map((child, idx) => (
+					{node.children.map((child, index) => (
 						<AccountList
-							key={idx}
+							key={`${child.name}-${index}`} // Better key generation
 							node={child}
 							forceExpanded={forceExpanded}
 						/>
@@ -70,46 +72,87 @@ const AccountList = ({ node, forceExpanded = false }) => {
 	);
 };
 
+// Fix the component props destructuring
 const AdvancedAccountList = () => {
-	const [expandAll, setExpandAll] = useState(false);
 	const { data: accountData, isLoading } = useChartOfAccounts();
+	const [expandAll, setExpandAll] = useState(false);
 
 	if (isLoading) return <span>Loading...</span>;
 
 	return (
-		<div className='w-full p-2'>
-			<div className='card bg-transparent shadow-2xl'>
+		<div>
+			<div className='mb-4 flex items-center justify-between pt-4'>
+				<h3 className='text-lg font-semibold text-base-content'>
+					Tree View
+				</h3>
+
+				<button
+					type='button'
+					className={`btn btn-sm ${
+						expandAll ? 'btn-primary' : 'btn-outline'
+					}`}
+					onClick={() => setExpandAll(!expandAll)}
+				>
+					{expandAll ? 'Collapse All' : 'Expand All'}
+				</button>
+			</div>
+			<div className='menu rounded-box bg-transparent p-2'>
+				<ul className='space-y-2'>
+					{accountData?.map((account, index) => (
+						<AccountList
+							key={`${account.name}-${index}`} // Better key generation
+							node={account}
+							forceExpanded={expandAll}
+						/>
+					))}
+				</ul>
+			</div>
+		</div>
+	);
+};
+
+const ChartOfAccounts = () => {
+	const [isTableView, setIsTableView] = useState(false);
+	const { isLoading } = useChartOfAccounts();
+
+	if (isLoading) return <span>Loading...</span>;
+
+	return (
+		<div className='w-full'>
+			<div className='card bg-transparent'>
 				<div className='card-body'>
-					<div className='mb-4 flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center'>
+					<div className='mb-2 flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center'>
 						<h2 className='card-title flex items-center gap-2 text-2xl text-primary'>
 							<Book className='h-8 w-6' />
 							Chart of Accounts
 						</h2>
 						<button
+							type='button'
+							className={`btn btn-sm ${
+								isTableView ? 'btn-primary' : 'btn-outline'
+							}`}
+							onClick={() => setIsTableView(!isTableView)}
+						>
+							{isTableView
+								? 'Switch to Tree View'
+								: 'Switch to Table View'}
+						</button>
+						{/* <button
+							type='button'
 							className={`btn btn-sm ${
 								expandAll ? 'btn-primary' : 'btn-outline'
 							}`}
-							onClick={() => setExpandAll(!expandAll)}
-						>
+							onClick={() => setExpandAll(!expandAll)}>
 							{expandAll ? 'Collapse All' : 'Expand All'}
-						</button>
+						</button> */}
 					</div>
 					<hr />
-					<div className='menu rounded-box bg-transparent p-2'>
-						<ul className='space-y-2'>
-							{accountData?.map((account, idx) => (
-								<AccountList
-									key={idx}
-									node={account}
-									forceExpanded={expandAll}
-								/>
-							))}
-						</ul>
-					</div>
+					{!isTableView && <AdvancedAccountList />}
+					{isTableView && <AdvancedAccountTable />}
 				</div>
 			</div>
 		</div>
 	);
 };
 
-export default AdvancedAccountList;
+export default ChartOfAccounts;

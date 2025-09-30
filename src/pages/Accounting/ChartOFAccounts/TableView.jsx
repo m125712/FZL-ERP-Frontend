@@ -58,8 +58,8 @@ const TableRow = ({ item, onToggleExpand }) => {
 	};
 
 	return (
-		<tr className='border-b border-base-300 transition-colors hover:bg-base-200/50'>
-			<td className='px-4 py-3'>
+		<tr className='border border-base-300 bg-secondary-foreground transition-colors'>
+			<td className='px-1 py-2'>
 				<div
 					className='flex items-center gap-2'
 					style={{ paddingLeft: `${item.level * 24}px` }}
@@ -80,7 +80,7 @@ const TableRow = ({ item, onToggleExpand }) => {
 								)}
 							</button>
 						) : (
-							<div className='h-2 w-2 rounded-full bg-accent'></div>
+							<div className='h-1 w-1 rounded-full bg-accent'></div>
 						)}
 					</div>
 					<span
@@ -93,26 +93,18 @@ const TableRow = ({ item, onToggleExpand }) => {
 					</span>
 				</div>
 			</td>
-			<td className='px-4 py-3'>
-				{item.account_type && (
-					<span className='badge badge-outline badge-sm'>
-						{item.account_type}
-					</span>
-				)}
+			<td className='px-4 py-3 capitalize'>
+				{item.account_type && item.account_type}
 			</td>
 			<td className='px-4 py-3'>
-				{item.account_tag && (
-					<span className='badge badge-primary badge-sm'>
-						{item.account_tag}
-					</span>
-				)}
+				{item.account_tag && item.account_tag}
 			</td>
 		</tr>
 	);
 };
 
 // Main Table Component
-const AdvancedAccountTable = () => {
+export const AdvancedAccountTable = () => {
 	const [expandedItems, setExpandedItems] = useState(new Set());
 	const [expandAll, setExpandAll] = useState(false);
 	const { data: accountData, isLoading } = useChartOfAccounts();
@@ -122,6 +114,26 @@ const AdvancedAccountTable = () => {
 		if (!accountData) return [];
 		return flattenTreeData(accountData, 0, '', expandedItems);
 	}, [accountData, expandedItems]);
+
+	// Get all expandable paths
+	const getAllExpandablePaths = useMemo(() => {
+		if (!accountData) return new Set();
+
+		const allPaths = new Set();
+		const collectPaths = (data, parentPath = '') => {
+			data.forEach((node, index) => {
+				const currentPath = parentPath
+					? `${parentPath}.${index}`
+					: String(index);
+				if (node.children && node.children.length > 0) {
+					allPaths.add(currentPath);
+					collectPaths(node.children, currentPath);
+				}
+			});
+		};
+		collectPaths(accountData);
+		return allPaths;
+	}, [accountData]);
 
 	// Handle individual item toggle
 	const handleToggleExpand = (path) => {
@@ -139,51 +151,28 @@ const AdvancedAccountTable = () => {
 	// Handle expand/collapse all
 	const handleExpandAll = () => {
 		if (expandAll) {
+			// Collapse all
 			setExpandedItems(new Set());
 		} else {
-			const allPaths = new Set();
-			const collectPaths = (data, parentPath = '') => {
-				data.forEach((node, index) => {
-					const currentPath = parentPath
-						? `${parentPath}.${index}`
-						: String(index);
-					if (node.children && node.children.length > 0) {
-						allPaths.add(currentPath);
-						collectPaths(node.children, currentPath);
-					}
-				});
-			};
-			if (accountData) {
-				collectPaths(accountData);
-			}
-			setExpandedItems(allPaths);
+			// Expand all
+			setExpandedItems(new Set(getAllExpandablePaths));
 		}
 		setExpandAll(!expandAll);
 	};
 
 	// Update expandAll state based on expanded items
 	useEffect(() => {
-		if (!accountData) return;
+		const totalExpandableCount = getAllExpandablePaths.size;
+		const expandedCount = expandedItems.size;
 
-		const totalExpandableItems = new Set();
-		const collectExpandablePaths = (data, parentPath = '') => {
-			data.forEach((node, index) => {
-				const currentPath = parentPath
-					? `${parentPath}.${index}`
-					: String(index);
-				if (node.children && node.children.length > 0) {
-					totalExpandableItems.add(currentPath);
-					collectExpandablePaths(node.children, currentPath);
-				}
-			});
-		};
-
-		collectExpandablePaths(accountData);
 		setExpandAll(
-			totalExpandableItems.size > 0 &&
-				totalExpandableItems.size === expandedItems.size
+			totalExpandableCount > 0 &&
+				expandedCount === totalExpandableCount &&
+				Array.from(getAllExpandablePaths).every((path) =>
+					expandedItems.has(path)
+				)
 		);
-	}, [expandedItems, accountData]);
+	}, [expandedItems, getAllExpandablePaths]);
 
 	if (isLoading) {
 		return (
@@ -194,70 +183,50 @@ const AdvancedAccountTable = () => {
 	}
 
 	return (
-		<div className='w-full p-2'>
-			<div className='card bg-transparent shadow-2xl'>
-				<div className='card-body'>
-					{/* Header */}
-					<div className='mb-4 flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center'>
-						<h2 className='card-title flex items-center gap-2 text-2xl text-primary'>
-							<Book className='h-8 w-6' />
-							Chart of Accounts
-						</h2>
-						<div className='flex gap-2'>
-							<button
-								className={`btn btn-sm ${
-									expandAll ? 'btn-primary' : 'btn-outline'
-								}`}
-								onClick={handleExpandAll}
-							>
-								{expandAll ? (
-									<>
-										<Minus className='h-4 w-4' />
-										Collapse All
-									</>
-								) : (
-									<>
-										<Plus className='h-4 w-4' />
-										Expand All
-									</>
-								)}
-							</button>
-							<div className='badge badge-neutral badge-sm'>
-								{flattenedData.length} rows
-							</div>
-						</div>
-					</div>
+		<div className='w-full'>
+			{/* Header with Expand All Button */}
+			<div className='mb-4 flex items-center justify-between'>
+				<h3 className='text-lg font-semibold text-base-content'></h3>
+				<button
+					type='button'
+					className={`btn btn-sm gap-2 ${
+						expandAll ? 'btn-primary' : 'btn-outline'
+					}`}
+					onClick={handleExpandAll}
+					disabled={getAllExpandablePaths.size === 0}
+				>
+					{expandAll ? <>Collapse All</> : <>Expand All</>}
+				</button>
+			</div>
 
-					{/* Table */}
-					<div className='overflow-x-auto'>
-						<table className='table table-zebra w-full'>
-							{/* Table Header */}
-							<thead>
-								<tr className='border-b-2 border-base-300'>
-									<th className='px-4 py-3 text-left font-semibold text-base-content'>
-										Account Name
-									</th>
-									<th className='px-4 py-3 text-left font-semibold text-base-content'>
-										Type
-									</th>
-									<th className='px-4 py-3 text-left font-semibold text-base-content'>
-										Tag
-									</th>
-								</tr>
-							</thead>
-							{/* Table Body */}
-							<tbody>
-								{flattenedData.map((item) => (
-									<TableRow
-										key={item.path}
-										item={item}
-										onToggleExpand={handleToggleExpand}
-									/>
-								))}
-							</tbody>
-						</table>
-					</div>
-				</div>
+			{/* Table */}
+			<div className='overflow-x-auto'>
+				<table className='table w-full'>
+					{/* Table Header */}
+					<thead>
+						<tr className='border-2 border-base-300'>
+							<th className='bg-secondary-foreground px-4 py-3 text-left text-sm font-semibold text-base-content'>
+								Account Name
+							</th>
+							<th className='px-4 py-3 text-left text-sm font-semibold text-base-content'>
+								Type
+							</th>
+							<th className='px-4 py-3 text-left text-sm font-semibold text-base-content'>
+								Tag
+							</th>
+						</tr>
+					</thead>
+					{/* Table Body */}
+					<tbody>
+						{flattenedData.map((item) => (
+							<TableRow
+								key={item.path}
+								item={item}
+								onToggleExpand={handleToggleExpand}
+							/>
+						))}
+					</tbody>
+				</table>
 			</div>
 		</div>
 	);

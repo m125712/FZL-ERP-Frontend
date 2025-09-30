@@ -10,4 +10,5 @@ export const accQK = {
 		'accReport',
 	],
 	chartOfAccounts: () => [...accQK.all(), 'chartOfAccounts'],
+	chartOfAccountsTable: () => [...accQK.all(), 'chartOfAccountsTable'],
 };

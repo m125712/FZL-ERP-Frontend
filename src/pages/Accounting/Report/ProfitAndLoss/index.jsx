@@ -14,7 +14,7 @@ export default function index() {
 	const { data, isFetching } = useAccReport(
 		format(from, 'yyyy-MM-dd'),
 		format(to, 'yyyy-MM-dd'),
-		'balance_sheet'
+		'profit_and_loss'
 	);
 
 	const handleGeneratePDF = async () => {
@@ -28,7 +28,7 @@ export default function index() {
 				from,
 				to,
 				format(from, 'yyyy'),
-				'balance_sheet'
+				'profit_and_loss'
 			);
 			balanceSheetPDF.open();
 			// Open the PDF

@@ -16,3 +16,10 @@ export const useChartOfAccounts = () =>
 		url: '/report/chart-of-accounts',
 		enabled: true,
 	});
+//* Charts of Accounts Table View
+export const useChartOfAccountsTable = () =>
+	createGlobalState({
+		queryKey: accQK.chartOfAccountsTable(),
+		url: '/report/chart-of-accounts-table-view',
+		enabled: true,
+	});

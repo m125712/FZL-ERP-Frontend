@@ -3746,6 +3746,18 @@ export const ISSUE_NULL = {
 	emergence: '',
 };
 
+export const ISSUE_MAINTAIN_SCHEMA = {
+	maintain_condition: STRING_REQUIRED,
+	maintenance_desc: STRING.nullable(),
+	parts_details: STRING.nullable(),
+};
+
+export const ISSUE_MAINTAIN_NULL = {
+	maintain_condition: '',
+	maintenance_desc: '',
+	parts_details: '',
+};
+
 export const ISSUE_PROCUREMENT_SCHEMA = {
 	material_uuid: STRING_REQUIRED,
 	quantity: NUMBER_REQUIRED.moreThan(0, 'More Than 0'),

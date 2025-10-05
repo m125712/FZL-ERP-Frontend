@@ -17,6 +17,7 @@ function DateTime({
 	customizedDateFormate = 'dd/MM/yy',
 	customizedTimeFormate = 'h:mm a',
 	className = '',
+	classNameBody = '',
 	showInOneLine = false,
 }) {
 	if (!date) return '--';
@@ -34,12 +35,15 @@ function DateTime({
 			>
 				{isDate && (
 					<Body
-						className={isTime ? '' : 'text-md'}
+						className={cn(classNameBody, isTime ? '' : 'text-md')}
 						value={customizedDate}
 					/>
 				)}
 				{isTime && (
-					<Body className='text-secondary' value={customizedTime} />
+					<Body
+						className={cn('text-secondary', classNameBody)}
+						value={customizedTime}
+					/>
 				)}
 			</div>
 		);

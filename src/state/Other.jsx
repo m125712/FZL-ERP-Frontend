@@ -610,10 +610,12 @@ export const useOtherOrderEntryBy = (uuid, isZipper, challanUuid) =>
 		enabled: !!uuid,
 	});
 
-export const useOtherSectionMachine = () =>
+export const useOtherSectionMachine = (query) =>
 	createGlobalState({
-		queryKey: otherQK.sectionMachine(),
-		url: '/other/maintain/section-machine/value/label',
+		queryKey: otherQK.sectionMachine(query),
+		url: query
+			? `/other/maintain/section-machine/value/label?${query}`
+			: '/other/maintain/section-machine/value/label',
 	});
 
 export const useOtherIssue = () =>
@@ -627,6 +629,7 @@ export const useSubscribe = () =>
 	createGlobalState({
 		queryKey: otherQK.subscribe(),
 		url: '/public/subscribe',
+		enabled: false,
 	});
 
 //* Get schema for global log

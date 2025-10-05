@@ -2,10 +2,9 @@ import { useEffect } from 'react';
 import { useAuth } from '@/context/auth';
 import { useIssue, useIssueByUUID } from '@/state/Maintenance';
 import { useOtherSectionMachine } from '@/state/Other';
-import { useAccess, useFetchForRhfReset, useRHF } from '@/hooks';
+import { useAccess, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { ShowLocalToast } from '@/components/Toast';
 import { FormField, Input, ReactSelect, Textarea } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
@@ -39,9 +38,8 @@ export default function Index({
 	);
 
 	const { invalidateQuery } = useIssue(
-		haveAccess.includes('show_own_issue') ? `own_uuid =${user.uuid}` : ''
+		haveAccess.includes('show_own_issue') ? `own_uuid =${user?.uuid}` : ''
 	);
-	const { data: sectionMachines } = useOtherSectionMachine();
 
 	const {
 		register,
@@ -55,26 +53,38 @@ export default function Index({
 		watch,
 	} = useRHF(ISSUE_SCHEMA, ISSUE_NULL);
 
+	const { data: sectionMachines } = useOtherSectionMachine(
+		`section=${watch('section')}`
+	);
+
 	let options = []; // Initialize options as an empty array
 
-	// Dynamically assign options based on the 'section' value
-	switch (watch('section')) {
-		case 'dyeing':
-			options = partsDyeing;
-			break;
-		case 'vislon':
-			options = machineVislon;
-			break;
-		case 'metal':
-			options = partsMetal;
-			break;
-		case 'slider':
-			options = partsSlider;
-			break;
-		default:
-			// Optionally, handle a default case or no selection
-			options = [];
-			break;
+	if (watch('section') === 'metal_vislon_nylon') {
+		options = [];
+	} else if (
+		sections
+			.find((item) => item.value === watch('section'))
+			?.new.includes('dyeing')
+	) {
+		options = partsDyeing;
+	} else if (
+		sections
+			.find((item) => item.value === watch('section'))
+			?.new.includes('vislon')
+	) {
+		options = machineVislon;
+	} else if (
+		sections
+			.find((item) => item.value === watch('section'))
+			?.new.includes('metal')
+	) {
+		options = partsMetal;
+	} else if (
+		sections
+			.find((item) => item.value === watch('section'))
+			?.new.includes('slider')
+	) {
+		options = partsSlider;
 	}
 
 	useEffect(() => {

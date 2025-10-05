@@ -1,7 +1,7 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useIssue } from '@/state/Maintenance';
-import { differenceInMinutes, intervalToDuration } from 'date-fns';
+import { differenceInMinutes } from 'date-fns';
 import { Clock } from 'lucide-react';
 import { useAccess } from '@/hooks';
 
@@ -9,15 +9,18 @@ import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { EyeBtn } from '@/ui/Others/Button';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { DateTime, EditDelete, ReactSelect, Transfer } from '@/ui';
+import { DateTime, EditDelete, Transfer } from '@/ui';
 
+import { cn } from '@/lib/utils';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 import { usePushSubscription } from './Notification';
+import { sections } from './utils';
 
 const AddOrUpdate = lazy(() => import('./AddOrUpdate'));
 const Procurement = lazy(() => import('./Procurement'));
+const Maintain = lazy(() => import('./Maintain'));
 const History = lazy(() => import('./History'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
@@ -29,7 +32,7 @@ export default function Index() {
 	const haveAccess = useAccess('maintenance__issue');
 
 	const { data, isLoading, url, deleteData, updateData } = useIssue(
-		haveAccess.includes('show_own_issue') ? `own_uuid=${user.uuid}` : ''
+		haveAccess.includes('show_own_issue') ? `own_uuid=${user?.uuid}` : ''
 	);
 
 	const info = new PageInfo('Issue', url, 'maintenance__issue');
@@ -70,7 +73,12 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'name',
-				header: 'জারি করেছেন (Issued By)',
+				header: () => (
+					<>
+						জারি করেছেন <br />
+						(Issued By)
+					</>
+				),
 				enableColumnFilter: false,
 			},
 			{
@@ -81,16 +89,30 @@ export default function Index() {
 					</>
 				),
 				enableColumnFilter: false,
+				cell: (info) => {
+					const { section, extra_section } = info.row.original;
+					return (
+						<div className='flex flex-col'>
+							{
+								sections.find((item) => item.value === section)
+									?.label
+							}
+							<span className='text-xs italic'>
+								{extra_section.toUpperCase()}
+							</span>
+						</div>
+					);
+				},
 			},
-			{
-				accessorKey: 'extra_section',
-				header: () => (
-					<>
-						অন্যান্য সেকশন <br /> (Extra Section)
-					</>
-				),
-				enableColumnFilter: false,
-			},
+			// {
+			// 	accessorKey: 'extra_section',
+			// 	header: () => (
+			// 		<>
+			// 			অন্যান্য সেকশন <br /> (Extra Section)
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// },
 			{
 				accessorKey: 'problem_type',
 				header: () => (
@@ -100,6 +122,7 @@ export default function Index() {
 					</>
 				),
 				enableColumnFilter: false,
+				cell: (info) => info.getValue()?.toUpperCase(),
 			},
 			{
 				accessorKey: 'parts_problem',
@@ -109,6 +132,10 @@ export default function Index() {
 					</>
 				),
 				enableColumnFilter: false,
+				cell: (info) =>
+					info.getValue()
+						? info.getValue()?.replaceAll('_', ' ')
+						: '--',
 			},
 			{
 				accessorKey: 'section_machine_name',
@@ -120,15 +147,15 @@ export default function Index() {
 				),
 				enableColumnFilter: false,
 			},
-			{
-				accessorKey: 'description',
-				header: () => (
-					<>
-						বর্ণনা <br /> (Description)
-					</>
-				),
-				enableColumnFilter: false,
-			},
+			// {
+			// 	accessorKey: 'description',
+			// 	header: () => (
+			// 		<>
+			// 			বর্ণনা <br /> (Description)
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// },
 			{
 				accessorKey: 'emergence',
 				header: () => (
@@ -137,77 +164,203 @@ export default function Index() {
 					</>
 				),
 				enableColumnFilter: false,
-			},
-			{
-				accessorKey: 'maintain_condition',
-				header: () => (
-					<>
-						রক্ষণাবেক্ষণ অবস্থা <br /> (Maintain Condition)
-					</>
-				),
-				enableColumnFilter: false,
-				width: 'w-40',
 				cell: (info) => {
-					const {
-						maintain_condition,
-						maintain_by_name,
-						maintain_date,
-						created_at,
-					} = info.row.original;
-
-					const options = [
-						{ value: 'okay', label: 'OK' },
-						{ value: 'waiting', label: 'Waiting' },
-						{ value: 'rejected', label: 'Rejected' },
-						{ value: 'ongoing', label: 'On Going' },
-					];
+					const { emergence, description } = info.row.original;
 
 					return (
-						<div>
-							<ReactSelect
-								className='w-40'
-								menuPortalTarget={document.body}
-								placeholder='Select condition'
-								options={options}
-								value={options?.filter(
-									(item) => item.value === info.getValue()
-								)}
-								onChange={(e) => {
-									handelCondition(e.value, info.row.index);
-								}}
-							/>
-
-							<span className='mt-3 flex flex-col text-xs'>
-								{/* Maintainer name */}
-								<p className='text-center text-sm font-semibold uppercase text-gray-800'>
-									{maintain_by_name}
-								</p>
-
-								{/* Date + Duration card */}
-								<div className='mt-2 flex w-full items-center justify-evenly rounded-full border border-gray-200 bg-white px-2 py-1.5 shadow-sm'>
-									{/* Date */}
-									<div className='text-gray-600'>
-										<DateTime
-											showInOneLine
-											date={maintain_date}
-											isTime
-										/>
-									</div>
-								</div>
+						<div className='flex flex-col'>
+							<span>{emergence}</span>
+							<span className='text-xs italic'>
+								{description}
 							</span>
 						</div>
 					);
 				},
 			},
 			{
+				accessorKey: 'maintain',
+				header: () => (
+					<>
+						রক্ষণাবেক্ষণ অবস্থা <br /> (Maintain Condition)
+					</>
+				),
+				enableColumnFilter: false,
+				width: 'w-80',
+				cell: (info) => {
+					const {
+						maintain_by_name,
+						maintain_date,
+						maintain_condition,
+						maintenance_desc,
+						parts_details,
+					} = info.row.original;
+					return (
+						<div className='flex items-center gap-2'>
+							<Transfer
+								// disabled={!haveAccess.includes('procurement')}
+								onClick={() => handleMaintain(info.row.index)}
+							/>
+							<div
+								className={cn(
+									'flex w-full flex-col gap-2 rounded-2xl border p-4 shadow-md transition-all duration-300 hover:shadow-lg',
+									{
+										'border-red-200 bg-red-50 text-red-800':
+											maintain_condition === 'waiting',
+										'border-red-600 bg-red-500 text-white':
+											maintain_condition === 'rejected',
+										'border-yellow-200 bg-yellow-50 text-yellow-800':
+											maintain_condition === 'ongoing',
+										'border-green-200 bg-green-50 text-green-800':
+											maintain_condition === 'okay',
+									}
+								)}
+							>
+								{/* Status badge */}
+								<span
+									className={cn('font-semibold', {
+										'text-red-700':
+											maintain_condition === 'waiting',
+										'text-white':
+											maintain_condition === 'rejected',
+										'text-yellow-700':
+											maintain_condition === 'ongoing',
+										'text-green-700':
+											maintain_condition === 'okay',
+									})}
+								>
+									<strong>Status: </strong>
+									{maintain_condition.toUpperCase()}
+								</span>
+
+								{/* Details */}
+								{(parts_details || maintenance_desc) && (
+									<div
+										className={cn(
+											'flex flex-col gap-1 text-sm text-gray-700',
+											maintain_condition === 'rejected' &&
+												'text-white'
+										)}
+									>
+										{parts_details && (
+											<p>
+												<span className='font-semibold'>
+													Parts:
+												</span>{' '}
+												{parts_details}
+											</p>
+										)}
+
+										{maintenance_desc && (
+											<p>
+												<span className='font-semibold'>
+													Main:
+												</span>{' '}
+												{maintenance_desc}
+											</p>
+										)}
+									</div>
+								)}
+
+								{/* Maintainer */}
+								{maintain_by_name && (
+									<div className='mt-3 flex gap-2 text-xs'>
+										<p className='text-sm font-medium uppercase'>
+											{maintain_by_name}
+										</p>
+										<span className='flex'>
+											(
+											<DateTime
+												showInOneLine
+												date={maintain_date}
+												isTime
+												customizedDateFormate='dd MMM, yy'
+												classNameBody={cn(
+													maintain_condition ===
+														'rejected' &&
+														'text-white'
+												)}
+											/>
+											)
+										</span>
+									</div>
+								)}
+							</div>
+						</div>
+					);
+				},
+			},
+			// {
+			// 	accessorKey: 'maintain_condition',
+			// 	header: () => (
+			// 		<>
+			// 			রক্ষণাবেক্ষণ অবস্থা <br /> (Maintain Condition)
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	width: 'w-40',
+			// 	cell: (info) => {
+			// 		const { maintain_by_name, maintain_date } =
+			// 			info.row.original;
+
+			// 		const options = [
+			// 			{ value: 'okay', label: 'OK' },
+			// 			{ value: 'waiting', label: 'Waiting' },
+			// 			{ value: 'rejected', label: 'Rejected' },
+			// 			{ value: 'ongoing', label: 'On Going' },
+			// 		];
+
+			// 		return (
+			// 			<div>
+			// 				<ReactSelect
+			// 					className={cn(
+			// 						'w-40',
+			// 						info.getValue() === 'waiting' &&
+			// 							'bg-yellow-100',
+			// 						info.getValue() === 'rejected' &&
+			// 							'bg-red-100',
+			// 						info.getValue() === 'ongoing' &&
+			// 							'bg-blue-100',
+			// 						info.getValue() === 'okay' && 'bg-green-100'
+			// 					)}
+			// 					menuPortalTarget={document.body}
+			// 					placeholder='Select condition'
+			// 					options={options}
+			// 					value={options?.filter(
+			// 						(item) => item.value === info.getValue()
+			// 					)}
+			// 					onChange={(e) => {
+			// 						handelCondition(e.value, info.row.index);
+			// 					}}
+			// 				/>
+
+			// 				<span className='mt-3 flex flex-col text-xs'>
+			// 					{/* Maintainer name */}
+			// 					<p className='text-center text-sm font-semibold uppercase text-gray-800'>
+			// 						{maintain_by_name}
+			// 					</p>
+
+			// 					{/* Date + Duration card */}
+			// 					<div className='mt-2 flex w-full items-center justify-evenly rounded-full border border-gray-200 bg-white px-2 py-1.5 shadow-sm'>
+			// 						{/* Date */}
+			// 						<div className='text-gray-600'>
+			// 							<DateTime
+			// 								showInOneLine
+			// 								date={maintain_date}
+			// 								isTime
+			// 							/>
+			// 						</div>
+			// 					</div>
+			// 				</span>
+			// 			</div>
+			// 		);
+			// 	},
+			// },
+			{
 				accessorKey: 'time_diff',
 				header: 'Time Difference',
 				enableColumnFilter: false,
 				cell: (info) => {
-					const { maintain_condition, maintain_date, created_at } =
-						info.row.original;
-
-					// if (maintain_condition !== 'okay') return '---';
+					const { maintain_date, created_at } = info.row.original;
 
 					let diffInMinutes = 0;
 					if (!maintain_date) {
@@ -282,7 +435,7 @@ export default function Index() {
 
 					const access =
 						(haveAccess.includes('verification') &&
-							user.uuid === created_by &&
+							user?.uuid === created_by &&
 							!verification_approved) ||
 						haveAccess.includes('override');
 
@@ -407,7 +560,7 @@ export default function Index() {
 					data[idx]?.verification_approved === true
 						? null
 						: GetDateTime(),
-				verification_by: user.uuid,
+				verification_by: user?.uuid,
 			},
 		});
 	};
@@ -417,7 +570,7 @@ export default function Index() {
 			url: `/maintain/issue/${data[idx]?.uuid}`,
 			updatedData: {
 				maintain_condition: e,
-				maintain_by: user.uuid,
+				maintain_by: user?.uuid,
 				maintain_date: GetDateTime(),
 			},
 		});
@@ -435,6 +588,18 @@ export default function Index() {
 		}));
 
 		window['ProcureModal'].showModal();
+	};
+
+	const [maintain, setMaintain] = useState({ uuid: null });
+
+	const handleMaintain = (idx) => {
+		const val = data[idx];
+		setMaintain((prev) => ({
+			...prev,
+			...val,
+		}));
+
+		window['MaintainModal'].showModal();
 	};
 
 	const [history, setHistory] = useState(null);
@@ -523,6 +688,15 @@ export default function Index() {
 					{...{
 						updateIssueData,
 						setUpdateIssueData,
+					}}
+				/>
+			</Suspense>
+			<Suspense>
+				<Maintain
+					modalId='MaintainModal'
+					{...{
+						maintain,
+						setMaintain,
 					}}
 				/>
 			</Suspense>

@@ -1687,7 +1687,7 @@ export const otherQK = {
 		challanUuid,
 	],
 
-	sectionMachine: () => [...otherQK.all(), 'section-machine'],
+	sectionMachine: (query) => [...otherQK.all(), 'section-machine', query],
 	otherIssue: () => [...otherQK.all(), 'other-issue'],
 
 	//* NOTIFICATION SUBSCRIBE

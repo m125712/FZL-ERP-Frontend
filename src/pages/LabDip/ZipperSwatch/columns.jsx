@@ -2,15 +2,7 @@
 import { format } from 'date-fns';
 
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import {
-	DateTime,
-	LinkWithCopy,
-	ReactSelect,
-	StatusButton,
-	StatusSelect,
-} from '@/ui';
-
-import GetDateTime from '@/util/GetDateTime';
+import { DateTime, LinkWithCopy, ReactSelect, StatusButton } from '@/ui';
 
 // Main table columns configuration
 export const createColumns = ({
@@ -147,7 +139,10 @@ export const createColumns = ({
 		width: 'w-24',
 		enableColumnFilter: false,
 		cell: (info) => (
-			<DateTime date={info.row.original.swatch_approval_received_date} />
+			<DateTime
+				date={info.row.original.swatch_approval_received_date}
+				isSecondNeeded={true}
+			/>
 		),
 	},
 	{
@@ -202,7 +197,9 @@ export const createColumns = ({
 		),
 		width: 'w-24',
 		enableColumnFilter: false,
-		cell: (info) => <DateTime date={info.row.original.max} />,
+		cell: (info) => (
+			<DateTime date={info.row.original.max} isSecondNeeded={true} />
+		),
 	},
 	{
 		accessorKey: 'color_ref_entry_date',

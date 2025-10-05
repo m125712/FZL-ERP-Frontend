@@ -19,11 +19,15 @@ function DateTime({
 	className = '',
 	classNameBody = '',
 	showInOneLine = false,
+	isSecondNeeded = false,
 }) {
 	if (!date) return '--';
 
 	const customizedDate = format(new Date(date), customizedDateFormate);
-	const customizedTime = format(new Date(date), customizedTimeFormate);
+	let newCustomizedTime = 'h:mm:ss a';
+	const customizedTime = isSecondNeeded
+		? format(new Date(date), newCustomizedTime)
+		: format(new Date(date), customizedTimeFormate);
 
 	if (showInOneLine)
 		return (

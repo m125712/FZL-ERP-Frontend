@@ -60,6 +60,8 @@ export const HEAD_SCHEMA = {
 };
 
 export const HEAD_NULL = {
+	group_number: '',
+	index: 0,
 	name: '',
 	title: '',
 	type: 'assets',

@@ -22,7 +22,8 @@ const CostCenterAdd = lazy(() => import('./components/CostCenterAdd'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
-	const { uuid, vendor_name, purchase_id, amount } = useParams();
+	const { uuid, vendor_name, purchase_id, amount, currency_name } =
+		useParams();
 
 	// State
 	const [deleteItem, setDeleteItem] = useState({
@@ -210,6 +211,7 @@ export default function Index() {
 					watch={watch}
 					isUpdate={isUpdate}
 					currencyOptions={currencyOptions}
+					currency={currency_name}
 				/>
 
 				<VoucherEntryRow

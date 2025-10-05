@@ -43,6 +43,7 @@ function VoucherEntryRow({
 		defaultValue: [],
 	});
 	const category = watch('category');
+	console.log(category);
 	const [index, setIndex] = useState(0);
 
 	const { invalidateQuery: invalidQueryCostCenter } = useOtherCostCenter(
@@ -80,9 +81,10 @@ function VoucherEntryRow({
 
 			entryOrder.forEach((orderEntry, displayIndex) => {
 				if (
-					orderEntry.type === 'payment' &&
-					type === 'cr' &&
-					category === 'payment'
+					(orderEntry.type === 'payment' &&
+						type === 'cr' &&
+						category === 'payment') ||
+					category === 'contra'
 				) {
 					const paymentIndex = orderEntry.index;
 					if (payments[paymentIndex]) {
@@ -188,7 +190,8 @@ function VoucherEntryRow({
 
 								const showPaymentButton =
 									type === 'cr' &&
-									category === 'payment' &&
+									(category === 'payment' ||
+										category === 'contra') &&
 									selectedLedger?.is_cash_ledger === false;
 								const remainingAmount =
 									voucherEntry.amount -

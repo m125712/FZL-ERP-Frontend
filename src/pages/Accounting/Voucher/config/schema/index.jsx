@@ -2,14 +2,12 @@ import * as yup from 'yup';
 
 import {
 	BOOLEAN, // default
-	BOOLEAN_DEFAULT_VALUE, // default
 	BOOLEAN_REQUIRED, // default
 	EMAIL, // default
 	EMAIL_REQUIRED, // default
 	FORTUNE_ZIP_EMAIL_PATTERN, // default
 	JSON_STRING, // default
 	JSON_STRING_REQUIRED,
-	NAME_REQUIRED, // default
 	NUMBER, // default
 	NUMBER_DOUBLE, // default
 	NUMBER_DOUBLE_REQUIRED, // default
@@ -21,10 +19,6 @@ import {
 	PHONE_NUMBER_REQUIRED, // default
 	STRING, // default
 	STRING_REQUIRED, // default
-	URL_REQUIRED, // default
-	UUID, // default
-	UUID_FK, // default
-	UUID_REQUIRED,
 } from '@/util/Schema/utils';
 
 export {

@@ -4,7 +4,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { CustomLink, DateTime, EditDelete, LinkOnly } from '@/ui';
+import { CustomLink, DateTime, EditDelete } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -31,10 +31,10 @@ export default function Index() {
 		() => [
 			{
 				accessorKey: 'voucher_id',
-				header: 'LC',
+				header: 'Voucher ID',
 				enableColumnFilter: true,
 				cell: (info) => {
-					const { uuid, lc_date } = info.row.original;
+					const { uuid } = info.row.original;
 					const url = `/accounting/voucher/${uuid}/details/`;
 					return (
 						<div className='flex flex-col gap-1'>

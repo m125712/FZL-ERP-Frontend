@@ -78,6 +78,8 @@ export const LEDGER_SCHEMA = {
 };
 
 export const LEDGER_NULL = {
+	group_number: '',
+	index: 0,
 	is_bank_ledger: false,
 	table_name: null,
 	table_uuid: null,

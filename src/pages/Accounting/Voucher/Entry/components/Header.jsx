@@ -14,6 +14,7 @@ export default function Header({
 	Controller,
 	watch,
 	currencyOptions,
+	currency,
 }) {
 	return (
 		<SectionEntryBody
@@ -34,6 +35,7 @@ export default function Header({
 			<div className='flex gap-4'>
 				<FormField
 					label='currency_uuid'
+					sub_label={`Purchase Curr. ${currency}`}
 					title='Currency'
 					errors={errors}
 				>

@@ -48,7 +48,7 @@ export const AccountingRoutes = [
 			},
 			{
 				name: 'Voucher Entry (Automatic)',
-				path: '/accounting/voucher/entry/:vendor_name/:purchase_id/:amount',
+				path: '/accounting/voucher/entry/:vendor_name/:purchase_id/:amount/:currency_name',
 				element: <VoucherEntry />,
 				page_name: 'accounting__voucher_entry_automation',
 				hidden: true,

@@ -60,6 +60,8 @@ export const GROUP_SCHEMA = {
 };
 
 export const GROUP_NULL = {
+	group_number: '',
+	index: 0,
 	name: '',
 	head_uuid: '',
 	code: '',

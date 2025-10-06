@@ -145,7 +145,9 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'color_ref_entry_date',
+				accessorFn: (row) =>
+					REPORT_DATE_TIME_FORMAT(row.color_ref_entry_date),
+				id: 'color_ref_entry_date',
 				header: (
 					<>
 						Color Ref <br /> Entry
@@ -169,7 +171,9 @@ export default function Index() {
 				cell: (info) => <Status status={info.getValue()} />,
 			},
 			{
-				accessorKey: 'swatch_approval_received_date',
+				accessorFn: (row) =>
+					REPORT_DATE_TIME_FORMAT(row.swatch_approval_received_date),
+				id: 'swatch_approval_received_date',
 				header: (
 					<>
 						Swatch <br />

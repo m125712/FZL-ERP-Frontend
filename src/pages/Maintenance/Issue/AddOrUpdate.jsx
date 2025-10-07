@@ -130,6 +130,8 @@ export default function Index({
 			uuid: nanoid(),
 			created_by: user?.uuid,
 			created_at: GetDateTime(),
+			maintain_by: user?.uuid,
+			maintain_date: GetDateTime(),
 		};
 
 		await postData.mutateAsync({
@@ -279,7 +281,7 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<FormField label='emergence' title='Emegence' errors={errors}>
+			<FormField label='emergence' title='Emergence' errors={errors}>
 				<Controller
 					name={'emergence'}
 					control={control}

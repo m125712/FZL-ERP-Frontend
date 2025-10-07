@@ -2116,4 +2116,5 @@ export const maintenanceQK = {
 		'issue-procurement',
 		uuid,
 	],
+	dashboard: () => [...maintenanceQK.all(), 'dashboard'],
 };

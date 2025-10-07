@@ -29,6 +29,7 @@ const Party = lazy(() => import('@/pages/Order/Party'));
 const Properties = lazy(() => import('@/pages/Order/Properties'));
 const Settings = lazy(() => import('@/pages/Order/Settings'));
 const OrderPricing = lazy(() => import('@/pages/Order/OrderPricing'));
+const PriceLock = lazy(() => import('@/pages/Order/PriceLock'));
 
 export const OrderRoutes = [
 	{
@@ -114,6 +115,22 @@ export const OrderRoutes = [
 				path: '/order/order-pricing',
 				element: <OrderPricing />,
 				page_name: 'order__order_pricing',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'show_own_orders',
+					'edit_md_price',
+					'edit_mkt_price',
+					'click_price_lock',
+				],
+			},
+			{
+				name: 'Price Lock',
+				path: '/order/price-lock',
+				element: <PriceLock />,
+				page_name: 'order__price_lock',
 				actions: [
 					'create',
 					'read',

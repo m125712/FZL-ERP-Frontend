@@ -54,6 +54,7 @@ function Table({
 	indicatorValue,
 	showDateRange = true,
 	containerClassName = '',
+	autoResetPageIndex = true,
 	...props
 }) {
 	//* Define state variables
@@ -83,6 +84,7 @@ function Table({
 		},
 		onColumnFiltersChange: setColumnFilters,
 		onGlobalFilterChange: setGlobalFilter,
+		autoResetPageIndex,
 		globalFilterFn: FuzzyFilter,
 		getCoreRowModel: getCoreRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),

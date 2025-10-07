@@ -164,6 +164,7 @@ export default function Index() {
 					</>
 				),
 				enableColumnFilter: false,
+				width: 'w-44',
 				cell: (info) => {
 					const { emergence, description } = info.row.original;
 

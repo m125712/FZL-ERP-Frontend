@@ -46,3 +46,8 @@ export const useProcurementByIssueUUID = (uuid) =>
 		url: `/maintain/issue-procurement/by/${uuid}`,
 		enabled: !!uuid,
 	});
+export const useDashboard = () =>
+	createGlobalState({
+		queryKey: maintenanceQK.dashboard(),
+		url: `/maintain/maintenance/dashboard`,
+	});

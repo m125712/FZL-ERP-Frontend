@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { NotebookPen } from 'lucide-react';
 
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { CustomLink, DateTime, EditDelete, StatusButton } from '@/ui';
@@ -490,6 +491,7 @@ export const DetailsColumns = ({
 	haveAccess,
 	data,
 	handelMarketingCheckedStatus,
+	handleComplain,
 }) => {
 	return useMemo(
 		() => [
@@ -556,6 +558,30 @@ export const DetailsColumns = ({
 					);
 				},
 			},
+			// {
+			// 	accessorKey: 'complain',
+			// 	header: 'Complain',
+			// 	enableColumnFilter: true,
+			// 	width: 'w-36',
+			// 	cell: (info) => {
+			// 		const { order_description_uuid, order_number } =
+			// 			info.row.original;
+			// 		return (
+			// 			// <CustomLink
+			// 			// 	label={info.getValue()}
+			// 			// 	url={`/order/details/${order_number}/${order_description_uuid}`}
+			// 			// 	openInNewTab={true}
+			// 			// />
+			// 			<button
+			// 				className='hover:bg-slate-300'
+			// 				onClick={() => {
+			// 					handleComplain(info.row.index);
+			// 				}}>
+			// 				<NotebookPen size={18} />
+			// 			</button>
+			// 		);
+			// 	},
+			// },
 			{
 				accessorKey: 'order_type',
 				header: 'Type',

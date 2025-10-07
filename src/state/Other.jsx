@@ -61,10 +61,12 @@ export const useOtherFactoryByPartyUUID = (uuid) =>
 	});
 
 // GET OTHER MARKETING
-export const useOtherMarketing = () =>
+export const useOtherMarketing = (query) =>
 	createGlobalState({
 		queryKey: otherQK.marketing(),
-		url: '/other/marketing/value/label',
+		url: query
+			? `/other/marketing/value/label?${query}`
+			: '/other/marketing/value/label',
 		refetchOnWindowFocus: false,
 	});
 

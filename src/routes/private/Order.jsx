@@ -17,6 +17,7 @@ const OrderDetails = lazy(() => import('@/pages/Order/Details'));
 const OrderIndByUUID = lazy(
 	() => import('@/pages/Order/Details/ByOrderDescriptionUUID')
 );
+const Complain = lazy(() => import('@/pages/Order/Details/Complain'));
 const OrderFilterByOrderNumber = lazy(
 	() => import('@/pages/Order/Details/ByOrderNumber')
 );
@@ -29,6 +30,7 @@ const Party = lazy(() => import('@/pages/Order/Party'));
 const Properties = lazy(() => import('@/pages/Order/Properties'));
 const Settings = lazy(() => import('@/pages/Order/Settings'));
 const OrderPricing = lazy(() => import('@/pages/Order/OrderPricing'));
+const PriceLock = lazy(() => import('@/pages/Order/PriceLock'));
 
 export const OrderRoutes = [
 	{
@@ -77,6 +79,15 @@ export const OrderRoutes = [
 				isDynamic: true,
 			},
 			{
+				name: 'Complain',
+				path: '/order/complain/:order_number/:order_description_uuid',
+				element: <Complain />,
+				hidden: true,
+				page_name: 'order__complain',
+				actions: ['read', 'create'],
+				isDynamic: true,
+			},
+			{
 				name: 'Entry',
 				path: '/order/entry',
 				element: <OrderEntry />,
@@ -114,6 +125,22 @@ export const OrderRoutes = [
 				path: '/order/order-pricing',
 				element: <OrderPricing />,
 				page_name: 'order__order_pricing',
+				actions: [
+					'create',
+					'read',
+					'update',
+					'delete',
+					'show_own_orders',
+					'edit_md_price',
+					'edit_mkt_price',
+					'click_price_lock',
+				],
+			},
+			{
+				name: 'Price Lock',
+				path: '/order/price-lock',
+				element: <PriceLock />,
+				page_name: 'order__price_lock',
 				actions: [
 					'create',
 					'read',

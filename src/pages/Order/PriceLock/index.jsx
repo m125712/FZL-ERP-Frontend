@@ -20,13 +20,13 @@ import { MDPriceForm } from './MdPriceForm';
 
 const getPath = (haveAccess, userUUID) => {
 	if (haveAccess.includes('show_own_orders') && userUUID) {
-		return `own_uuid=${userUUID}&price_lock=false`;
+		return `own_uuid=${userUUID}&marketing_price=true&price_lock=true`;
 	}
-	return `all=true&marketing_price=true&price_lock=false`;
+	return `all=true&marketing_price=true&price_lock=true`;
 };
 
 export default function Index() {
-	const haveAccess = useAccess('order__order_pricing');
+	const haveAccess = useAccess('order__price_lock');
 	const { user } = useAuth();
 	const {
 		data,
@@ -37,8 +37,7 @@ export default function Index() {
 	} = useOrderPrice(`${getPath(haveAccess, user?.uuid)}`, {
 		enabled: !!user?.uuid,
 	});
-
-	const info = new PageInfo('Order Pricing', url, 'order__order_pricing');
+	const info = new PageInfo('Price Lock', url, 'order__price_lock');
 	const handlePriceLock = async (index) => {
 		const is_price_confirmed = data[index].is_price_confirmed
 			? false
@@ -190,6 +189,13 @@ export default function Index() {
 					</div>
 				),
 			},
+			//  "size_wise_quantity": {
+			//     "61": 330,
+			//     "63": 330,
+			//     "65": 330,
+			//     "67": 165,
+			//     "69": 165
+			// }
 			{
 				accessorFn: (row) =>
 					row.sizes +

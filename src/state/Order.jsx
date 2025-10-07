@@ -170,3 +170,13 @@ export const useOrderPrice = (query) =>
 		url: '/report/zipper-production-status-report-v2?' + query,
 		enabled: true,
 	});
+export const useComplain = (query) =>
+	createGlobalState({
+		queryKey: orderQK.complaint(),
+		url: '/public/complaint',
+	});
+export const useComplainByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: orderQK.complaintByUUID(uuid),
+		url: `/public/complaint/${uuid}`,
+	});

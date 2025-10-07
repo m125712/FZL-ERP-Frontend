@@ -121,7 +121,7 @@ export default function Index() {
 					])
 						.then(() => reset(MARKETING_TEAM_NULL))
 						.then(() => {
-							navigate(`/commercial/manual-pi/${data?.uuid}`);
+							navigate(`/marketing/teams/${data?.uuid}`);
 						});
 				} catch (err) {
 					console.error(`Error with Promise.all: ${err}`);
@@ -180,7 +180,7 @@ export default function Index() {
 					.then(() => reset(MARKETING_TEAM_NULL))
 					.then(() => {
 						marketingTeams();
-						// navigate(`/commercial/manual-pi/${new_manual_pi_uuid}`);
+						navigate(`/marketing/teams/${marketing_team_uuid}`);
 					});
 			} catch (err) {
 				console.error(`Error with Promise.all: ${err}`);
@@ -190,20 +190,6 @@ export default function Index() {
 
 	// Check if uuid is valuuid
 	if (getValues('quantity') === null) return <Navigate to='/not-found' />;
-
-	const handleEnter = (event) => {
-		event.preventDefault();
-		if (Object.keys(errors).length > 0) return;
-	};
-
-	const keyMap = {
-		NEW_ROW: 'alt+n',
-		COPY_LAST_ROW: 'alt+c',
-		ENTER: 'enter',
-	};
-
-	const rowClass =
-		'group whitespace-nowrap text-left text-sm font-normal tracking-wide';
 
 	return (
 		<FormProvider {...form}>
@@ -232,6 +218,7 @@ export default function Index() {
 						MarketingEntriesAppend,
 						MarketingEntriesRemove,
 						setDeleteItem,
+						data,
 					}}
 				/>
 

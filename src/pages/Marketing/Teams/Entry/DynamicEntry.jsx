@@ -1,14 +1,9 @@
 import { useCallback } from 'react';
 import { useOtherMarketing } from '@/state/Other';
 
-import {
-	ActionButtons,
-	CheckBox,
-	DynamicField,
-	FormField,
-	ReactSelect,
-	Textarea,
-} from '@/ui';
+import { ActionButtons, CheckBox, DynamicField, Textarea } from '@/ui';
+
+import MarketingExecutive from './MarketingExecutive';
 
 export default function index({
 	register,
@@ -18,35 +13,17 @@ export default function index({
 	Controller,
 	watch,
 	setValue,
-
 	MarketingEntries,
 	MarketingEntriesAppend,
 	MarketingEntriesRemove,
 	setDeleteItem,
+	data,
 }) {
-	const { data: marketing } = useOtherMarketing();
-
-	let filteredMarketing = marketing?.filter(
-		(item) =>
-			// * this returns true if the condition is met in the sone() function
-			!MarketingEntries.some(
-				({ marketing_uuid }) => marketing_uuid === item.value
-			)
-	);
-
 	const handelMarketingEntriesAppend = () => {
 		MarketingEntriesAppend({
-			uuid: '',
+			uuid: undefined,
 		});
 	};
-
-	const handelDuplicateDynamicField = useCallback(
-		(index) => {
-			const item = getValues(`marketing_team_entry[${index}]`);
-			MarketingEntriesAppend({ ...item, uuid: undefined });
-		},
-		[getValues, MarketingEntriesAppend]
-	);
 
 	const handleRecipeRemove = (index) => {
 		const Uuid = getValues(`marketing_team_entry[${index}].uuid`);
@@ -67,7 +44,7 @@ export default function index({
 	return (
 		<>
 			<DynamicField
-				title='UD'
+				title='Team Member'
 				handelAppend={handelMarketingEntriesAppend}
 				tableHead={[
 					'Marketing Executive',
@@ -87,39 +64,17 @@ export default function index({
 				{MarketingEntries.map((item, index) => (
 					<tr key={item.id}>
 						<td className={`${rowClass}`}>
-							<FormField
-								label={`marketing_team_entry[${index}].marketing_uuid`}
-								is_title_needed='false'
+							<MarketingExecutive
+								index={index}
+								MarketingEntries={MarketingEntries}
+								control={control}
 								errors={errors}
-								dynamicerror={
-									errors?.marketing_team_entry?.[index]
-										?.marketing_uuid
-								}
-							>
-								<Controller
-									name={`marketing_team_entry[${index}].marketing_uuid`}
-									control={control}
-									render={({ field: { onChange } }) => {
-										return (
-											<ReactSelect
-												menuPortalTarget={document.body}
-												placeholder='Select Party'
-												options={filteredMarketing}
-												value={marketing?.find(
-													(item) =>
-														item.value ===
-														getValues(
-															`marketing_team_entry[${index}].marketing_uuid`
-														)
-												)}
-												onChange={(e) =>
-													onChange(e.value)
-												}
-											/>
-										);
-									}}
-								/>
-							</FormField>
+								watch={watch}
+								Controller={Controller}
+								getValues={getValues}
+								setValue={setValue}
+								data={data}
+							/>
 						</td>
 						<td className={`${rowClass}`}>
 							<CheckBox
@@ -153,9 +108,7 @@ export default function index({
 							className={`w-16 ${rowClass} border-l-4 border-l-primary`}
 						>
 							<ActionButtons
-								duplicateClick={() =>
-									handelDuplicateDynamicField(index)
-								}
+								showDuplicateButton={false}
 								removeClick={() => handleRecipeRemove(index)}
 								showRemoveButton={true}
 							/>

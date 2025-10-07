@@ -17,6 +17,7 @@ const OrderDetails = lazy(() => import('@/pages/Order/Details'));
 const OrderIndByUUID = lazy(
 	() => import('@/pages/Order/Details/ByOrderDescriptionUUID')
 );
+const Complain = lazy(() => import('@/pages/Order/Details/Complain'));
 const OrderFilterByOrderNumber = lazy(
 	() => import('@/pages/Order/Details/ByOrderNumber')
 );
@@ -75,6 +76,15 @@ export const OrderRoutes = [
 				hidden: true,
 				page_name: 'order__details_by_uuid',
 				actions: ['read', 'update'],
+				isDynamic: true,
+			},
+			{
+				name: 'Complain',
+				path: '/order/complain/:order_number/:order_description_uuid',
+				element: <Complain />,
+				hidden: true,
+				page_name: 'order__complain',
+				actions: ['read', 'create'],
 				isDynamic: true,
 			},
 			{

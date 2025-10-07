@@ -190,13 +190,6 @@ export default function Index() {
 					</div>
 				),
 			},
-			//  "size_wise_quantity": {
-			//     "61": 330,
-			//     "63": 330,
-			//     "65": 330,
-			//     "67": 165,
-			//     "69": 165
-			// }
 			{
 				accessorFn: (row) =>
 					row.sizes +

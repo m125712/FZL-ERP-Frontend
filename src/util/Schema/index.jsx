@@ -47,6 +47,26 @@ export {
 	STRING,
 	STRING_REQUIRED,
 };
+// Complain Schema
+export const COMPLAIN_SCHEMA = {
+	name: STRING_REQUIRED,
+	description: STRING_REQUIRED,
+	root_cause_analysis: STRING.nullable(),
+	issue_department: STRING_REQUIRED,
+	solution: STRING.nullable(),
+	future_proof: STRING.nullable(),
+	remarks: STRING.nullable(),
+};
+export const COMPLAIN_NULL = {
+	uuid: null,
+	name: '',
+	description: '',
+	root_cause_analysis: '',
+	issue_department: '',
+	solution: '',
+	future_proof: '',
+	remarks: '',
+};
 
 // Library
 //User

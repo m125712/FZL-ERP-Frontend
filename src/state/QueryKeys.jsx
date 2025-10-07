@@ -68,6 +68,10 @@ export const orderQK = {
 	properties: () => [...orderQK.all(), 'properties'],
 	propertiesByUUID: (uuid) => [...orderQK.party(), uuid],
 	zipperOrderPrice: (query) => [...orderQK.all(), 'zipperOrderPrice', query],
+
+	//*complaint
+	complaint: (uuid) => [...orderQK.all(), 'complaint', uuid],
+	complaintByUUID: (uuid) => [...orderQK.complaint(), uuid],
 };
 
 export const adminQK = {

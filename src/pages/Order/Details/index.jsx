@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useOrderDetailsByQuery } from '@/state/Order';
+import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
@@ -14,6 +15,7 @@ import { getPath, options } from './utils';
 
 export default function Index() {
 	const [status, setStatus] = useState('all');
+	const navigation = useNavigate();
 
 	const haveAccess = useAccess('order__details');
 	const { user } = useAuth();
@@ -68,12 +70,18 @@ export default function Index() {
 		window.open(whatsappUrl, '_blank');
 	};
 
+	const handleComplain = (idx) => {
+		navigation(
+			`/order/complain/${data[idx]?.order_number}/${data[idx]?.order_description_uuid}`
+		);
+	};
 	const columns = DetailsColumns({
 		handelUpdate,
 		haveAccess,
 		data,
 		handelMarketingCheckedStatus,
 		handleWhatsApp,
+		handleComplain,
 	});
 
 	if (isLoading)

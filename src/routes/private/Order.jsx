@@ -84,7 +84,22 @@ export const OrderRoutes = [
 				element: <Complain />,
 				hidden: true,
 				page_name: 'order__complain',
-				actions: ['read', 'create'],
+				actions: [
+					'read',
+					'create',
+					'update',
+					'delete',
+					'show_own_orders',
+				],
+				isDynamic: true,
+			},
+			{
+				name: 'Complain Update',
+				path: '/order/complain/:order_number/:order_description_uuid/:uuid/update',
+				element: <Complain />,
+				hidden: true,
+				page_name: 'order__complain_update',
+				actions: ['read', 'create', 'update', 'delete'],
 				isDynamic: true,
 			},
 			{

@@ -153,6 +153,7 @@ export default function Index() {
 	);
 	// Submit
 	const onSubmit = async (data) => {
+		console.log(data);
 		// Update item
 		if (isUpdate) {
 			const purchase_description_data = {

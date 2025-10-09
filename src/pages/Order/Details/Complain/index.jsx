@@ -2,37 +2,37 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 // Custom Hooks
 import { useAuth } from '@/context/auth';
-import { useComplain, useOrderDetailsByStyleForPDF } from '@/state/Order';
+import { useComplainByUUID, useOrderDetailsByStyleForPDF } from '@/state/Order';
 import {
 	useOtherOrderPropertiesByGarmentsWash,
 	useOtherOrderPropertiesBySpecialRequirement,
 } from '@/state/Other';
 import { FormProvider } from 'react-hook-form';
-import { Navigate, useParams } from 'react-router';
-// State Management Hooks
-import { useFetchFunc, useRHF } from '@/hooks';
+import { Navigate, useNavigate, useParams } from 'react-router';
+import { useAccess, useFetchFunc, useRHF } from '@/hooks';
 
-// Components
-import { Suspense as SuspenseFallback } from '@/components/Feedback';
+// ===== LAZY LOADED COMPONENTS =====
+
 import OrderSheetPdf from '@/components/Pdf/OrderSheet';
 import OrderSheetByStyle from '@/components/Pdf/OrderSheetByStyle';
 import OrderSheetByStyleV3 from '@/components/Pdf/OrderSheetByStyleV3';
-
 // Utilities
+import { ShowLocalToast } from '@/components/Toast';
+
 import nanoid from '@/lib/nanoid';
 import GetDateTime from '@/util/GetDateTime';
 import { COMPLAIN_NULL, COMPLAIN_SCHEMA } from '@/util/Schema';
 
-import InformationSkeleton from '../_components/Information/skeleton';
-import ComplainBox from './ComplainBox';
-
-// Lazy Components
+const InformationSkeleton = lazy(
+	() => import('../_components/Information/skeleton')
+);
+const ComplainBox = lazy(() => import('./ComplainBox'));
 const SingleInformation = lazy(() => import('../_components/Information'));
 const Table = lazy(() => import('../_components/Table'));
 const Timeline = lazy(() => import('../_components/Timeline'));
 
-// ===== CONSTANTS & TYPES =====
-const MAX_FILES = 3;
+// ===== CONSTANTS =====
+let MAX_FILES = 3;
 
 const INITIAL_TOTALS = {
 	Quantity: 0,
@@ -122,9 +122,6 @@ const useOrderData = (order_description_uuid, initial_order) => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
-	const isEnabled =
-		order_description_uuid !== null && order_description_uuid !== undefined;
-
 	useEffect(() => {
 		if (order_description_uuid !== undefined) {
 			useFetchFunc(
@@ -138,7 +135,7 @@ const useOrderData = (order_description_uuid, initial_order) => {
 		}
 	}, [order_description_uuid]);
 
-	return { order, loading, error, isEnabled };
+	return { order, loading, error };
 };
 
 const usePDFGeneration = (
@@ -176,47 +173,26 @@ const usePDFGeneration = (
 		}
 	}, [order, garments, sr, order_description_uuid, orderbystyle]);
 
-	return { getPdfData, getPdfData2, getPdfData3 };
+	return { getPdfData2 };
 };
 
-const useFileManagement = (control, setValue, getValues) => {
-	const [fileCount, setFileCount] = useState(1);
+// ===== LOADING COMPONENTS =====
+const LoadingSpinner = () => (
+	<div className='flex items-center justify-center p-4'>
+		<span className='loading loading-dots loading-lg' />
+	</div>
+);
 
-	const addFile = () => {
-		if (fileCount < MAX_FILES) {
-			setFileCount((prev) => prev + 1);
-		}
-	};
-
-	const removeFile = (index) => {
-		if (fileCount > 1) {
-			setValue(`file_${index}`, null);
-
-			// Shift remaining files up
-			for (let i = index; i < fileCount - 1; i++) {
-				const nextFile = getValues(`file_${i + 1}`);
-				setValue(`file_${i}`, nextFile);
-			}
-
-			// Clear the last file field
-			setValue(`file_${fileCount - 1}`, null);
-			setFileCount((prev) => prev - 1);
-		}
-	};
-
-	const hasFiles = () => {
-		for (let i = 0; i < fileCount; i++) {
-			if (getValues(`file_${i}`)) return true;
-		}
-		return false;
-	};
-
-	return { fileCount, addFile, removeFile, hasFiles };
-};
+const FormLoadingSkeleton = () => (
+	<div className='animate-pulse space-y-4 p-4'>
+		<div className='h-4 w-3/4 rounded bg-gray-200'></div>
+		<div className='h-32 rounded bg-gray-200'></div>
+		<div className='h-4 w-1/2 rounded bg-gray-200'></div>
+	</div>
+);
 
 // ===== SUBCOMPONENTS =====
 const PDFPreviewSection = ({
-	getPdfData,
 	getPdfData2,
 	form,
 	handleSubmit,
@@ -227,34 +203,43 @@ const PDFPreviewSection = ({
 	getValues,
 	Controller,
 	setValue,
+	existingFileUrls,
 }) => (
 	<div className='grid grid-cols-2 gap-4'>
-		<div className='flex h-[50rem] w-full gap-6 rounded-md border-none'>
-			<iframe
-				id='iframeContainer2'
-				src={getPdfData2}
-				className='w-full'
-				title='PDF Preview 2'
-			/>
-		</div>
-		<div className='h-[50rem] w-full rounded-md border-none'>
+		<div className='h-[55rem] w-full rounded-md border-none'>
 			<FormProvider {...form}>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					noValidate
 					className='flex flex-col gap-4'
 				>
-					<ComplainBox
-						register={register}
-						errors={errors}
-						control={control}
-						getValues={getValues}
-						Controller={Controller}
-						setValue={setValue}
-						MAX_FILES={MAX_FILES}
-					/>
+					<Suspense fallback={<FormLoadingSkeleton />}>
+						<ComplainBox
+							register={register}
+							errors={errors}
+							control={control}
+							getValues={getValues}
+							Controller={Controller}
+							setValue={setValue}
+							MAX_FILES={MAX_FILES}
+							FileCount={
+								getValues('file')
+									? JSON?.parse(getValues('file'))?.length
+									: 1
+							}
+							existingFileUrls={existingFileUrls}
+						/>
+					</Suspense>
 				</form>
 			</FormProvider>
+		</div>
+		<div className='flex h-[55rem] w-full gap-6 rounded-md border-none'>
+			<iframe
+				id='iframeContainer2'
+				src={getPdfData2}
+				className='w-full'
+				title='PDF Preview 2'
+			/>
 		</div>
 	</div>
 );
@@ -263,12 +248,14 @@ const PDFPreviewSection = ({
 export default function Index({ initial_order, idx }) {
 	// ===== URL PARAMETERS =====
 	const { order_number, order_description_uuid, uuid } = useParams();
+	const navigation = useNavigate();
 
 	// ===== AUTHENTICATION =====
 	const { user } = useAuth();
+	const [existingFileUrls, setExistingFileUrls] = useState([]);
 
 	// ===== DATA FETCHING =====
-	const { order, loading, error, isEnabled } = useOrderData(
+	const { order, loading } = useOrderData(
 		order_description_uuid,
 		initial_order
 	);
@@ -277,14 +264,14 @@ export default function Index({ initial_order, idx }) {
 		data: complainData,
 		url,
 		postData,
+		updateData,
+		imageUpdateData,
 		invalidateQuery: invalidateComplain,
-		onClose,
-	} = useComplain();
+	} = useComplainByUUID(uuid);
 
-	const { data: garments, updateData } =
-		useOtherOrderPropertiesByGarmentsWash({
-			enabled: isEnabled,
-		});
+	const { data: garments } = useOtherOrderPropertiesByGarmentsWash({
+		enabled: !!order_description_uuid,
+	});
 
 	const { data: orderbystyle } = useOrderDetailsByStyleForPDF(
 		order_number,
@@ -292,11 +279,11 @@ export default function Index({ initial_order, idx }) {
 	);
 
 	const { data: sr } = useOtherOrderPropertiesBySpecialRequirement({
-		enabled: isEnabled,
+		enabled: !!order_description_uuid,
 	});
 
 	// ===== PDF GENERATION =====
-	const { getPdfData, getPdfData2, getPdfData3 } = usePDFGeneration(
+	const { getPdfData2 } = usePDFGeneration(
 		order,
 		garments,
 		sr,
@@ -315,7 +302,13 @@ export default function Index({ initial_order, idx }) {
 		getValues,
 		setValue,
 		context: form,
-	} = useRHF(COMPLAIN_SCHEMA, COMPLAIN_NULL);
+	} = useRHF(COMPLAIN_SCHEMA, {
+		...COMPLAIN_NULL,
+		file_1: null,
+		file_2: null,
+		file_3: null,
+	});
+	const navigatie = useNavigate();
 
 	// ===== COMPUTED VALUES =====
 	const hasInitialOrder = Object.keys(initial_order || []).length > 0;
@@ -327,40 +320,164 @@ export default function Index({ initial_order, idx }) {
 	}, [order_number]);
 
 	useEffect(() => {
-		if (uuid !== undefined) {
-			reset(complainData);
+		if (uuid !== undefined && complainData?.file) {
+			const fileArray = JSON.parse(complainData.file) || [];
+
+			const resetData = {
+				...complainData,
+			};
+
+			reset(resetData);
+
+			setExistingFileUrls(fileArray);
 		}
 	}, [uuid, complainData, reset]);
 
 	// ===== EVENT HANDLERS =====
 	const onSubmit = async (data) => {
-		const files = [];
-		for (let i = 0; i < MAX_FILES; i++) {
-			if (data[`file_${i}`]) {
-				files.push(data[`file_${i}`]);
+		const formData = new FormData();
+		// console.log(data);
+		// return;
+
+		// Arrays to track files
+		const newFiles = [];
+		const existingFileUrls = [];
+
+		for (let i = 1; i <= MAX_FILES; i++) {
+			const fileKey = `file_${i}`;
+			const fileValue = data[fileKey];
+
+			if (!fileValue) {
+				continue;
 			}
-			delete data[`file_${i}`];
+
+			if (fileValue instanceof File) {
+				// New file upload
+				newFiles.push(fileValue);
+				formData.append('file', fileValue);
+			} else {
+				// Existing file URL
+				existingFileUrls.push(fileValue);
+			}
+
+			// Clean up from data object
+			delete data[fileKey];
+		}
+		// console.log(existingFileUrls);
+		// return;
+		// Validate at least one file exists
+		if (
+			newFiles.length === 0 &&
+			existingFileUrls.length === 0 &&
+			!data?.file
+		) {
+			ShowLocalToast({
+				type: 'error',
+				message: 'Please upload at least one file',
+			});
+			return;
 		}
 
-		const updatedData = {
-			...data,
-			files, // Add files array
-			uuid: nanoid(),
-			created_by: user?.uuid,
-			created_at: GetDateTime(),
+		// Prepare submission data
+		const submissionData = {
+			is_resolved: data?.is_resolved,
+			description: data?.description || '',
+			future_proof: data?.future_proof || '',
+			issue_department: data?.issue_department || '',
+			name: data?.name || '',
+			remarks: data?.remarks || '',
+			root_cause_analysis: data?.root_cause_analysis || '',
+			solution: data?.solution || '',
+			order_description_uuid: order_description_uuid,
 		};
 
-		await postData.mutateAsync({
-			url,
-			newData: updatedData,
-			onClose,
-		});
-		invalidateComplain();
+		// Add metadata for file upload
+		if (existingFileUrls.length > 0) {
+			formData.append('file_string', JSON.stringify(existingFileUrls));
+		}
+		formData.append('updated_by', user?.uuid);
+		formData.append('updated_at', GetDateTime());
+
+		// Pass preserved file URLs
+		// if (uuid && JSON?.parse(data?.file).length > 0) {
+		// 	formData.append(
+		// 		'file_string',
+		// 		JSON.stringify(JSON.parse(data?.file))
+		// 	);
+		// }
+
+		try {
+			if (uuid) {
+				// Update existing complaint
+				await updateData.mutateAsync({
+					url: `/public/complaint/${uuid}`,
+					updatedData: {
+						...submissionData,
+						uuid,
+						updated_by: user?.uuid,
+						updated_at: GetDateTime(),
+						is_resolved_date:
+							data?.is_resolved === complainData?.is_resolved
+								? data?.is_resolved_date
+								: data?.is_resolved
+									? GetDateTime()
+									: null,
+					},
+					isOnCloseNeeded: false,
+				});
+
+				// Only upload files if there are new ones
+				if (newFiles.length > 0 || existingFileUrls.length > 0) {
+					await imageUpdateData.mutateAsync({
+						url: `/public/complaint-file/${uuid}`,
+						uuid: uuid,
+						updatedData: formData,
+						isOnCloseNeeded: false,
+					});
+				}
+			} else {
+				// Create new complaint
+				const new_uuid = nanoid();
+
+				await postData.mutateAsync({
+					url: '/public/complaint',
+					newData: {
+						...submissionData,
+						uuid: new_uuid,
+						created_by: user?.uuid,
+						created_at: GetDateTime(),
+						is_resolved_date: data?.is_resolved
+							? GetDateTime()
+							: null,
+					},
+					isOnCloseNeeded: false,
+				});
+
+				await imageUpdateData.mutateAsync({
+					url: `/public/complaint-file/${new_uuid}`,
+					uuid: new_uuid,
+					updatedData: formData,
+					isOnCloseNeeded: false,
+				});
+			}
+
+			reset(COMPLAIN_NULL);
+			await invalidateComplain();
+			navigation(
+				`/order/details/${order_number}/${order_description_uuid}`
+			);
+		} catch (error) {
+			console.error('Submission error:', error);
+			ShowLocalToast({
+				type: 'error',
+				message: 'Failed to submit complaint',
+			});
+		}
 	};
 
 	// ===== LOADING & ERROR STATES =====
 	if (loading) {
-		return <span className='loading loading-dots loading-lg z-50' />;
+		return <LoadingSpinner />;
 	}
 
 	if (!order) {
@@ -373,7 +490,6 @@ export default function Index({ initial_order, idx }) {
 			{/* PDF Preview Section */}
 			{order_description_uuid && (
 				<PDFPreviewSection
-					getPdfData={getPdfData}
 					getPdfData2={getPdfData2}
 					form={form}
 					handleSubmit={handleSubmit}
@@ -384,7 +500,7 @@ export default function Index({ initial_order, idx }) {
 					getValues={getValues}
 					Controller={Controller}
 					setValue={setValue}
-					MAX_FILES={MAX_FILES}
+					existingFileUrls={existingFileUrls}
 				/>
 			)}
 
@@ -399,7 +515,7 @@ export default function Index({ initial_order, idx }) {
 			</Suspense>
 
 			{/* Timeline and Table Section */}
-			<Suspense>
+			<Suspense fallback={<LoadingSpinner />}>
 				<Timeline {...order} />
 				<Table {...order} index={idx} total={total} />
 			</Suspense>

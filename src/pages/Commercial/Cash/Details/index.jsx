@@ -51,6 +51,7 @@ export default function Index() {
 					conventionRate={data?.conversion_rate}
 				/>
 			)}
+
 			{/* {data?.cash_receives.length > 0 && (
 				<CashReceivesTable cash_receives={data?.cash_receives} />
 			)} */}

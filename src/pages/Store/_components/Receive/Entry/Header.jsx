@@ -16,6 +16,7 @@ import {
 export default function Header({
 	register,
 	errors,
+	getValues,
 	control,
 	isUpdate,
 	setValue,
@@ -58,7 +59,7 @@ export default function Header({
 		<SectionEntryBody
 			title={
 				isUpdate
-					? `${control.getValues('purchase_id')} (LC Number: ${control.getValues(
+					? `${getValues('purchase_id')} (LC Number: ${getValues(
 							'lc_number'
 						)})`
 					: 'Information'

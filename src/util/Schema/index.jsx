@@ -49,15 +49,20 @@ export {
 };
 // Complain Schema
 export const COMPLAIN_SCHEMA = {
+	is_resolved: BOOLEAN_REQUIRED.default(false),
 	name: STRING_REQUIRED,
 	description: STRING_REQUIRED,
 	root_cause_analysis: STRING.nullable(),
 	issue_department: STRING_REQUIRED,
 	solution: STRING.nullable(),
 	future_proof: STRING.nullable(),
+	file_1: yup.mixed().nullable(),
+	file_2: yup.mixed().nullable(),
+	file_3: yup.mixed().nullable(),
 	remarks: STRING.nullable(),
 };
 export const COMPLAIN_NULL = {
+	is_resolved: false,
 	uuid: null,
 	name: '',
 	description: '',
@@ -66,6 +71,9 @@ export const COMPLAIN_NULL = {
 	solution: '',
 	future_proof: '',
 	remarks: '',
+	file_1: null,
+	file_2: null,
+	file_3: null,
 };
 
 // Library

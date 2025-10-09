@@ -6,6 +6,8 @@ import { CustomLink, DateTime, EditDelete, StatusButton } from '@/ui';
 
 import { DEFAULT_COLUMNS } from '@/util/Table/DefaultColumns';
 
+import { issueDepartment } from './Details/Complain/utils';
+
 export const BuyerColumns = ({
 	handelUpdate,
 	handelDelete,
@@ -28,6 +30,122 @@ export const BuyerColumns = ({
 			},
 
 			...DEFAULT_COLUMNS({ handelUpdate, handelDelete, haveAccess }),
+		],
+		[data]
+	);
+};
+
+export const complainColumns = ({
+	handelUpdate,
+	handelDelete,
+	haveAccess,
+	data,
+	handelResolved,
+}) => {
+	return useMemo(
+		() => [
+			{
+				accessorKey: 'is_resolved',
+				header: 'Resolved',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { is_resolved_date } = info.row.original;
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={haveAccess.includes(
+									'show_own_orders'
+								)}
+								onChange={() => {
+									handelResolved(info.row.index);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={is_resolved_date} />
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'name',
+				header: 'Complain Type',
+				enableColumnFilter: false,
+				cell: (info) =>
+					haveAccess.includes('show_own_orders') === false ? (
+						<div className='flex flex-col'>
+							<span
+								className='font-semibold underline'
+								onClick={() => handelUpdate(info.row.index)}
+							>
+								{info.getValue()}
+							</span>
+							<span className='italic'>
+								Dep:{' '}
+								{
+									issueDepartment?.find(
+										(item) =>
+											item.value ===
+											info.row.original.issue_department
+									).label
+								}
+							</span>
+						</div>
+					) : (
+						<div className='flex flex-col'>
+							<span>{info.getValue()}</span>
+							<span className='italic'>
+								Dep:{' '}
+								{
+									issueDepartment?.find(
+										(item) =>
+											item.value ===
+											info.row.original.issue_department
+									).label
+								}
+							</span>
+						</div>
+					),
+			},
+			// {
+			// 	accessorKey: 'issue_department',
+			// 	header: 'Department',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue(),
+			// },
+			{
+				accessorKey: 'created_at',
+				header: 'Created',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+
+			{
+				accessorKey: 'actions',
+				header: 'Actions',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden:
+					(!haveAccess.includes('update') &&
+						!haveAccess.includes('delete')) ||
+					!haveAccess.includes('show_own_orders'),
+				width: 'w-24',
+				cell: (info) => (
+					<EditDelete
+						idx={info.row.index}
+						handelUpdate={handelUpdate}
+						handelDelete={handelDelete}
+						showUpdate={
+							haveAccess.includes('update') &&
+							haveAccess.includes('show_own_orders')
+						}
+						showDelete={
+							haveAccess.includes('delete') &&
+							haveAccess.includes('show_own_orders')
+						}
+					/>
+				),
+			},
 		],
 		[data]
 	);
@@ -558,30 +676,31 @@ export const DetailsColumns = ({
 					);
 				},
 			},
-			// {
-			// 	accessorKey: 'complain',
-			// 	header: 'Complain',
-			// 	enableColumnFilter: true,
-			// 	width: 'w-36',
-			// 	cell: (info) => {
-			// 		const { order_description_uuid, order_number } =
-			// 			info.row.original;
-			// 		return (
-			// 			// <CustomLink
-			// 			// 	label={info.getValue()}
-			// 			// 	url={`/order/details/${order_number}/${order_description_uuid}`}
-			// 			// 	openInNewTab={true}
-			// 			// />
-			// 			<button
-			// 				className='hover:bg-slate-300'
-			// 				onClick={() => {
-			// 					handleComplain(info.row.index);
-			// 				}}>
-			// 				<NotebookPen size={18} />
-			// 			</button>
-			// 		);
-			// 	},
-			// },
+			{
+				accessorKey: 'complain',
+				header: 'Complain',
+				enableColumnFilter: true,
+				width: 'w-36',
+				cell: (info) => {
+					const { order_description_uuid, order_number } =
+						info.row.original;
+					return (
+						// <CustomLink
+						// 	label={info.getValue()}
+						// 	url={`/order/details/${order_number}/${order_description_uuid}`}
+						// 	openInNewTab={true}
+						// />
+						<button
+							className='hover:bg-slate-300'
+							onClick={() => {
+								handleComplain(info.row.index);
+							}}
+						>
+							<NotebookPen size={18} />
+						</button>
+					);
+				},
+			},
 			{
 				accessorKey: 'order_type',
 				header: 'Type',

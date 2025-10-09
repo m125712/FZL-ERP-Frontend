@@ -186,8 +186,6 @@ export const InputImage = ({ field, isUpdate, ...props }) => {
 
 	useEffect(() => {
 		if (isUpdate && field.value && typeof field.value === 'string') {
-			console.log('fileRejections', field.value, typeof field.value);
-			console.log('string');
 			setPreview(API_IMG_URL + field.value);
 		}
 	}, [isUpdate, field.value]);

@@ -101,7 +101,6 @@ export default function Header({
 
 	const [sp_req, setSpReq] = useState({});
 	const [garmentsWash, setGramentsWash] = useState({});
-	console.log(watch('hand'));
 
 	useEffect(() => {
 		if (order_description_uuid !== undefined) {

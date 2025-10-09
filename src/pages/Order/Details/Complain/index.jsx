@@ -336,8 +336,6 @@ export default function Index({ initial_order, idx }) {
 	// ===== EVENT HANDLERS =====
 	const onSubmit = async (data) => {
 		const formData = new FormData();
-		// console.log(data);
-		// return;
 
 		// Arrays to track files
 		const newFiles = [];
@@ -363,9 +361,7 @@ export default function Index({ initial_order, idx }) {
 			// Clean up from data object
 			delete data[fileKey];
 		}
-		// console.log(existingFileUrls);
-		// return;
-		// Validate at least one file exists
+
 		if (
 			newFiles.length === 0 &&
 			existingFileUrls.length === 0 &&

@@ -1,4 +1,11 @@
-import { forwardRef, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+	forwardRef,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import { CalenderIcon } from '@/assets/icons';
 import { format } from 'date-fns';
 import DatePicker from 'react-datepicker';
@@ -8,7 +15,15 @@ import cn from '@/lib/cn';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-import { Eye, EyeOff, FileUp, ImagePlus, Repeat } from 'lucide-react';
+import {
+	Eye,
+	EyeOff,
+	FileUp,
+	ImageIcon,
+	ImagePlus,
+	Repeat,
+	X,
+} from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
 
 import { API_IMG_URL } from '@/lib/secret';
@@ -142,6 +157,191 @@ export const File = ({ field, isUpdate, IframeClassName, ...props }) => {
 				<input {...getInputProps()} />
 				<p>Drag 'n' drop some files here, or click to select files</p>
 			</div> */}
+		</FormField>
+	);
+};
+
+export const InputImage = ({ field, isUpdate, ...props }) => {
+	const [preview, setPreview] = useState('');
+	const form = useFormContext();
+	const [zoomLevel, setZoomLevel] = useState(1);
+
+	const containerRef = useRef(null);
+	const isDragging = useRef(false);
+	const startPos = useRef({ x: 0, y: 0 });
+	const scrollPos = useRef({ left: 0, top: 0 });
+
+	const resetZoom = () => setZoomLevel(1);
+
+	const onDrop = useCallback(
+		(files) => {
+			const reader = new FileReader();
+			reader.onload = () => setPreview(reader.result);
+			reader.readAsDataURL(files[0]);
+			field.onChange(files[0]);
+			form.clearErrors(field.name);
+		},
+		[field, form]
+	);
+
+	useEffect(() => {
+		if (isUpdate && field.value && typeof field.value === 'string') {
+			setPreview(API_IMG_URL + field.value);
+		}
+	}, [isUpdate, field.value]);
+
+	const { getRootProps, getInputProps, inputRef } = useDropzone({
+		onDrop,
+		maxFiles: 1,
+		maxSize: 10000000,
+		noClick: true,
+		noKeyboard: true,
+	});
+
+	// Panning handlers
+	const onMouseDown = (e) => {
+		e.stopPropagation();
+		isDragging.current = true;
+		startPos.current = { x: e.clientX, y: e.clientY };
+		const c = containerRef.current;
+		scrollPos.current = { left: c.scrollLeft, top: c.scrollTop };
+		c.style.cursor = 'grabbing';
+	};
+	const onMouseMove = (e) => {
+		if (!isDragging.current) return;
+		e.preventDefault();
+		const dx = e.clientX - startPos.current.x;
+		const dy = e.clientY - startPos.current.y;
+		const c = containerRef.current;
+		c.scrollLeft = scrollPos.current.left - dx;
+		c.scrollTop = scrollPos.current.top - dy;
+	};
+	const onMouseUp = (e) => {
+		isDragging.current = false;
+		containerRef.current.style.cursor = 'grab';
+	};
+
+	return (
+		<FormField {...props} className='relative flex h-full w-full flex-col'>
+			{preview && !props.disabled && (
+				<div className='absolute bottom-10 right-10 z-50'>
+					<button
+						type='button'
+						className='rounded bg-teal-500 p-2'
+						onClick={() => inputRef.current?.click()}
+					>
+						<Repeat className='size-4' />
+					</button>
+				</div>
+			)}
+
+			<div
+				{...getRootProps()}
+				className='flex flex-1 items-center justify-center'
+			>
+				<label className='relative flex w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500'>
+					<div className='flex w-full flex-col items-center justify-center p-4'>
+						{preview ? (
+							<div className='group relative inline-block'>
+								<img
+									src={preview}
+									alt='Preview'
+									className='h-[100px] w-full cursor-pointer rounded-lg object-cover'
+								/>
+								<div
+									className='invisible absolute bottom-full z-50 opacity-0 transition-all duration-300 group-hover:visible group-hover:opacity-100'
+									onClick={(e) => e.stopPropagation()}
+									onMouseDown={(e) => e.stopPropagation()}
+								>
+									<div className='relative rounded-lg border border-gray-200 bg-white p-2 shadow-xl'>
+										<div className='absolute right-2 top-2 z-10 flex gap-1 rounded bg-black/50 p-1'>
+											<button
+												type='button'
+												onClick={(e) => {
+													e.stopPropagation();
+													setZoomLevel((z) =>
+														Math.min(3, z + 0.2)
+													);
+												}}
+												className='flex h-6 w-6 items-center justify-center rounded bg-white/20 text-sm text-white hover:bg-white/30'
+											>
+												+
+											</button>
+											<button
+												type='button'
+												onClick={(e) => {
+													e.stopPropagation();
+													setZoomLevel((z) =>
+														Math.max(0.5, z - 0.2)
+													);
+												}}
+												className='flex h-6 w-6 items-center justify-center rounded bg-white/20 text-sm text-white hover:bg-white/30'
+											>
+												–
+											</button>
+											<button
+												type='button'
+												onClick={(e) => {
+													e.stopPropagation();
+													resetZoom();
+												}}
+												className='flex h-6 w-6 items-center justify-center rounded bg-white/20 text-xs text-white hover:bg-white/30'
+											>
+												↻
+											</button>
+										</div>
+
+										<div
+											ref={containerRef}
+											className='h-[400px] w-[800px] cursor-grab overflow-auto'
+											// onWheel={handleWheel}
+											onMouseDown={onMouseDown}
+											onMouseMove={onMouseMove}
+											onMouseUp={onMouseUp}
+											onMouseLeave={onMouseUp}
+										>
+											<img
+												src={preview}
+												alt='Zoomable Preview'
+												draggable={false}
+												className='select-none rounded-md object-cover transition-transform duration-200'
+												style={{
+													transform: `scale(${zoomLevel})`,
+													transformOrigin: 'top left',
+													width: '100%',
+													height: 'auto',
+												}}
+											/>
+										</div>
+
+										<div className='absolute bottom-2 left-2 rounded bg-black/50 px-2 py-1 text-xs text-white'>
+											{Math.round(zoomLevel * 100)}%
+										</div>
+									</div>
+								</div>
+							</div>
+						) : (
+							<>
+								<FileUp className='block size-7' />
+								<p className='my-2 text-sm text-gray-500 dark:text-gray-400'>
+									<span className='font-semibold'>
+										Click to upload
+									</span>{' '}
+									or drag and drop
+								</p>
+								<p className='text-xs text-gray-500 dark:text-gray-400'>
+									png, jpg, jpeg, gif, bmp, svg, pdf
+								</p>
+							</>
+						)}
+					</div>
+					<input
+						disabled={props.disabled}
+						{...getInputProps()}
+						type='file'
+					/>
+				</label>
+			</div>
 		</FormField>
 	);
 };

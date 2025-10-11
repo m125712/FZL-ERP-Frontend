@@ -1,5 +1,20 @@
+import { useState } from 'react';
+import { complainColumns } from '@/pages/Order/columns';
+import {
+	useComplain,
+	useComplainByProductDescriptionUUID,
+} from '@/state/Order';
+import { Plus } from 'lucide-react';
+import { useNavigate } from 'react-router';
+import { useAccess } from '@/hooks';
+
+import { Suspense } from '@/components/Feedback';
+import { DeleteModal } from '@/components/Modal';
+import ReactTableWithoutTitle from '@/components/Table/ReactTableWithoutTitle';
 import RenderTable from '@/ui/Others/Table/RenderTable';
 import { LinkWithCopy, TitleValue } from '@/ui';
+
+import GetDateTime from '@/util/GetDateTime';
 
 const renderCashOrLC = (is_cash, is_sample, is_bill, is_only_value) => {
 	let value = is_cash == 1 ? 'Cash' : 'LC';
@@ -16,6 +31,18 @@ const renderCashOrLC = (is_cash, is_sample, is_bill, is_only_value) => {
 };
 
 export default function OrderDescription({ order }) {
+	const {
+		data: complainData,
+		url,
+		postData,
+		updateData,
+		imageUpdateData,
+		invalidateQuery: invalidateComplain,
+		deleteData,
+	} = useComplainByProductDescriptionUUID(order.order_description_uuid);
+	const haveAccess = useAccess('order__complain');
+	const navigation = useNavigate();
+
 	const renderItems = () => {
 		const {
 			order_number,
@@ -100,9 +127,47 @@ export default function OrderDescription({ order }) {
 			buyer_details,
 		};
 	};
+	const handelUpdate = (idx) => {
+		navigation(
+			`/order/complain/${complainData[idx]?.order_number}/${complainData[idx]?.order_description_uuid}/${complainData[idx]?.uuid}/update`
+		);
+	};
 
+	// Delete
+	const [deleteItem, setDeleteItem] = useState({
+		itemId: null,
+		itemName: null,
+	});
+
+	const handelDelete = (idx) => {
+		setDeleteItem((prev) => ({
+			...prev,
+			itemId: complainData[idx].uuid,
+			itemName: complainData[idx].name,
+		}));
+
+		window['deleteComplainModal'].showModal();
+	};
+	const handelResolved = async (idx) => {
+		const is_resolved = complainData[idx].is_resolved ? false : true;
+		await updateData.mutateAsync({
+			url: `/public/complaint/${complainData[idx].uuid}`,
+			updatedData: {
+				is_resolved,
+				is_resolved_date: is_resolved ? GetDateTime() : null,
+			},
+			isOnCloseNeeded: false,
+		});
+	};
+	const columns = complainColumns({
+		handelUpdate,
+		handelDelete,
+		haveAccess,
+		data: complainData,
+		handelResolved,
+	});
 	return (
-		<div className='grid grid-cols-1 md:grid-cols-2 md:gap-8'>
+		<div className='grid grid-cols-1 md:grid-cols-3 md:gap-8'>
 			<RenderTable
 				className={
 					'border-b border-r-0 border-secondary/30 md:border-r'
@@ -113,11 +178,50 @@ export default function OrderDescription({ order }) {
 
 			<RenderTable
 				className={
-					'border-b border-l-0 border-secondary/30 md:border-l'
+					'border-b border-l-0 border-secondary/30 md:border-l md:border-r'
 				}
 				title={'Buyer Details'}
 				items={renderItems().buyer_details}
 			/>
+			<div className='border border-secondary/30'>
+				<div className='flex items-center justify-between bg-base-200 px-3 py-2'>
+					<h4 className='text-lg font-medium capitalize leading-tight text-primary'>
+						Complain
+					</h4>
+					{haveAccess.includes('show_own_order') && (
+						<button
+							type='button'
+							disabled={!haveAccess.includes('show_own_order')}
+							className='flex items-center rounded-sm bg-accent p-2 text-xs text-secondary-foreground disabled:bg-slate-400'
+							onClick={() =>
+								navigation(
+									`/order/complain/${order?.order_number}/${order?.order_description_uuid}`
+								)
+							}
+						>
+							New
+							<Plus className='ml-2' size={16} />
+						</button>
+					)}
+				</div>
+				<ReactTableWithoutTitle
+					title='Complain'
+					data={complainData}
+					columns={columns}
+				/>
+			</div>
+			<Suspense>
+				<DeleteModal
+					modalId={'deleteComplainModal'}
+					title={'Are you sure you want to delete this complain?'}
+					{...{
+						deleteItem,
+						setDeleteItem,
+						url: `/public/complaint`,
+						deleteData,
+					}}
+				/>
+			</Suspense>
 		</div>
 	);
 }

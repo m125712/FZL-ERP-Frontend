@@ -1,7 +1,13 @@
 import { useState } from 'react';
 
-export const useFileManagement = (control, setValue, getValues, MAX_FILES) => {
-	const [fileCount, setFileCount] = useState(1);
+export const useFileManagement = (
+	control,
+	setValue,
+	getValues,
+	MAX_FILES,
+	FileCount
+) => {
+	const [fileCount, setFileCount] = useState(FileCount || 1);
 
 	const addFile = () => {
 		if (fileCount < MAX_FILES) {
@@ -11,23 +17,27 @@ export const useFileManagement = (control, setValue, getValues, MAX_FILES) => {
 
 	const removeFile = (index) => {
 		if (fileCount > 1) {
-			setValue(`file_${index}`, null);
+			const fileIndex = index + 1;
+
+			// Clear the specific file
+			setValue(`file_${fileIndex}`, null, { shouldValidate: true });
 
 			// Shift remaining files up
-			for (let i = index; i < fileCount - 1; i++) {
+			for (let i = fileIndex; i < fileCount; i++) {
 				const nextFile = getValues(`file_${i + 1}`);
-				setValue(`file_${i}`, nextFile);
+				setValue(`file_${i}`, nextFile, { shouldValidate: true });
 			}
 
 			// Clear the last file field
-			setValue(`file_${fileCount - 1}`, null);
+			setValue(`file_${fileCount}`, null, { shouldDirty: true });
 			setFileCount((prev) => prev - 1);
 		}
 	};
 
 	const hasFiles = () => {
-		for (let i = 0; i < fileCount; i++) {
-			if (getValues(`file_${i}`)) return true;
+		for (let i = 1; i <= fileCount; i++) {
+			const file = getValues(`file_${i}`);
+			if (file !== null && file !== undefined) return true;
 		}
 		return false;
 	};

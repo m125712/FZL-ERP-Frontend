@@ -43,7 +43,7 @@ function VoucherEntryRow({
 		defaultValue: [],
 	});
 	const category = watch('category');
-	console.log(category);
+
 	const [index, setIndex] = useState(0);
 
 	const { invalidateQuery: invalidQueryCostCenter } = useOtherCostCenter(

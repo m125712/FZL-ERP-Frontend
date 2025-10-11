@@ -72,6 +72,7 @@ export const orderQK = {
 	//*complaint
 	complaint: (uuid) => [...orderQK.all(), 'complaint', uuid],
 	complaintByUUID: (uuid) => [...orderQK.complaint(), uuid],
+	complaintByProductDescriptionUUID: (uuid) => [...orderQK.complaint(), uuid],
 };
 
 export const adminQK = {

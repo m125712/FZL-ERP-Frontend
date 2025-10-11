@@ -481,9 +481,9 @@ export default function Index() {
 					data[idx]?.is_warehouse_received === true
 						? null
 						: GetDateTime(),
-				warehouse_received_by: user.uuid,
+				warehouse_received_by: user?.uuid,
 				updated_at: GetDateTime(),
-				updated_by: user.uuid,
+				updated_by: user?.uuid,
 			},
 			isOnCloseNeeded: false,
 		});
@@ -502,9 +502,9 @@ export default function Index() {
 				gate_pass: data[idx]?.gate_pass === 1 ? 0 : 1,
 				gate_pass_date:
 					data[idx]?.gate_pass === 1 ? null : GetDateTime(),
-				gate_pass_by: user.uuid,
+				gate_pass_by: user?.uuid,
 				updated_at: GetDateTime(),
-				updated_by: user.uuid,
+				updated_by: user?.uuid,
 			},
 			isOnCloseNeeded: false,
 		});

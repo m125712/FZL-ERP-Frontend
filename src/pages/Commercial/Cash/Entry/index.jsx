@@ -376,7 +376,7 @@ export default function Index() {
 				rest?.thread_order_info_uuids
 			),
 			created_at,
-			created_by: user.uuid,
+			created_by: user?.uuid,
 			is_pi: 0,
 		};
 

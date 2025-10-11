@@ -76,6 +76,8 @@ export default function Index() {
 						: GetDateTime(),
 				sno_from_head_office_by:
 					data[idx]?.sno_from_head_office === true ? null : user.uuid,
+				updated_at: GetDateTime(),
+				updated_by: user.uuid,
 			},
 			isOnCloseNeeded: false,
 		});
@@ -92,6 +94,8 @@ export default function Index() {
 						: GetDateTime(),
 				receive_by_factory_by:
 					data[idx]?.receive_by_factory === true ? null : user.uuid,
+				updated_at: GetDateTime(),
+				updated_by: user.uuid,
 			},
 			isOnCloseNeeded: false,
 		});
@@ -106,6 +110,8 @@ export default function Index() {
 					data[idx]?.production_pause === true ? null : GetDateTime(),
 				production_pause_by:
 					data[idx]?.production_pause === true ? null : user.uuid,
+				updated_at: GetDateTime(),
+				updated_by: user.uuid,
 			},
 			isOnCloseNeeded: false,
 		});

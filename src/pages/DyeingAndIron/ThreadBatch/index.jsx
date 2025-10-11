@@ -347,6 +347,8 @@ export default function Index() {
 				updatedData: {
 					is_drying_complete: true,
 					drying_created_at: GetDateTime(),
+					updated_at: GetDateTime(),
+					updated_by: user?.uuid,
 				},
 				isOnCloseNeeded: false,
 			});

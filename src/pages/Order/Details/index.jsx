@@ -55,6 +55,8 @@ export default function Index() {
 					data[idx]?.is_marketing_checked === true
 						? null
 						: GetDateTime(),
+				updated_at: GetDateTime(),
+				updated_by: user.uuid,
 			},
 			isOnCloseNeeded: false,
 		});

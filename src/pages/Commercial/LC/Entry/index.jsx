@@ -215,6 +215,7 @@ export default function Index() {
 				production_complete: data.production_complete ? 1 : 0,
 				lc_cancel: data.lc_cancel ? 1 : 0,
 				updated_at,
+				updated_by: user?.uuid,
 			};
 
 			// Update LC master data
@@ -465,6 +466,8 @@ export default function Index() {
 			const pi_numbers = [...data.pi].map((item) => ({
 				uuid: item.uuid,
 				lc_uuid: new_lc_uuid,
+				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			}));
 
 			const pi_numbers_promises = pi_numbers.map(async (item) =>

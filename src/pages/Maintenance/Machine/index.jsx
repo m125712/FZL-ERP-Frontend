@@ -1,4 +1,5 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useMaintenanceMachine } from '@/state/Maintenance';
 import { useAccess } from '@/hooks';
 
@@ -7,6 +8,7 @@ import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { DateTime, EditDelete, StatusButton } from '@/ui';
 
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 import { sections } from './Utils';
@@ -17,6 +19,7 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 export default function Index() {
 	const { data, isLoading, url, deleteData, updateData } =
 		useMaintenanceMachine();
+	const { user } = useAuth();
 	const info = new PageInfo(
 		'Maintenance/Section-Machine',
 		url,
@@ -28,9 +31,10 @@ export default function Index() {
 
 		await updateData.mutateAsync({
 			url: `/maintain/section-machine/${data[idx]?.uuid}`,
-
 			updatedData: {
 				status: status === true ? false : true,
+				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			},
 			isOnCloseNeeded: false,
 		});

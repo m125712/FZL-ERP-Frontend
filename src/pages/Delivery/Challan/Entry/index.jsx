@@ -6,10 +6,7 @@ import {
 	useDeliveryPackingList,
 	useDeliveryPackingListEntryByPackingListUUID,
 } from '@/state/Delivery';
-import {
-	useOtherChallan,
-	useOtherPackingListByOrderInfoUUIDAndChallanUUID,
-} from '@/state/Other';
+import { useOtherChallan } from '@/state/Other';
 import { useAuth } from '@context/auth';
 import { format } from 'date-fns';
 import { FormProvider } from 'react-hook-form';
@@ -18,7 +15,7 @@ import { useRHF } from '@/hooks';
 
 import { UpdateModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
-import { CustomLink, DynamicDeliveryField, LinkWithCopy } from '@/ui';
+import { CustomLink, DynamicDeliveryField } from '@/ui';
 
 import cn from '@/lib/cn';
 import nanoid from '@/lib/nanoid';

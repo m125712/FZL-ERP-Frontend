@@ -82,6 +82,8 @@ export default function Index() {
 					sno_from_head_office === true ? null : GetDateTime(),
 				sno_from_head_office_by:
 					sno_from_head_office === true ? null : user.uuid,
+				updated_at: GetDateTime(),
+				updated_by: user.uuid,
 			},
 			isOnCloseNeeded: false,
 		});
@@ -98,6 +100,8 @@ export default function Index() {
 					receive_by_factory === true ? null : GetDateTime(),
 				receive_by_factory_by:
 					receive_by_factory === true ? null : user.uuid,
+				updated_at: GetDateTime(),
+				updated_by: user.uuid,
 			},
 			isOnCloseNeeded: false,
 		});

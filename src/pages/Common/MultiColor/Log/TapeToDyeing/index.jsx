@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useCommonMultiColorLog } from '@/state/Common';
 import { useOtherOrderDescription } from '@/state/Other';
 import { useAccess } from '@/hooks';
@@ -9,6 +10,7 @@ import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { CustomLink, DateTime, EditDelete } from '@/ui';
 
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 import AddOrUpdate from './AddOrUpdate';
@@ -17,6 +19,8 @@ export default function Index() {
 	const { data, deleteData, isLoading, url, updateData } =
 		useCommonMultiColorLog();
 	const info = new PageInfo('Tape -> Dyeing', url, 'common__multi_color_log');
+
+	const { user } = useAuth();
 
 	const haveAccess = useAccess('common__multi_color_log');
 
@@ -189,6 +193,8 @@ export default function Index() {
 			url: `/zipper/tape-coil-to-dyeing/${val?.uuid}`,
 			updatedData: {
 				is_received_in_sewing: val.is_received_in_sewing ? 0 : 1,
+				updated_by: user?.uuid,
+				updated_at: GetDateTime(),
 			},
 		});
 	};

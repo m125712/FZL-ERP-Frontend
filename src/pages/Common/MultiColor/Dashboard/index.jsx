@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useCommonMultiColorDashboard } from '@/state/Common';
 import { useAccess } from '@/hooks';
 
@@ -18,6 +19,8 @@ export default function Index() {
 		url,
 		'common__multi_color_dashboard'
 	);
+
+	const { user } = useAuth();
 
 	const haveAccess = useAccess('common__multi_color_dashboard');
 
@@ -284,6 +287,7 @@ export default function Index() {
 				url: `/zipper/multi-color-dashboard/${val?.uuid}`,
 				updatedData: {
 					is_swatch_approved: val.is_swatch_approved ? 0 : 1,
+					updated_by: user?.uuid,
 				},
 			});
 		} else if (type === 'coil') {
@@ -293,6 +297,7 @@ export default function Index() {
 					is_coil_received_sewing: val.is_coil_received_sewing
 						? 0
 						: 1,
+					updated_by: user?.uuid,
 				},
 			});
 		} else if (type === 'thread') {
@@ -302,6 +307,7 @@ export default function Index() {
 					is_thread_received_sewing: val.is_thread_received_sewing
 						? 0
 						: 1,
+					updated_by: user?.uuid,
 				},
 			});
 		}

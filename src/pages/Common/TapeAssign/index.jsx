@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useCommonTapeAssign } from '@/state/Common';
 import { useOtherTapeCoil } from '@/state/Other';
 import { useAccess } from '@/hooks';
@@ -6,10 +7,12 @@ import { useAccess } from '@/hooks';
 import ReactTable from '@/components/Table';
 import { CustomLink, ReactSelect, StatusButton, StatusSelect } from '@/ui';
 
+import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
 	const [status, setStatus] = useState('bulk_pending');
+	const { user } = useAuth();
 	// options for extra table select
 	const options = [
 		{ value: 'bulk_pending', label: 'Bulk Pending' },
@@ -152,6 +155,8 @@ export default function Index() {
 			url: `/zipper/order/description/update/by/${e.value}`,
 			updatedData: {
 				order_description_uuid: data[idx].order_description_uuid,
+				updated_by: user?.uuid,
+				updated_at: GetDateTime(),
 			},
 			isOnCloseNeeded: false,
 		});

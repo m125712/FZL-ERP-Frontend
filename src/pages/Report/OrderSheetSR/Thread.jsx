@@ -13,6 +13,8 @@ import {
 	StatusSelect,
 } from '@/ui';
 
+import GetDateTime from '@/util/GetDateTime';
+
 import { REPORT_DATE_FORMATE } from '../utils';
 import { types } from './utils';
 
@@ -35,6 +37,8 @@ export default function Index() {
 			url: `/thread/order-info/swatch-attachment/update/by/${data[idx]?.uuid}`,
 			updatedData: {
 				is_swatch_attached: !data[idx]?.is_swatch_attached,
+				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			},
 		});
 	};

@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { PDF } from '@/assets/icons';
+import { useAuth } from '@/context/auth';
 import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import SectionContainer from '@/ui/Others/SectionContainer';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import RenderTable from '@/ui/Others/Table/RenderTable';
-import { LinkWithCopy, StatusButton, TitleValue } from '@/ui';
+import { LinkWithCopy, StatusButton } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 
@@ -25,6 +26,7 @@ export default function SingleInformation({
 	const [marketingCheckedStatus, setMarketingCheckedStatus] = useState(
 		order.is_marketing_checked
 	);
+	const { user } = useAuth();
 
 	useEffect(() => {
 		order?.order_entry.map((item, i) => {
@@ -52,6 +54,8 @@ export default function SingleInformation({
 						marketingCheckedStatus === true ? false : true,
 					marketing_checked_at:
 						marketingCheckedStatus === true ? null : GetDateTime(),
+					updated_by: user?.uuid,
+					updated_at: GetDateTime(),
 				},
 				isOnCloseNeeded: false,
 			});

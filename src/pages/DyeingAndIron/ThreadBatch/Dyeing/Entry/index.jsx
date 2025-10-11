@@ -53,11 +53,6 @@ export default function Index() {
 		}
 	}, [data, batch_con_uuid]);
 
-	const [transfer, setTransfer] = useState({
-		batch_entry_uuid: null,
-		transfer_quantity: null,
-	});
-
 	const getTotalQty = useCallback(
 		(batch_entry) =>
 			batch_entry.reduce((acc, item) => {
@@ -94,8 +89,10 @@ export default function Index() {
 			[isCreatedAtNull ? 'dyeing_created_at' : 'dyeing_updated_at']:
 				GetDateTime(),
 			status_date: data?.status !== 'pending' ? GetDateTime() : null,
-			yarn_issue_created_by: user.uuid,
+			yarn_issue_created_by: user?.uuid,
 			yarn_issue_created_at: GetDateTime(),
+			updated_at: GetDateTime(),
+			updated_by: user?.uuid,
 		};
 
 		// Update /commercial/pi/{uuid}

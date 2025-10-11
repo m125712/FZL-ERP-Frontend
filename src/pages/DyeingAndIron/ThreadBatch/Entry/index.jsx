@@ -211,7 +211,7 @@ export default function Index() {
 			const batch_data_updated = {
 				...rest,
 				updated_at: GetDateTime(),
-				updated_by: user.uuid,
+				updated_by: user?.uuid,
 			};
 
 			let flag = false;

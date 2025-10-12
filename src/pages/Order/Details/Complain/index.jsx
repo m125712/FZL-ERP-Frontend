@@ -9,7 +9,7 @@ import {
 } from '@/state/Other';
 import { FormProvider } from 'react-hook-form';
 import { Navigate, useNavigate, useParams } from 'react-router';
-import { useAccess, useFetchFunc, useRHF } from '@/hooks';
+import { useFetchFunc, useRHF } from '@/hooks';
 
 // ===== LAZY LOADED COMPONENTS =====
 

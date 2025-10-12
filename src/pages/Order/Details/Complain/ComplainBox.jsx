@@ -84,9 +84,11 @@ export default function ComplainBox({
 										onChange={(e) => {
 											onChange(e);
 										}}
-										disabled={haveAccess.includes(
-											'show_own_orders'
-										)}
+										disabled={
+											haveAccess.includes(
+												'show_own_orders'
+											) || !isUpdate
+										}
 										checked={getValues('is_resolved')}
 									/>
 								);
@@ -96,7 +98,10 @@ export default function ComplainBox({
 					<Input
 						title='Complain Type'
 						label='name'
-						disabled={!haveAccess.includes('show_own_orders')}
+						disabled={
+							!haveAccess.includes('show_own_orders') ||
+							getValues('is_resolved')
+						}
 						{...{ register, errors }}
 					/>
 
@@ -117,7 +122,7 @@ export default function ComplainBox({
 										isDisabled={
 											!haveAccess.includes(
 												'show_own_orders'
-											)
+											) || getValues('is_resolved')
 										}
 										value={issueDepartment?.find(
 											(item) =>
@@ -140,19 +145,31 @@ export default function ComplainBox({
 				</div>
 				<Textarea
 					label='description'
-					disabled={!haveAccess.includes('show_own_orders')}
+					disabled={
+						!haveAccess.includes('show_own_orders') ||
+						!isUpdate ||
+						getValues('is_resolved')
+					}
 					{...{ register, errors }}
 				/>
 				{/* Descriptions */}
 				<div className='grid grid-cols-2 gap-4'>
 					<Textarea
 						label='root_cause_analysis'
-						disabled={haveAccess.includes('show_own_orders')}
+						disabled={
+							haveAccess.includes('show_own_orders') ||
+							!isUpdate ||
+							getValues('is_resolved')
+						}
 						{...{ register, errors }}
 					/>
 					<Textarea
 						label='solution'
-						disabled={haveAccess.includes('show_own_orders')}
+						disabled={
+							haveAccess.includes('show_own_orders') ||
+							!isUpdate ||
+							getValues('is_resolved')
+						}
 						{...{ register, errors }}
 					/>
 				</div>
@@ -161,10 +178,22 @@ export default function ComplainBox({
 				<div className='grid grid-cols-2 gap-4'>
 					<Textarea
 						label='future_proof'
-						disabled={haveAccess.includes('show_own_orders')}
+						disabled={
+							haveAccess.includes('show_own_orders') ||
+							!isUpdate ||
+							getValues('is_resolved')
+						}
 						{...{ register, errors }}
 					/>
-					<Textarea label='remarks' {...{ register, errors }} />
+					<Textarea
+						label='remarks'
+						disabled={
+							(!haveAccess.includes('show_own_orders') &&
+								!isUpdate) ||
+							getValues('is_resolved')
+						}
+						{...{ register, errors }}
+					/>
 				</div>
 
 				{/* File Upload Section */}
@@ -178,7 +207,10 @@ export default function ComplainBox({
 						errors={errors}
 						isUpdate={isUpdate}
 						MAX_FILES={MAX_FILES}
-						disabled={!haveAccess.includes('show_own_orders')}
+						disabled={
+							!haveAccess.includes('show_own_orders') ||
+							getValues('is_resolved')
+						}
 					/>
 				</div>
 			</div>

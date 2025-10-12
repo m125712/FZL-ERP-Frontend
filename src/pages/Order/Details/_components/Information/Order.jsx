@@ -188,10 +188,10 @@ export default function OrderDescription({ order }) {
 					<h4 className='text-lg font-medium capitalize leading-tight text-primary'>
 						Complain
 					</h4>
-					{haveAccess.includes('show_own_order') && (
+					{haveAccess.includes('show_own_orders') && (
 						<button
 							type='button'
-							disabled={!haveAccess.includes('show_own_order')}
+							disabled={!haveAccess.includes('show_own_orders')}
 							className='flex items-center rounded-sm bg-accent p-2 text-xs text-secondary-foreground disabled:bg-slate-400'
 							onClick={() =>
 								navigation(

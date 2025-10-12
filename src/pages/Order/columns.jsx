@@ -71,7 +71,8 @@ export const complainColumns = ({
 				header: 'Complain Type',
 				enableColumnFilter: false,
 				cell: (info) =>
-					haveAccess.includes('show_own_orders') === false ? (
+					haveAccess.includes('show_own_orders') === false ||
+					info.row.original.is_resolved === true ? (
 						<div className='flex flex-col'>
 							<span
 								className='font-semibold underline'
@@ -137,11 +138,13 @@ export const complainColumns = ({
 						handelDelete={handelDelete}
 						showUpdate={
 							haveAccess.includes('update') &&
-							haveAccess.includes('show_own_orders')
+							haveAccess.includes('show_own_orders') &&
+							!info.row.original.is_resolved
 						}
 						showDelete={
 							haveAccess.includes('delete') &&
-							haveAccess.includes('show_own_orders')
+							haveAccess.includes('show_own_orders') &&
+							!info.row.original.is_resolved
 						}
 					/>
 				),
@@ -681,6 +684,7 @@ export const DetailsColumns = ({
 				header: 'Complain',
 				enableColumnFilter: true,
 				width: 'w-36',
+				hidden: !haveAccess.includes('show_own_orders'),
 				cell: (info) => {
 					const { order_description_uuid, order_number } =
 						info.row.original;
@@ -691,6 +695,7 @@ export const DetailsColumns = ({
 						// 	openInNewTab={true}
 						// />
 						<button
+							type='button'
 							className='hover:bg-slate-300'
 							onClick={() => {
 								handleComplain(info.row.index);

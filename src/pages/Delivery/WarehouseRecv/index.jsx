@@ -174,7 +174,7 @@ export default function Index() {
 							warehouse_received_date:
 								item.warehouse_received_date,
 							is_warehouse_received: true,
-							warehouse_received_by: user.uuid,
+							warehouse_received_by: user?.uuid,
 							updated_at: GetDateTime(),
 							updated_by: user?.uuid, // Uncomment if needed
 						};

@@ -198,6 +198,8 @@ export default function Index() {
 				item.updated_at = GetDateTime();
 				const updatedData = {
 					...item,
+					updated_at: GetDateTime(),
+					updated_by: user?.uuid,
 				};
 				return await updateData.mutateAsync({
 					url: `${threadOrderEntryUrl}/${item.uuid}`,

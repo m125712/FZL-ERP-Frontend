@@ -1,7 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useDeliveryChallan } from '@/state/Delivery';
-import { format } from 'date-fns';
 import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
 
@@ -438,6 +437,8 @@ export default function Index() {
 				receive_status: status,
 				receive_status_by: status ? user?.uuid : null,
 				receive_status_date: status ? GetDateTime() : null,
+				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			},
 			isOnCloseNeeded: false,
 		});
@@ -451,9 +452,10 @@ export default function Index() {
 			uuid: challan?.uuid,
 			updatedData: {
 				is_delivered: status,
-
 				is_delivered_by: status ? user?.uuid : null,
 				is_delivered_date: status ? GetDateTime() : null,
+				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			},
 			isOnCloseNeeded: false,
 		});
@@ -470,6 +472,8 @@ export default function Index() {
 				is_out_for_delivery: status,
 				is_out_for_delivery_by: user?.uuid,
 				is_out_for_delivery_date: status ? GetDateTime() : null,
+				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			},
 			isOnCloseNeeded: false,
 		});

@@ -1,4 +1,5 @@
 import { lazy, useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@/context/auth';
 import { useDyeingBatch } from '@/state/Dyeing';
 import { useNavigate } from 'react-router';
 import { useAccess } from '@/hooks';
@@ -34,6 +35,8 @@ export default function Index() {
 		{ value: 'bulk', label: 'Bulk' },
 		{ value: 'sample', label: 'Sample' },
 	];
+
+	const { user } = useAuth();
 
 	const [status, setStatus] = useState('pending');
 	const [orderType, setOrderType] = useState('bulk');
@@ -436,6 +439,8 @@ export default function Index() {
 			updatedData: {
 				received: data[idx]?.received === 1 ? 0 : 1,
 				received_date: data[idx]?.received === 1 ? null : GetDateTime(),
+				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			},
 			isOnCloseNeeded: false,
 		});

@@ -15,7 +15,7 @@ const zipperNode = [
 	getTable('specification', 'Specification'),
 	getTable('size', 'Size'),
 	getTable('quantity', 'Quantity', 'right'),
-	getTable('unit_price', 'Price($)', 'right'),
+	getTable('unit_price', 'Price($)/Dzn', 'right'),
 	getTable('value', 'Value($)', 'right'),
 ];
 const threadNode = [
@@ -157,7 +157,7 @@ export default function Index(data) {
 				? {
 						table: {
 							headerRows: 1,
-							widths: [40, '*', 50, 70, 40, 35, 35, 35],
+							widths: [40, '*', 50, 75, 35, 35, 52, 35],
 							body: [
 								[
 									{

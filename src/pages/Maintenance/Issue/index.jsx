@@ -562,6 +562,8 @@ export default function Index() {
 						? null
 						: GetDateTime(),
 				verification_by: user?.uuid,
+				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			},
 		});
 	};
@@ -573,6 +575,8 @@ export default function Index() {
 				maintain_condition: e,
 				maintain_by: user?.uuid,
 				maintain_date: GetDateTime(),
+				updated_at: GetDateTime(),
+				updated_by: user?.uuid,
 			},
 		});
 	};

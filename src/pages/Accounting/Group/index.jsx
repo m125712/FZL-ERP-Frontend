@@ -30,6 +30,12 @@ export default function Index() {
 				enableColumnFilter: false,
 			},
 			{
+				accessorKey: 'head_name',
+				header: 'Accounting Head',
+				enableColumnFilter: false,
+				width: 'w-32',
+			},
+			{
 				accessorKey: 'group_number',
 				header: 'Group Number',
 				enableColumnFilter: false,
@@ -44,12 +50,7 @@ export default function Index() {
 				header: 'Code',
 				enableColumnFilter: false,
 			},
-			{
-				accessorKey: 'head_name',
-				header: 'Accounting Head',
-				enableColumnFilter: false,
-				width: 'w-32',
-			},
+
 			{
 				accessorKey: 'is_fixed',
 				header: 'Fixed',

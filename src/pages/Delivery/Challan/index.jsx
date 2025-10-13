@@ -48,7 +48,7 @@ const productTypeOptions = [
 ];
 
 export default function Index() {
-	const [status, setStatus] = useState('received');
+	const [status, setStatus] = useState('pending');
 	const [orderType, setOrderType] = useState('bulk');
 	const [productType, setProductType] = useState('all');
 	const navigate = useNavigate();

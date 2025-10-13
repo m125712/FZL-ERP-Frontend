@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronRight, FileX } from 'lucide-react';
 
 // Utility function to flatten tree data for Tree display
 const flattenTreeData = (
@@ -17,6 +17,11 @@ const flattenTreeData = (
 			? `${parentPath}.${index}`
 			: String(index);
 
+		const hasChildren = Boolean(node.children && node.children.length > 0);
+		const isEmptyGroup = Boolean(
+			node.children && node.children.length === 0
+		);
+
 		const flatNode = {
 			id: node.id || currentPath,
 			name: node.name || '',
@@ -24,7 +29,8 @@ const flattenTreeData = (
 			account_tag: node.account_tag || '',
 			level,
 			path: currentPath,
-			hasChildren: Boolean(node.children && node.children.length > 0),
+			hasChildren,
+			isEmptyGroup,
 			isExpanded: expandedItems.has(currentPath),
 			parentPath,
 			originalNode: node,
@@ -33,7 +39,7 @@ const flattenTreeData = (
 		flattened.push(flatNode);
 
 		// Add children if this node is expanded
-		if (node.children && expandedItems.has(currentPath)) {
+		if (hasChildren && expandedItems.has(currentPath)) {
 			const childrenFlattened = flattenTreeData(
 				node.children,
 				level + 1,
@@ -41,6 +47,25 @@ const flattenTreeData = (
 				expandedItems
 			);
 			flattened.push(...childrenFlattened);
+		}
+
+		// Add "no ledger" row if this is an empty group and expanded
+		if (isEmptyGroup && expandedItems.has(currentPath)) {
+			const noLedgerNode = {
+				id: `${currentPath}_no_ledger`,
+				name: '(no ledger)',
+				account_type: '',
+				account_tag: '',
+				level: level + 1,
+				path: `${currentPath}_no_ledger`,
+				hasChildren: false,
+				isEmptyGroup: false,
+				isExpanded: false,
+				parentPath: currentPath,
+				originalNode: null,
+				isNoLedgerRow: true, // Special flag to style differently
+			};
+			flattened.push(noLedgerNode);
 		}
 	});
 
@@ -50,10 +75,34 @@ const flattenTreeData = (
 // Tree Row Component
 const TreeRow = ({ item, onToggleExpand }) => {
 	const handleToggle = () => {
-		if (item.hasChildren) {
+		// Allow expansion for both groups with children AND empty groups
+		if (item.hasChildren || item.isEmptyGroup) {
 			onToggleExpand(item.path);
 		}
 	};
+
+	// Special styling for "no ledger" rows
+	if (item.isNoLedgerRow) {
+		return (
+			<tr className='border border-base-300 transition-colors'>
+				<td className='px-1 py-2'>
+					<div
+						className='flex items-center gap-2'
+						style={{ paddingLeft: `${item.level * 24}px` }}
+					>
+						<div className='flex h-4 w-4 flex-shrink-0 items-center justify-center'>
+							<FileX className='h-3 w-3 text-gray-400' />
+						</div>
+						<span className='text-sm italic text-gray-500'>
+							{item.name}
+						</span>
+					</div>
+				</td>
+				<td className='px-4 py-3 text-gray-400'>-</td>
+				<td className='px-4 py-3 text-gray-400'>-</td>
+			</tr>
+		);
+	}
 
 	return (
 		<tr className='border border-base-300 transition-colors'>
@@ -63,8 +112,9 @@ const TreeRow = ({ item, onToggleExpand }) => {
 					style={{ paddingLeft: `${item.level * 24}px` }}
 				>
 					<div className='flex h-4 w-4 flex-shrink-0 items-center justify-center'>
-						{item.hasChildren ? (
+						{item.hasChildren || item.isEmptyGroup ? (
 							<button
+								type='button'
 								onClick={handleToggle}
 								className='rounded p-0.5 transition-colors hover:bg-base-300'
 								aria-label={
@@ -83,7 +133,9 @@ const TreeRow = ({ item, onToggleExpand }) => {
 					</div>
 					<span
 						className={`text-sm font-medium capitalize text-base-content ${
-							item.hasChildren ? 'cursor-pointer' : ''
+							item.hasChildren || item.isEmptyGroup
+								? 'cursor-pointer'
+								: ''
 						}`}
 						onClick={handleToggle}
 					>
@@ -111,7 +163,7 @@ const TreeViewV2 = ({ expandAll, accountData }) => {
 		return flattenTreeData(accountData, 0, '', expandedItems);
 	}, [accountData, expandedItems]);
 
-	// Get all expandable paths - now uses prop accountData
+	// Get all expandable paths - now includes empty groups
 	const getAllExpandablePaths = useMemo(() => {
 		if (!accountData) return new Set();
 
@@ -121,8 +173,16 @@ const TreeViewV2 = ({ expandAll, accountData }) => {
 				const currentPath = parentPath
 					? `${parentPath}.${index}`
 					: String(index);
-				if (node.children && node.children.length > 0) {
+
+				// Include both nodes with children AND empty groups
+				if (
+					(node.children && node.children.length > 0) ||
+					(node.children && node.children.length === 0)
+				) {
 					allPaths.add(currentPath);
+				}
+
+				if (node.children && node.children.length > 0) {
 					collectPaths(node.children, currentPath);
 				}
 			});

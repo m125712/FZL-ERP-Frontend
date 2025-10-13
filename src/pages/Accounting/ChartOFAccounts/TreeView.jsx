@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronRight, FileX } from 'lucide-react';
 
 const AccountList = ({ node, forceExpanded = false }) => {
 	const [isExpanded, setIsExpanded] = useState(forceExpanded);
 	const hasChildren = node.children && node.children.length > 0;
+	const isEmptyGroup = node.children && node.children.length === 0;
 
 	// Update state when forceExpanded prop changes
 	useEffect(() => {
@@ -11,7 +12,8 @@ const AccountList = ({ node, forceExpanded = false }) => {
 	}, [forceExpanded]);
 
 	const toggleExpanded = () => {
-		if (hasChildren) {
+		// Allow expansion for both groups with children AND empty groups
+		if (hasChildren || isEmptyGroup) {
 			setIsExpanded(!isExpanded);
 		}
 	};
@@ -19,11 +21,15 @@ const AccountList = ({ node, forceExpanded = false }) => {
 	return (
 		<li>
 			<div
-				className='flex cursor-pointer rounded-md p-1 transition-colors'
+				className={`flex cursor-pointer rounded-md p-1 transition-colors ${
+					hasChildren || isEmptyGroup
+						? 'cursor-pointer hover:bg-base-200'
+						: 'cursor-default'
+				}`}
 				onClick={toggleExpanded}
 			>
-				<div className='flex gap-2'>
-					{hasChildren ? (
+				<div className='flex flex-1 gap-2'>
+					{hasChildren || isEmptyGroup ? (
 						<div className='flex-shrink-0'>
 							{isExpanded ? (
 								<ChevronDown className='h-4 w-4 text-primary' />
@@ -53,22 +59,32 @@ const AccountList = ({ node, forceExpanded = false }) => {
 					)}
 				</div>
 			</div>
-			{hasChildren && isExpanded && (
+
+			{/* Render children or empty state when expanded */}
+			{(hasChildren || isEmptyGroup) && isExpanded && (
 				<ul className='ml-2 mt-2 space-y-1 border-l-2 border-base-300/50 pl-4'>
-					{node.children.map((child, index) => (
-						<AccountList
-							key={`${child.name}-${index}`}
-							node={child}
-							forceExpanded={forceExpanded}
-						/>
-					))}
+					{hasChildren ? (
+						// Render actual children
+						node.children.map((child, index) => (
+							<AccountList
+								key={`${child.name}-${index}`}
+								node={child}
+								forceExpanded={forceExpanded}
+							/>
+						))
+					) : (
+						// Render "no ledger" message as a child item
+						<li className='flex text-gray-500'>
+							<span className='text-xs'>(no ledger)</span>
+						</li>
+					)}
 				</ul>
 			)}
 		</li>
 	);
 };
 
-// Tree View Component - receives expandAll and accountData as props
+// Tree View Component remains the same
 const TreeView = ({ expandAll, accountData }) => {
 	return (
 		<div className='menu rounded-box bg-transparent p-2'>

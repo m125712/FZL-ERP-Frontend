@@ -110,8 +110,7 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) => row.delivery_order_quantity.split('/')[1],
-				id: 'order_quantity',
+				accessorKey: 'order_quantity',
 				header: () => {
 					return (
 						<>
@@ -125,15 +124,13 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'delivery_order_quantity',
+				accessorKey: 'delivery_quantity',
 				header: 'Del. QTY',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue().split('/')[0],
+				cell: (info) => info.getValue(),
 			},
 			{
-				accessorFn: (row) =>
-					row.delivery_order_quantity.split('/')[1] -
-					row.delivery_order_quantity.split('/')[0],
+				accessorFn: (row) => row.order_quantity - row.delivery_quantity,
 				id: 'balance_quantity',
 				header: 'Bal. QTY',
 				enableColumnFilter: false,
@@ -143,7 +140,7 @@ export default function Index() {
 			{
 				accessorFn: (row) =>
 					REPORT_DATE_FORMATE(row.delivery_last_date),
-				header: 'Delivery last Add',
+				header: 'Last Delivery at',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) =>

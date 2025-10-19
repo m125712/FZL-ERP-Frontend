@@ -112,7 +112,14 @@ export default function Index() {
 			{
 				accessorFn: (row) => row.delivery_order_quantity.split('/')[1],
 				id: 'order_quantity',
-				header: 'Order QTY',
+				header: () => {
+					return (
+						<>
+							Order <br />
+							QTY
+						</>
+					);
+				},
 				enableColumnFilter: false,
 
 				cell: (info) => info.getValue(),
@@ -136,7 +143,7 @@ export default function Index() {
 			{
 				accessorFn: (row) =>
 					REPORT_DATE_FORMATE(row.delivery_last_date),
-				header: 'Delivery last Date',
+				header: 'Delivery last Add',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) =>

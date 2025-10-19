@@ -98,14 +98,37 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'color_count',
-				header: 'Color Count',
+				header: () => {
+					return (
+						<>
+							Color <br />
+							Count
+						</>
+					);
+				},
 				enableColumnFilter: false,
-				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) => row.delivery_order_quantity.split('/')[1],
+				id: 'order_quantity',
+				header: 'Order QTY',
+				enableColumnFilter: false,
+
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorKey: 'delivery_order_quantity',
-				header: 'Del/Order QTY',
+				header: 'Del. QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue().split('/')[0],
+			},
+			{
+				accessorFn: (row) =>
+					row.delivery_order_quantity.split('/')[1] -
+					row.delivery_order_quantity.split('/')[0],
+				id: 'balance_quantity',
+				header: 'Bal. QTY',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => info.getValue(),

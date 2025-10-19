@@ -98,14 +98,41 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'color_count',
-				header: 'Color Count',
+				header: () => {
+					return (
+						<>
+							Color <br />
+							Count
+						</>
+					);
+				},
 				enableColumnFilter: false,
-				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
 			{
-				accessorKey: 'delivery_order_quantity',
-				header: 'Del/Order QTY',
+				accessorKey: 'order_quantity',
+				header: () => {
+					return (
+						<>
+							Order <br />
+							QTY
+						</>
+					);
+				},
+				enableColumnFilter: false,
+
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'delivery_quantity',
+				header: 'Del. QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) => row.order_quantity - row.delivery_quantity,
+				id: 'balance_quantity',
+				header: 'Bal. QTY',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) => info.getValue(),
@@ -113,7 +140,7 @@ export default function Index() {
 			{
 				accessorFn: (row) =>
 					REPORT_DATE_FORMATE(row.delivery_last_date),
-				header: 'Delivery last Date',
+				header: 'Last Delivery at',
 				enableColumnFilter: false,
 				width: 'w-32',
 				cell: (info) =>

@@ -111,7 +111,7 @@ export function useVoucherNestedEntries({ watch, setValue, setDeleteItem }) {
 				itemId: deleteData.uuid,
 				itemName: deleteData.cost_center_name,
 			});
-			window['voucher_entry_payment_delete'].showModal();
+			window['cost_center_delete'].showModal();
 		} else {
 			// Remove cost center
 			currentCostCenters.splice(costCenterIndex, 1);

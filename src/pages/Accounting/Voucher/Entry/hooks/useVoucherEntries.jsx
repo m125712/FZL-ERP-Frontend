@@ -1,4 +1,5 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
+import { useWatch } from 'react-hook-form';
 
 export function useVoucherEntries({
 	watch,
@@ -8,6 +9,7 @@ export function useVoucherEntries({
 	remove,
 	voucherFields,
 	setDeleteItem,
+	control,
 }) {
 	// Calculate totals
 	const totalCr = (watch('voucher_entry') || []).reduce((acc, curr) => {
@@ -19,6 +21,45 @@ export function useVoucherEntries({
 		if (curr.type === 'dr') return acc + Number(curr.amount);
 		return acc;
 	}, 0);
+
+	// Watch voucher entries for changes
+	const entries = useWatch({
+		control,
+		name: 'voucher_entry',
+		defaultValue: [],
+	});
+
+	// Auto-set credit amount when debit amount changes
+	useEffect(() => {
+		if (!entries || entries.length < 2) return;
+
+		// Find the first debit and first credit entry
+		const debitEntry = entries.find((entry) => entry.type === 'dr');
+		const creditEntry = entries.find((entry) => entry.type === 'cr');
+
+		if (debitEntry && creditEntry) {
+			const debitAmount = Number(debitEntry.amount) || 0;
+			const creditAmount = Number(creditEntry.amount) || 0;
+
+			// If debit amount is different from credit amount, auto-set credit amount
+			if (debitAmount !== creditAmount && debitAmount > 0) {
+				const debitIndex = entries.findIndex(
+					(entry) => entry.type === 'dr'
+				);
+				const creditIndex = entries.findIndex(
+					(entry) => entry.type === 'cr'
+				);
+
+				// Only update if this is the first time or if debit amount changed
+				if (debitIndex !== -1 && creditIndex !== -1) {
+					setValue(
+						`voucher_entry[${creditIndex}].amount`,
+						debitAmount
+					);
+				}
+			}
+		}
+	}, [entries, setValue]);
 
 	// Seeds the opposite entry amount
 	const getSeedAmount = useCallback(

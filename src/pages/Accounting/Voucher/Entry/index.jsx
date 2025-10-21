@@ -83,6 +83,7 @@ export default function Index() {
 		remove: formProps.remove,
 		voucherFields,
 		setDeleteItem,
+		control,
 	});
 
 	const nestedEntryProps = useVoucherNestedEntries({

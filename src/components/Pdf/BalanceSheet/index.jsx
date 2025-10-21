@@ -31,7 +31,7 @@ const INDENTATION = {
 
 function formatAmount(amount) {
 	if (typeof amount !== 'number' || isNaN(amount)) return '0.00';
-	return amount.toLocaleString('en-US', {
+	return Math.abs(amount).toLocaleString('en-US', {
 		minimumFractionDigits: 2,
 		maximumFractionDigits: 2,
 	});
@@ -56,6 +56,21 @@ function calculateHeadSubtotals(groups) {
 				currentPeriod: totals.currentPeriod + groupTotals.currentPeriod,
 				yearToDate: totals.yearToDate + groupTotals.yearToDate,
 				lastYear: totals.lastYear + groupTotals.lastYear,
+			};
+		},
+		{ currentPeriod: 0, yearToDate: 0, lastYear: 0 }
+	);
+}
+
+function calculateCategoryTotals(category) {
+	return category.heads.reduce(
+		(totals, head) => {
+			const headSubtotals = calculateHeadSubtotals(head.groups);
+			return {
+				currentPeriod:
+					totals.currentPeriod + headSubtotals.currentPeriod,
+				yearToDate: totals.yearToDate + headSubtotals.yearToDate,
+				lastYear: totals.lastYear + headSubtotals.lastYear,
 			};
 		},
 		{ currentPeriod: 0, yearToDate: 0, lastYear: 0 }
@@ -273,6 +288,70 @@ function createGroupTotalRow(totals, baseFontSize) {
 	];
 }
 
+function createCategoryTotalRow(category, totals, baseFontSize) {
+	return [
+		createTableCell(`${category.typeName} Total`, {
+			bold: true,
+			fontSize: baseFontSize,
+			fillColor: COLORS.CATEGORY,
+			margin: [5, 4, 5, 4],
+		}),
+		createTableCell(formatAmount(totals.currentPeriod), {
+			bold: true,
+			fontSize: baseFontSize,
+			alignment: 'right',
+			fillColor: COLORS.CATEGORY,
+			margin: [5, 4, 8, 4],
+		}),
+		createTableCell(formatAmount(totals.yearToDate), {
+			bold: true,
+			fontSize: baseFontSize,
+			alignment: 'right',
+			fillColor: COLORS.CATEGORY,
+			margin: [5, 4, 8, 4],
+		}),
+		createTableCell(formatAmount(totals.lastYear), {
+			bold: true,
+			fontSize: baseFontSize,
+			alignment: 'right',
+			fillColor: COLORS.CATEGORY,
+			margin: [5, 4, 8, 4],
+		}),
+	];
+}
+
+function createGrandTotalRow(totals, baseFontSize) {
+	return [
+		createTableCell('GRAND TOTAL', {
+			bold: true,
+			fontSize: baseFontSize + 1,
+			fillColor: '#B8B8B8',
+			margin: [5, 6, 5, 6],
+		}),
+		createTableCell(formatAmount(totals.currentPeriod), {
+			bold: true,
+			fontSize: baseFontSize + 1,
+			alignment: 'right',
+			fillColor: '#B8B8B8',
+			margin: [5, 6, 8, 6],
+		}),
+		createTableCell(formatAmount(totals.yearToDate), {
+			bold: true,
+			fontSize: baseFontSize + 1,
+			alignment: 'right',
+			fillColor: '#B8B8B8',
+			margin: [5, 6, 8, 6],
+		}),
+		createTableCell(formatAmount(totals.lastYear), {
+			bold: true,
+			fontSize: baseFontSize + 1,
+			alignment: 'right',
+			fillColor: '#B8B8B8',
+			margin: [5, 6, 8, 6],
+		}),
+	];
+}
+
 function generateTableBody(categories, baseFontSize) {
 	const rows = [];
 	rows.push(createHeaderRow(baseFontSize));
@@ -303,6 +382,41 @@ function generateTableBody(categories, baseFontSize) {
 				);
 			}
 		});
+	});
+
+	return rows;
+}
+
+function generateSummaryTable(categories, baseFontSize) {
+	const rows = [];
+
+	// Add header for summary table
+	rows.push([
+		createTableCell('SUMMARY BY TYPE', {
+			bold: true,
+			fontSize: baseFontSize + 2,
+			fillColor: COLORS.HEADER,
+			margin: [5, 6, 5, 6],
+		}),
+		createEmptyCell(COLORS.HEADER),
+		createEmptyCell(COLORS.HEADER),
+		createEmptyCell(COLORS.HEADER),
+	]);
+
+	// Add column headers
+	rows.push(createHeaderRow(baseFontSize));
+
+	// Calculate totals for each category
+	const categoryTotals = [];
+
+	categories.forEach((category) => {
+		const totals = calculateCategoryTotals(category);
+		categoryTotals.push({ category, totals });
+	});
+
+	// Add category total rows
+	categoryTotals.forEach(({ category, totals }) => {
+		rows.push(createCategoryTotalRow(category, totals, baseFontSize));
 	});
 
 	return rows;
@@ -354,6 +468,21 @@ export async function generateDetailedBalanceSheetPDF(
 					headerRows: 1,
 					widths: PDF_CONFIG.COLUMN_WIDTHS,
 					body: generateTableBody(processedCategories, baseFontSize),
+				},
+				layout: createPDFLayout(),
+			},
+			{
+				text: '',
+				margin: [0, 20, 0, 0],
+			},
+			{
+				table: {
+					headerRows: 1,
+					widths: PDF_CONFIG.COLUMN_WIDTHS,
+					body: generateSummaryTable(
+						processedCategories,
+						baseFontSize
+					),
 				},
 				layout: createPDFLayout(),
 			},

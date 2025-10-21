@@ -80,26 +80,28 @@ function VoucherEntryRow({
 			let subRows = [];
 
 			entryOrder.forEach((orderEntry, displayIndex) => {
-				if (
-					(orderEntry.type === 'payment' &&
-						type === 'cr' &&
-						category === 'payment') ||
-					category === 'contra'
-				) {
-					const paymentIndex = orderEntry.index;
-					if (payments[paymentIndex]) {
-						subRows.push({
-							type: 'payment',
-							parent: idx,
-							subIdx: paymentIndex,
-							displayIndex: displayIndex,
-							id: `payment-${idx}-${paymentIndex}-${renderKey}`,
-						});
+				if (orderEntry.type === 'payment') {
+					// Show payment entries for credit entries with payment category OR contra category
+					if (
+						(type === 'cr' && category === 'payment') ||
+						category === 'contra'
+					) {
+						const paymentIndex = orderEntry.index;
+						if (payments[paymentIndex]) {
+							subRows.push({
+								type: 'payment',
+								parent: idx,
+								subIdx: paymentIndex,
+								displayIndex: displayIndex,
+								id: `payment-${idx}-${paymentIndex}-${renderKey}`,
+							});
+						}
 					}
 				} else if (
 					orderEntry.type === 'costCenter' &&
 					selectedLedger?.cost_center_count > 0
 				) {
+					// Show cost center entries for any category when ledger supports cost centers
 					const costCenterIndex = orderEntry.index;
 					if (costCenters[costCenterIndex]) {
 						subRows.push({

@@ -1,6 +1,3 @@
-import { useOtherCurrency } from '@/pages/Accounting/Currency/config/query';
-import { useParams } from 'react-router';
-
 import { DateInput, FormField, Radio } from '@/ui/Core';
 import { Input, ReactSelect, SectionEntryBody, Textarea } from '@/ui';
 
@@ -22,20 +19,15 @@ export default function Header({
 			className='grid grid-cols-3 gap-4'
 		>
 			<div className='flex gap-4'>
-				<DateInput
-					label={`date`}
-					Controller={Controller}
-					control={control}
-					selected={watch(`date`)}
-					{...{ register, errors }}
-				/>
 				<Input label='vat_deduction' {...{ register, errors }} />
 				<Input label='tax_deduction' {...{ register, errors }} />
 			</div>
 			<div className='flex gap-4'>
 				<FormField
 					label='currency_uuid'
-					sub_label={`Purchase Curr. ${currency}`}
+					sub_label={
+						currency ? `Purchase Curr. ${currency}` : undefined
+					}
 					title='Currency'
 					errors={errors}
 				>
@@ -73,6 +65,13 @@ export default function Header({
 				<Input label='conversion_rate' {...{ register, errors }} />
 			</div>
 			<Textarea label='remarks' {...{ register, errors }} />
+			<DateInput
+				label={`date`}
+				Controller={Controller}
+				control={control}
+				selected={watch(`date`)}
+				{...{ register, errors }}
+			/>
 			<Radio
 				name='category'
 				title='Category'

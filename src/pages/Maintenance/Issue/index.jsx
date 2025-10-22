@@ -66,15 +66,24 @@ export default function Index() {
 				hidden:
 					!haveAccess.includes('update') &&
 					!haveAccess.includes('delete'),
-				cell: (info) => (
-					<EditDelete
-						idx={info.row.index}
-						handelUpdate={handelUpdate}
-						handelDelete={handelDelete}
-						showDelete={haveAccess.includes('delete')}
-						showUpdate={haveAccess.includes('update')}
-					/>
-				),
+				cell: (info) => {
+					const { verification_approved } = info.row.original;
+					return (
+						<EditDelete
+							idx={info.row.index}
+							handelUpdate={handelUpdate}
+							handelDelete={handelDelete}
+							showDelete={
+								haveAccess.includes('delete') &&
+								!verification_approved
+							}
+							showUpdate={
+								haveAccess.includes('update') &&
+								!verification_approved
+							}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'issue_id',
@@ -752,7 +761,7 @@ export default function Index() {
 					{...{
 						deleteItem,
 						setDeleteItem,
-						url,
+						url: '/maintain/issue',
 						deleteData,
 					}}
 				/>

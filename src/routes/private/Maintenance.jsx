@@ -39,6 +39,7 @@ export const MaintenanceRoutes = [
 					'procurement',
 					'show_own_issue',
 					'override',
+					'maintain_condition_access',
 				],
 			},
 		],

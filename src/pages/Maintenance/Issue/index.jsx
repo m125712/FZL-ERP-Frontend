@@ -9,7 +9,7 @@ import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { EyeBtn } from '@/ui/Others/Button';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { DateTime, EditDelete, Transfer } from '@/ui';
+import { DateTime, EditDelete, StatusSelect, Transfer } from '@/ui';
 
 import { cn } from '@/lib/utils';
 import GetDateTime from '@/util/GetDateTime';
@@ -25,6 +25,14 @@ const History = lazy(() => import('./History'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
+	const [status, setStatus] = useState('waiting_ongoing');
+	const options = [
+		{ value: 'okay', label: 'Okay' },
+		{ value: 'waiting_ongoing', label: 'Waiting & On Going' },
+		{ value: 'rejected', label: 'Rejected' },
+		{ value: 'all', label: 'All' },
+	];
+
 	const { registerAndSubscribe, unregisterPushSubscription } =
 		usePushSubscription();
 
@@ -32,7 +40,9 @@ export default function Index() {
 	const haveAccess = useAccess('maintenance__issue');
 
 	const { data, isLoading, url, deleteData, updateData } = useIssue(
-		haveAccess.includes('show_own_issue') ? `own_uuid=${user?.uuid}` : ''
+		haveAccess.includes('show_own_issue')
+			? `own_uuid=${user?.uuid}${status !== 'all' && `&maintain_condition=${status}`}`
+			: `${status !== 'all' && `maintain_condition=${status}`}`
 	);
 
 	const info = new PageInfo('Issue', url, 'maintenance__issue');
@@ -73,7 +83,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'name',
-				header: () => (
+				header: (
 					<>
 						জারি করেছেন <br />
 						(Issued By)
@@ -83,7 +93,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'section',
-				header: () => (
+				header: (
 					<>
 						সেকশন <br /> (Section)
 					</>
@@ -115,7 +125,7 @@ export default function Index() {
 			// },
 			{
 				accessorKey: 'problem_type',
-				header: () => (
+				header: (
 					<>
 						কোথায় সমস্যা <br />
 						(Problem In)
@@ -126,7 +136,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'parts_problem',
-				header: () => (
+				header: (
 					<>
 						পার্টস সমস্যা <br /> (Parts Problem)
 					</>
@@ -139,7 +149,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'section_machine_name',
-				header: () => (
+				header: (
 					<>
 						মেশিন নাম/নম্বর <br />
 						(Machine Name/No.)
@@ -158,7 +168,7 @@ export default function Index() {
 			// },
 			{
 				accessorKey: 'emergence',
-				header: () => (
+				header: (
 					<>
 						জরুরী <br /> (Emergency)
 					</>
@@ -180,7 +190,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'maintain',
-				header: () => (
+				header: (
 					<>
 						রক্ষণাবেক্ষণ অবস্থা <br /> (Maintain Condition)
 					</>
@@ -194,11 +204,16 @@ export default function Index() {
 						maintain_condition,
 						maintenance_desc,
 						parts_details,
+						verification_approved,
 					} = info.row.original;
 					return (
 						<div className='flex items-center gap-2'>
 							<Transfer
-								// disabled={!haveAccess.includes('procurement')}
+								disabled={
+									!haveAccess.includes(
+										'maintain_condition_access'
+									) || verification_approved
+								}
 								onClick={() => handleMaintain(info.row.index)}
 							/>
 							<div
@@ -264,8 +279,8 @@ export default function Index() {
 
 								{/* Maintainer */}
 								{maintain_by_name && (
-									<div className='mt-3 flex gap-2 text-xs'>
-										<p className='text-sm font-medium uppercase'>
+									<div className='mt-3 flex flex-col gap-2 text-xs'>
+										<p className='block text-sm font-medium uppercase'>
 											{maintain_by_name}
 										</p>
 										<span className='flex'>
@@ -392,7 +407,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'verification_approved',
-				header: () => (
+				header: (
 					<>
 						অনুমোদন <br />
 						(Approval)
@@ -488,7 +503,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'procurement',
-				header: () => (
+				header: (
 					<>
 						সংগ্রহ <br />
 						(Procurement)
@@ -516,7 +531,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'created_by_name',
-				header: () => (
+				header: (
 					<>
 						তৈরি করেছেন <br />
 						(Created By)
@@ -527,7 +542,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'created_at',
-				header: () => (
+				header: (
 					<>
 						তৈরির তারিখ <br />
 						(Created)
@@ -538,7 +553,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'updated_at',
-				header: () => (
+				header: (
 					<>
 						পরিবর্তন তারিখ <br />
 						(Updated)
@@ -672,18 +687,25 @@ export default function Index() {
 				data={data}
 				columns={columns}
 				extraButton={
-					haveAccess.includes('unsubscribe') && (
-						<button
-							type='button'
-							disabled={!localStorage.getItem('pushEndpoint')}
-							onClick={() => unregisterPushSubscription()}
-							className='btn btn-sm h-[2.3rem] border-none bg-rose-400 text-black hover:bg-rose-500'
-						>
-							{localStorage.getItem('pushEndpoint')
-								? 'Unsubscribe'
-								: 'Unsubscribed'}
-						</button>
-					)
+					<>
+						<StatusSelect
+							status={status}
+							setStatus={setStatus}
+							options={options}
+						/>
+						{haveAccess.includes('unsubscribe') && (
+							<button
+								type='button'
+								disabled={!localStorage.getItem('pushEndpoint')}
+								onClick={() => unregisterPushSubscription()}
+								className='btn btn-sm h-[2.3rem] border-none bg-rose-400 text-black hover:bg-rose-500'
+							>
+								{localStorage.getItem('pushEndpoint')
+									? 'Unsubscribe'
+									: 'Unsubscribed'}
+							</button>
+						)}
+					</>
 				}
 			/>
 

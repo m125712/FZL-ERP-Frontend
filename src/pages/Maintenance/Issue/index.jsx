@@ -9,7 +9,7 @@ import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
 import { EyeBtn } from '@/ui/Others/Button';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { DateTime, EditDelete, Transfer } from '@/ui';
+import { DateTime, EditDelete, StatusSelect, Transfer } from '@/ui';
 
 import { cn } from '@/lib/utils';
 import GetDateTime from '@/util/GetDateTime';
@@ -25,6 +25,15 @@ const History = lazy(() => import('./History'));
 const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 
 export default function Index() {
+	const [status, setStatus] = useState('waiting');
+	const options = [
+		{ value: 'okay', label: 'Okay' },
+		{ value: 'waiting', label: 'Waiting' },
+		{ value: 'rejected', label: 'Rejected' },
+		{ value: 'ongoing', label: 'On Going' },
+		{ value: 'all', label: 'All' },
+	];
+
 	const { registerAndSubscribe, unregisterPushSubscription } =
 		usePushSubscription();
 
@@ -32,7 +41,9 @@ export default function Index() {
 	const haveAccess = useAccess('maintenance__issue');
 
 	const { data, isLoading, url, deleteData, updateData } = useIssue(
-		haveAccess.includes('show_own_issue') ? `own_uuid=${user?.uuid}` : ''
+		haveAccess.includes('show_own_issue')
+			? `own_uuid=${user?.uuid}${status !== 'all' && `&maintain_condition=${status}`}`
+			: `${status !== 'all' && `maintain_condition=${status}`}`
 	);
 
 	const info = new PageInfo('Issue', url, 'maintenance__issue');
@@ -194,11 +205,16 @@ export default function Index() {
 						maintain_condition,
 						maintenance_desc,
 						parts_details,
+						verification_approved,
 					} = info.row.original;
 					return (
 						<div className='flex items-center gap-2'>
 							<Transfer
-								// disabled={!haveAccess.includes('procurement')}
+								disabled={
+									!haveAccess.includes(
+										'maintain_condition_access'
+									) || verification_approved
+								}
 								onClick={() => handleMaintain(info.row.index)}
 							/>
 							<div
@@ -672,18 +688,25 @@ export default function Index() {
 				data={data}
 				columns={columns}
 				extraButton={
-					haveAccess.includes('unsubscribe') && (
-						<button
-							type='button'
-							disabled={!localStorage.getItem('pushEndpoint')}
-							onClick={() => unregisterPushSubscription()}
-							className='btn btn-sm h-[2.3rem] border-none bg-rose-400 text-black hover:bg-rose-500'
-						>
-							{localStorage.getItem('pushEndpoint')
-								? 'Unsubscribe'
-								: 'Unsubscribed'}
-						</button>
-					)
+					<>
+						<StatusSelect
+							status={status}
+							setStatus={setStatus}
+							options={options}
+						/>
+						{haveAccess.includes('unsubscribe') && (
+							<button
+								type='button'
+								disabled={!localStorage.getItem('pushEndpoint')}
+								onClick={() => unregisterPushSubscription()}
+								className='btn btn-sm h-[2.3rem] border-none bg-rose-400 text-black hover:bg-rose-500'
+							>
+								{localStorage.getItem('pushEndpoint')
+									? 'Unsubscribe'
+									: 'Unsubscribed'}
+							</button>
+						)}
+					</>
 				}
 			/>
 

@@ -40,9 +40,10 @@ function formatAmount(amount) {
 function calculateGroupTotals(leaders) {
 	return leaders.reduce(
 		(totals, leader) => ({
-			currentPeriod: totals.currentPeriod + (leader.currentPeriod || 0),
-			yearToDate: totals.yearToDate + (leader.yearToDate || 0),
-			lastYear: totals.lastYear + (leader.lastYear || 0),
+			currentPeriod:
+				totals.currentPeriod + Math.abs(leader.currentPeriod || 0),
+			yearToDate: totals.yearToDate + Math.abs(leader.yearToDate || 0),
+			lastYear: totals.lastYear + Math.abs(leader.lastYear || 0),
 		}),
 		{ currentPeriod: 0, yearToDate: 0, lastYear: 0 }
 	);

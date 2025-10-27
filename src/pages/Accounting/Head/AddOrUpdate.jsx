@@ -14,11 +14,11 @@ import { headTypeOptions } from '../Ledger/utils';
 import { useAccHead, useAccHeadByUUID } from './config/query';
 import { HEAD_NULL, HEAD_SCHEMA } from './config/schema';
 
+const DEFAULT_UPDATE_ITEM = { uuid: null };
+
 export default function Index({
 	modalId = '',
-	updateItem = {
-		uuid: null,
-	},
+	updateItem = DEFAULT_UPDATE_ITEM,
 	setUpdateItem,
 }) {
 	const { user } = useAuth();
@@ -118,10 +118,10 @@ export default function Index({
 			</FormField>
 			<Input label='name' {...{ register, errors }} />
 			{/* <Input label='title' {...{ register, errors }} /> */}
-			<div className='grid grid-cols-2 gap-4'>
+			{/* <div className='grid grid-cols-2 gap-4'>
 				<Input label='index' {...{ register, errors }} />
 				<Input label='group_number' {...{ register, errors }} />
-			</div>
+			</div> */}
 			<div className='flex gap-2'>
 				<FormField label='bs' title='Bs' errors={errors}>
 					<Controller

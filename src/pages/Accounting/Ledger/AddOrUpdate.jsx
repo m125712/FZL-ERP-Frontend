@@ -20,11 +20,11 @@ import {
 import { LEDGER_NULL, LEDGER_SCHEMA } from './config/schema';
 import { identifierOptions, restrictionOptions } from './utils';
 
+const DEFAULT_UPDATE_ITEM = { uuid: null };
+
 export default function Index({
 	modalId = '',
-	updateItem = {
-		uuid: null,
-	},
+	updateItem = DEFAULT_UPDATE_ITEM,
 	setUpdateItem,
 }) {
 	const { user } = useAuth();
@@ -149,10 +149,10 @@ export default function Index({
 					</FormField>
 				</div>
 			</div>
-			<div className='grid grid-cols-2 gap-4'>
+			{/* <div className='grid grid-cols-2 gap-4'>
 				<Input label='index' {...{ register, errors }} />
 				<Input label='group_number' {...{ register, errors }} />
-			</div>
+			</div> */}
 			<div className='grid grid-cols-2 gap-4'>
 				<Input label='name' {...{ register, errors }} />
 				<div className='flex gap-2'>

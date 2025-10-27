@@ -10,7 +10,6 @@ import nanoid from '@/lib/nanoid';
 import { DevTool } from '@/lib/react-hook-devtool';
 import GetDateTime from '@/util/GetDateTime';
 
-import { typeOptions } from '../Ledger/utils';
 import {
 	useAccGroup,
 	useAccGroupByUUID,
@@ -18,11 +17,11 @@ import {
 } from './config/query';
 import { GROUP_NULL, GROUP_SCHEMA } from './config/schema';
 
+const DEFAULT_UPDATE_ITEM = { uuid: null };
+
 export default function Index({
 	modalId = '',
-	updateItem = {
-		uuid: null,
-	},
+	updateItem = DEFAULT_UPDATE_ITEM,
 	setUpdateItem,
 }) {
 	const { user } = useAuth();
@@ -146,10 +145,10 @@ export default function Index({
 			</FormField> */}
 			<Input label='name' {...{ register, errors }} />
 			<Input label='code' {...{ register, errors }} />
-			<div className='grid grid-cols-2 gap-4'>
+			{/* <div className='grid grid-cols-2 gap-4'>
 				<Input label='index' {...{ register, errors }} />
 				<Input label='group_number' {...{ register, errors }} />
-			</div>
+			</div> */}
 
 			<FormField label='is_fixed' title='Fixed' errors={errors}>
 				<Controller

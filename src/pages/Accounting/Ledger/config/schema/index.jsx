@@ -1,6 +1,3 @@
-import index from '@/pages/Accounting/Report/BalanceSheet';
-import * as yup from 'yup';
-
 import {
 	BOOLEAN, // default
 	BOOLEAN_DEFAULT_VALUE, // default
@@ -9,8 +6,7 @@ import {
 	EMAIL_REQUIRED, // default
 	FORTUNE_ZIP_EMAIL_PATTERN, // default
 	JSON_STRING, // default
-	JSON_STRING_REQUIRED,
-	NAME_REQUIRED, // default
+	JSON_STRING_REQUIRED, // default
 	NUMBER, // default
 	NUMBER_DOUBLE, // default
 	NUMBER_DOUBLE_REQUIRED, // default
@@ -21,11 +17,7 @@ import {
 	PHONE_NUMBER, // default
 	PHONE_NUMBER_REQUIRED, // default
 	STRING, // default
-	STRING_REQUIRED, // default
-	URL_REQUIRED, // default
-	UUID, // default
-	UUID_FK, // default
-	UUID_REQUIRED,
+	STRING_REQUIRED,
 } from '@/util/Schema/utils';
 
 export {
@@ -52,8 +44,8 @@ export {
 export const LEDGER_SCHEMA = {
 	is_bank_ledger: BOOLEAN_REQUIRED,
 	identifier: STRING_REQUIRED,
-	group_number: STRING_REQUIRED,
-	index: NUMBER_REQUIRED,
+	// group_number: STRING_REQUIRED,
+	// index: NUMBER_REQUIRED,
 	table_name: STRING.nullable(),
 	table_uuid: STRING.when('table_name', {
 		is: (value) => value != null && value !== '',

@@ -321,33 +321,60 @@ function createCategoryTotalRow(category, totals, baseFontSize) {
 	];
 }
 
-function createGrandTotalRow(totals, baseFontSize) {
+function calculateBalanceByType(categoryTotals) {
+	// Find income and expense categories
+	const incomeCategory = categoryTotals.find(
+		(cat) =>
+			cat.category.typeName.toLowerCase().includes('income') ||
+			cat.category.typeName.toLowerCase().includes('revenue')
+	);
+	const expenseCategory = categoryTotals.find(
+		(cat) =>
+			cat.category.typeName.toLowerCase().includes('expense') ||
+			cat.category.typeName.toLowerCase().includes('cost')
+	);
+
+	const income = incomeCategory
+		? incomeCategory.totals
+		: { currentPeriod: 0, yearToDate: 0, lastYear: 0 };
+	const expense = expenseCategory
+		? expenseCategory.totals
+		: { currentPeriod: 0, yearToDate: 0, lastYear: 0 };
+
+	return {
+		currentPeriod: income.currentPeriod - expense.currentPeriod,
+		yearToDate: income.yearToDate - expense.yearToDate,
+		lastYear: income.lastYear - expense.lastYear,
+	};
+}
+
+function createBalanceSummaryRow(balance, baseFontSize) {
 	return [
-		createTableCell('GRAND TOTAL', {
+		createTableCell('BALANCE', {
 			bold: true,
 			fontSize: baseFontSize + 1,
-			fillColor: '#B8B8B8',
+			fillColor: '#D0D0D0',
 			margin: [5, 6, 5, 6],
 		}),
-		createTableCell(formatAmount(totals.currentPeriod), {
+		createTableCell(formatAmount(balance.currentPeriod), {
 			bold: true,
 			fontSize: baseFontSize + 1,
 			alignment: 'right',
-			fillColor: '#B8B8B8',
+			fillColor: '#D0D0D0',
 			margin: [5, 6, 8, 6],
 		}),
-		createTableCell(formatAmount(totals.yearToDate), {
+		createTableCell(formatAmount(balance.yearToDate), {
 			bold: true,
 			fontSize: baseFontSize + 1,
 			alignment: 'right',
-			fillColor: '#B8B8B8',
+			fillColor: '#D0D0D0',
 			margin: [5, 6, 8, 6],
 		}),
-		createTableCell(formatAmount(totals.lastYear), {
+		createTableCell(formatAmount(balance.lastYear), {
 			bold: true,
 			fontSize: baseFontSize + 1,
 			alignment: 'right',
-			fillColor: '#B8B8B8',
+			fillColor: '#D0D0D0',
 			margin: [5, 6, 8, 6],
 		}),
 	];
@@ -383,12 +410,18 @@ function generateTableBody(categories, baseFontSize) {
 				);
 			}
 		});
+
+		// Add category subtotal after each category
+		const categoryTotals = calculateCategoryTotals(category);
+		rows.push(
+			createCategoryTotalRow(category, categoryTotals, baseFontSize)
+		);
 	});
 
 	return rows;
 }
 
-function generateSummaryTable(categories, baseFontSize) {
+function generateSummaryTable(categories, baseFontSize, type) {
 	const rows = [];
 
 	// Add header for summary table
@@ -419,6 +452,12 @@ function generateSummaryTable(categories, baseFontSize) {
 	categoryTotals.forEach(({ category, totals }) => {
 		rows.push(createCategoryTotalRow(category, totals, baseFontSize));
 	});
+
+	// Add balance summary by type for profit and loss
+	if (type === 'profit_and_loss') {
+		const balance = calculateBalanceByType(categoryTotals);
+		rows.push(createBalanceSummaryRow(balance, baseFontSize));
+	}
 
 	return rows;
 }
@@ -482,7 +521,8 @@ export async function generateDetailedBalanceSheetPDF(
 					widths: PDF_CONFIG.COLUMN_WIDTHS,
 					body: generateSummaryTable(
 						processedCategories,
-						baseFontSize
+						baseFontSize,
+						type
 					),
 				},
 				layout: createPDFLayout(),

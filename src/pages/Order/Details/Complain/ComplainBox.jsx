@@ -147,7 +147,6 @@ export default function ComplainBox({
 					label='description'
 					disabled={
 						!haveAccess.includes('show_own_orders') ||
-						!isUpdate ||
 						getValues('is_resolved')
 					}
 					{...{ register, errors }}

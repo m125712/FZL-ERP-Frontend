@@ -9,4 +9,7 @@ export const accQK = {
 	otherGroup: () => [...accQK.all(), 'other', 'group'],
 	otherTableName: () => [...accQK.all(), 'other', 'table-name'],
 	otherTableNameBy: (name) => [...accQK.otherTableName(), name],
+
+	//Ledger Details
+	ledgerDetailsByUUID: (uuid) => [...accQK.all(), 'ledger', 'details', uuid],
 };

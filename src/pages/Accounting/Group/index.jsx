@@ -25,19 +25,13 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'index',
-				header: 'Index',
-				enableColumnFilter: false,
-			},
-			{
-				accessorKey: 'head_name',
-				header: 'Accounting Head',
-				enableColumnFilter: false,
-				width: 'w-32',
-			},
-			{
 				accessorKey: 'group_number',
 				header: 'Group Number',
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'code',
+				header: 'Code',
 				enableColumnFilter: false,
 			},
 			{
@@ -46,11 +40,11 @@ export default function Index() {
 				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'code',
-				header: 'Code',
+				accessorKey: 'head_name',
+				header: 'Accounting Head',
 				enableColumnFilter: false,
+				width: 'w-32',
 			},
-
 			{
 				accessorKey: 'is_fixed',
 				header: 'Fixed',
@@ -62,6 +56,12 @@ export default function Index() {
 					/>
 				),
 			},
+			{
+				accessorKey: 'index',
+				header: 'Index',
+				enableColumnFilter: false,
+			},
+
 			{
 				accessorKey: 'remarks',
 				header: 'Remarks',

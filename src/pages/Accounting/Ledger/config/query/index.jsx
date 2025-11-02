@@ -35,3 +35,10 @@ export const useOtherTableNameBy = (name) =>
 		url: `/other/accounts/table-data/by/${name}`,
 		enabled: !!name,
 	});
+
+export const useLedgerDetailsByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: accQK.ledgerDetailsByUUID(uuid),
+		url: `/acc/ledger/${uuid}`,
+		enabled: !!uuid,
+	});

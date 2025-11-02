@@ -19,6 +19,7 @@ const ProfitAndLossReport = lazy(
 const ChartOfAccounts = lazy(
 	() => import('@/pages/Accounting/ChartOFAccounts')
 );
+const LedgerDetails = lazy(() => import('@/pages/Accounting/Ledger/Details'));
 export const AccountingRoutes = [
 	{
 		name: 'Accounting',
@@ -83,6 +84,14 @@ export const AccountingRoutes = [
 				element: <Ledger />,
 				page_name: 'accounting__ledger',
 				actions: ['read', 'create', 'update', 'delete'],
+			},
+			{
+				name: 'Ledger Details',
+				path: '/accounting/ledger/:uuid/details',
+				element: <LedgerDetails />,
+				page_name: 'accounting__ledger_details',
+				hidden: true,
+				actions: ['read'],
 			},
 			{
 				name: 'Group',

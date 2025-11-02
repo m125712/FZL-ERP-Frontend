@@ -72,7 +72,7 @@ export default function Index({
 	};
 
 	const options = [
-		{ value: 'okay', label: 'OK' },
+		{ value: 'okay', label: 'Okay' },
 		{ value: 'waiting', label: 'Waiting' },
 		{ value: 'rejected', label: 'Rejected' },
 		{ value: 'ongoing', label: 'On Going' },

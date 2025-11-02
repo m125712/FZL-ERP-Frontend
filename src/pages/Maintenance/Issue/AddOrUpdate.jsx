@@ -151,9 +151,17 @@ export default function Index({
 			onClose={onClose}
 			isSmall={true}
 		>
-			<Input label='name' title='Issuer Name' {...{ register, errors }} />
+			<Input
+				label='name'
+				title='Issuer Name (ইস্যুকারীর নাম)'
+				{...{ register, errors }}
+			/>
 			<div className='flex gap-2'>
-				<FormField label='section' title='Section' errors={errors}>
+				<FormField
+					label='section'
+					title='Section (বিভাগ)'
+					errors={errors}
+				>
 					<Controller
 						name={'section'}
 						control={control}
@@ -176,7 +184,7 @@ export default function Index({
 				</FormField>
 				<FormField
 					label='extra_section'
-					title='Extra Section'
+					title='Extra Section (অতিরিক্ত বিভাগ)'
 					errors={errors}
 				>
 					<Controller
@@ -203,7 +211,7 @@ export default function Index({
 			</div>
 			<FormField
 				label='problem_type'
-				title='Problem Type'
+				title='Problem Type (সমস্যা ধরন)'
 				errors={errors}
 			>
 				<Controller
@@ -229,7 +237,7 @@ export default function Index({
 			{options.length > 0 && (
 				<FormField
 					label='parts_problem'
-					title='Part Problem'
+					title='Parts Problem (যন্ত্রাংশের সমস্যা)'
 					errors={errors}
 				>
 					<Controller
@@ -257,7 +265,7 @@ export default function Index({
 
 			<FormField
 				label='section_machine_uuid'
-				title='Section Machine'
+				title='Section Machine (বিভাগের মেশিন)'
 				errors={errors}
 			>
 				<Controller
@@ -281,7 +289,11 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<FormField label='emergence' title='Emergence' errors={errors}>
+			<FormField
+				label='emergence'
+				title='Emergence (জরুরি)'
+				errors={errors}
+			>
 				<Controller
 					name={'emergence'}
 					control={control}
@@ -303,7 +315,12 @@ export default function Index({
 					}}
 				/>
 			</FormField>
-			<Textarea label='description' rows={4} {...{ register, errors }} />
+			<Textarea
+				label='description'
+				title='Description (বিবরণ)'
+				rows={4}
+				{...{ register, errors }}
+			/>
 
 			<DevTool control={control} placement='top-left' />
 		</AddModal>

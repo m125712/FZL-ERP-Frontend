@@ -40,7 +40,9 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => (
 					<div>
-						<span className='text-sm'>{info.getValue()}</span>
+						<span className='text-sm'>
+							{info.getValue().toLocaleString()}
+						</span>
 						<span className='text-sm'>
 							{info.row.original.currency_symbol}
 						</span>

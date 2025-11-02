@@ -57,6 +57,34 @@ export default function Index() {
 				),
 			},
 			{
+				accessorKey: 'category',
+				header: 'Category',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) => row.dr_ledgers?.join(', '),
+				id: 'dr',
+				header: 'DR',
+				width: 'w-32',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorFn: (row) => row.cr_ledgers?.join(', '),
+				id: 'cr',
+				header: 'CR',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'amount',
+				header: 'Amount',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue().toLocaleString(),
+			},
+			{
 				accessorKey: 'currency_name',
 				header: 'Currency',
 				enableColumnFilter: false,
@@ -68,12 +96,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
-			{
-				accessorKey: 'category',
-				header: 'Category',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
-			},
+
 			{
 				accessorKey: 'vat_deduction',
 				header: 'VAT Deduction',

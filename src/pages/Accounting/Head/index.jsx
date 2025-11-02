@@ -31,13 +31,13 @@ export default function Index() {
 				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'type',
-				header: 'Type',
+				accessorKey: 'name',
+				header: 'Name',
 				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'name',
-				header: 'Name',
+				accessorKey: 'type',
+				header: 'Type',
 				enableColumnFilter: false,
 			},
 

@@ -3,7 +3,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
-import { DateTime, EditDelete, StatusButton } from '@/ui';
+import { CustomLink, DateTime, EditDelete, StatusButton } from '@/ui';
 
 import PageInfo from '@/util/PageInfo';
 
@@ -26,15 +26,25 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'is_bank_ledger',
-				header: 'Bank Ledger',
+				accessorKey: 'actions',
+				header: 'Actions',
 				enableColumnFilter: false,
-				cell: (info) => (
-					<StatusButton
-						size='btn-xs'
-						value={info.row.original.is_bank_ledger}
-					/>
-				),
+				enableSorting: false,
+				hidden:
+					!haveAccess.includes('update') &&
+					!haveAccess.includes('delete'),
+				width: 'w-24',
+				cell: (info) => {
+					return (
+						<EditDelete
+							idx={info.row.index}
+							handelUpdate={handelUpdate}
+							handelDelete={handelDelete}
+							showDelete={haveAccess.includes('delete')}
+							showUpdate={haveAccess.includes('update')}
+						/>
+					);
+				},
 			},
 			{
 				accessorKey: 'is_active',
@@ -47,48 +57,90 @@ export default function Index() {
 					/>
 				),
 			},
-
-			{
-				accessorKey: 'index',
-				header: 'Index',
-				enableColumnFilter: false,
-			},
-			{
-				accessorKey: 'group_number',
-				header: 'Group Number',
-				enableColumnFilter: false,
-			},
 			{
 				accessorKey: 'id',
 				header: 'ID',
 				enableColumnFilter: false,
 			},
-			{
-				accessorKey: 'table_name',
-				header: 'Table',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue()?.replace('.', ' '),
-			},
+
 			{
 				accessorKey: 'name',
 				header: 'Name',
 				enableColumnFilter: false,
+				cell: (info) => {
+					const { name } = info.row.original;
+					const uuid = info.row.original.uuid;
+					const url = `/accounting/ledger/${uuid}/details/`;
+					return (
+						<div className='flex flex-col gap-1'>
+							<CustomLink
+								label={name}
+								url={url}
+								openInNewTab={true}
+							/>
+						</div>
+					);
+				},
 			},
 			{
-				accessorKey: 'identifier',
-				header: 'Identifier',
+				accessorKey: 'group_name',
+				header: 'Group',
 				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'category',
-				header: 'Category',
+				accessorKey: 'head_name',
+				header: 'Accounting Head',
 				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'total_amount',
+				header: 'Amount',
+				enableColumnFilter: false,
+				cell: (info) =>
+					info.row.original.total_amount >= 0
+						? info.row.original.total_amount.toLocaleString()
+						: `(${Math.abs(info.row.original.total_amount).toLocaleString()})`,
+			},
+			{
+				accessorKey: 'is_bank_ledger',
+				header: 'Bank Ledger',
+				enableColumnFilter: false,
+				cell: (info) => (
+					<StatusButton
+						size='btn-xs'
+						value={info.row.original.is_bank_ledger}
+					/>
+				),
 			},
 			{
 				accessorKey: 'account_no',
 				header: 'Account No.',
 				enableColumnFilter: false,
 			},
+			{
+				accessorKey: 'old_ledger_id',
+				header: 'Old Ledger ID',
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'index',
+				header: 'Index',
+				enableColumnFilter: false,
+			},
+
+			{
+				accessorKey: 'table_name',
+				header: 'Table',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue()?.replace('.', ' '),
+			},
+
+			{
+				accessorKey: 'identifier',
+				header: 'Identifier',
+				enableColumnFilter: false,
+			},
+
 			{
 				accessorKey: 'type',
 				header: 'Type',
@@ -106,9 +158,10 @@ export default function Index() {
 					)?.label;
 				},
 			},
+
 			{
-				accessorKey: 'group_name',
-				header: 'Group',
+				accessorKey: 'group_number',
+				header: 'Group Number',
 				enableColumnFilter: false,
 			},
 			{
@@ -124,11 +177,6 @@ export default function Index() {
 			{
 				accessorKey: 'tax_deduction',
 				header: 'Tax Deduction',
-				enableColumnFilter: false,
-			},
-			{
-				accessorKey: 'old_ledger_id',
-				header: 'Old Ledger ID',
 				enableColumnFilter: false,
 			},
 			{
@@ -155,27 +203,6 @@ export default function Index() {
 				header: 'Updated',
 				enableColumnFilter: false,
 				cell: (info) => <DateTime date={info.getValue()} />,
-			},
-			{
-				accessorKey: 'actions',
-				header: 'Actions',
-				enableColumnFilter: false,
-				enableSorting: false,
-				hidden:
-					!haveAccess.includes('update') &&
-					!haveAccess.includes('delete'),
-				width: 'w-24',
-				cell: (info) => {
-					return (
-						<EditDelete
-							idx={info.row.index}
-							handelUpdate={handelUpdate}
-							handelDelete={handelDelete}
-							showDelete={haveAccess.includes('delete')}
-							showUpdate={haveAccess.includes('update')}
-						/>
-					);
-				},
 			},
 		],
 		[data]

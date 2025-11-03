@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useAuth } from '@/context/auth';
 import { useThreadBatch } from '@/state/Report';
 import { format, parse, subDays } from 'date-fns';
 import { useAccess } from '@/hooks';
@@ -14,7 +13,7 @@ import PageInfo from '@/util/PageInfo';
 import { REPORT_DATE_FORMATE } from '../utils';
 
 export default function Index() {
-	const [from, setFrom] = useState(
+	const [from, setFrom] = useState(() =>
 		parse(
 			format(
 				subDays(new Date(), 1), // Subtract 1 week from current time
@@ -24,19 +23,19 @@ export default function Index() {
 			new Date()
 		)
 	);
-	const [to, setTo] = useState(new Date());
+	const [to, setTo] = useState(() => new Date());
 	const { data, url, isLoading } = useThreadBatch(
 		`from=${format(from, 'yyyy-MM-dd HH:mm:ss')}&to=${format(to, 'yyyy-MM-dd HH:mm:ss')}`
 	);
 
 	const info = new PageInfo('Thread Batch', url, 'report__thread_batch');
-	const { user } = useAuth();
 	const haveAccess = useAccess('report__thread_batch');
 
 	const [status, setStatus] = useState([]);
 
 	useEffect(() => {
 		if (data) {
+			// eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
 			setStatus(data.map((item) => item.is_drying_complete === 'true'));
 		}
 	}, [data]);
@@ -117,18 +116,26 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorFn: (row) => row.style.join(' -- '),
+				id: 'style',
+				header: 'Style',
+				enableColumnFilter: false,
+				width: 'w-24',
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorFn: (row) => row.color.join(' -- '),
 				id: 'color',
 				header: 'Color',
 				enableColumnFilter: false,
-				width: 'w-24',
+				width: 'w-16',
 				cell: (info) => info.getValue(),
 			},
 			{
 				accessorFn: (row) => row.recipe_name.join(' -- '),
 				id: 'recipe_name',
 				header: 'Shade',
-				width: 'w-24',
+				width: 'w-16',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},
@@ -203,20 +210,6 @@ export default function Index() {
 				),
 				enableColumnFilter: false,
 				cell: (info) => {
-					const { is_drying_complete } = info.row.original;
-
-					const access = haveAccess.includes('click_drying_status');
-					const overrideAccess = haveAccess.includes(
-						'click_drying_status_override'
-					);
-					let isDisabled = false;
-					if (!overrideAccess) {
-						if (access) {
-							isDisabled = is_drying_complete === 'true';
-						} else {
-							isDisabled = true;
-						}
-					}
 					return (
 						<div className='flex items-center gap-2'>
 							<StatusButton

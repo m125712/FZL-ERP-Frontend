@@ -920,6 +920,60 @@ export const SPARE_PARTS_NULL = {
 	remarks: '',
 };
 
+// Utility
+export const UTILITY_SCHEMA = {
+	date: STRING_REQUIRED,
+	previous_date: STRING.nullable(),
+	off_day: BOOLEAN_DEFAULT_VALUE(false),
+	remarks: STRING.nullable(),
+	utility_entries: yup.array().of(
+		yup.object().shape({
+			type: STRING_REQUIRED.oneOf(
+				[
+					'fzl_peak_hour',
+					'fzl_off_hour',
+					'boiler',
+					'gas_generator',
+					'tsl_peak_hour',
+					'tsl_off_hour',
+				],
+				'Invalid utility entry type'
+			),
+			reading: NUMBER_DOUBLE_REQUIRED,
+			voltage_ratio: NUMBER_DOUBLE_REQUIRED,
+			unit_cost: NUMBER_DOUBLE_REQUIRED,
+			remarks: STRING.nullable(),
+		})
+	),
+};
+
+export const UTILITY_NULL = {
+	uuid: null,
+	date: null,
+	previous_date: null,
+	off_day: false,
+	created_at: '',
+	created_by: null,
+	updated_at: null,
+	updated_by: null,
+	remarks: '',
+	utility_entries: [
+		{
+			uuid: null,
+			utility_uuid: null,
+			type: '',
+			reading: 0,
+			voltage_ratio: 0,
+			unit_cost: 0,
+			created_at: '',
+			created_by: null,
+			updated_at: null,
+			updated_by: null,
+			remarks: '',
+		},
+	],
+};
+
 // Material Entry
 
 // Material

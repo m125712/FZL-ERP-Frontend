@@ -1700,6 +1700,7 @@ export const otherQK = {
 
 	schema: () => [...otherQK.all(), 'schema-names'],
 	table: (query) => [...otherQK.all(), 'table-names', query],
+	utilityDate: () => [...otherQK.all(), 'utility-date'],
 };
 
 //* Challan
@@ -2122,4 +2123,17 @@ export const maintenanceQK = {
 		uuid,
 	],
 	dashboard: () => [...maintenanceQK.all(), 'dashboard'],
+
+	//* Utility
+	utility: () => [...maintenanceQK.all(), 'utility'],
+	utilityByUUID: (uuid) => [...maintenanceQK.utility(), uuid],
+	utilityEntry: () => [...maintenanceQK.all(), 'utility-entry'],
+	utilityEntryByUUID: (uuid) => [...maintenanceQK.utilityEntry(), uuid],
+
+	//* Utility Report
+	maintenanceUtilityReport: (query) => [
+		...maintenanceQK.all(),
+		'maintenance-utility-report',
+		query,
+	],
 };

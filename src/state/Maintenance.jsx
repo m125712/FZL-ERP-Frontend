@@ -51,3 +51,37 @@ export const useDashboard = () =>
 		queryKey: maintenanceQK.dashboard(),
 		url: `/maintain/maintenance/dashboard`,
 	});
+
+// Utility
+export const useUtility = (query) =>
+	createGlobalState({
+		queryKey: maintenanceQK.utility(),
+		url: `/maintain/utility`,
+	});
+
+export const useUtilityByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: maintenanceQK.utilityByUUID(uuid),
+		url: `/maintain/utility/${uuid}`,
+		enabled: !!uuid,
+	});
+
+export const useUtilityEntry = () =>
+	createGlobalState({
+		queryKey: maintenanceQK.utilityEntry(),
+		url: `/maintain/utility-entry`,
+	});
+
+export const useUtilityEntryByUUID = (uuid) =>
+	createGlobalState({
+		queryKey: maintenanceQK.utilityEntryByUUID(uuid),
+		url: `/maintain/utility-entry/${uuid}`,
+		enabled: !!uuid,
+	});
+//* Maintenance Report
+export const useMaintenanceUtilityReport = (query) => {
+	return createGlobalState({
+		queryKey: maintenanceQK.maintenanceUtilityReport(query),
+		url: `/report/utility-report?${query}`,
+	});
+};

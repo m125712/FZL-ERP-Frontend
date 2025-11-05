@@ -27,6 +27,9 @@ import { TitleList, TitleValue } from './TitleValue';
 
 export {
 	BadgeCheckbox,
+	BatchType,
+	Collapse,
+	CustomLink,
 	DateTime,
 	DepartmentShow,
 	EditDelete,
@@ -39,15 +42,12 @@ export {
 	ResetPassword,
 	SectionEntryBody,
 	SectionName,
+	SimpleDatePicker,
+	Status,
 	StatusButton,
+	StatusSelect,
 	TitleList,
 	TitleValue,
 	Transfer,
 	UserName,
-	SimpleDatePicker,
-	BatchType,
-	StatusSelect,
-	CustomLink,
-	Collapse,
-	Status,
 };

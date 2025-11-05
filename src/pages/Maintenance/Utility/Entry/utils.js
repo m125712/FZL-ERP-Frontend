@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 export const PREDEFINED_UTILITY_TYPES = [
 	'fzl_peak_hour',
 	'fzl_off_hour',
@@ -46,3 +48,35 @@ export const utilityEntryTypeOptions = [
 	{ label: 'TSL Peak Hour', value: 'tsl_peak_hour' },
 	{ label: 'TSL Off Hour', value: 'tsl_off_hour' },
 ];
+
+export const convertUtilityDateDataToOptions = (utilityDateData) => {
+	if (!utilityDateData) return [];
+
+	// If it's an array, map over it and format each item
+	if (Array.isArray(utilityDateData)) {
+		return utilityDateData.map((item) => {
+			if (item?.value !== undefined && item?.label !== undefined) {
+				return {
+					label: format(new Date(item.label), 'dd MMM, yyyy'),
+					value: item.value,
+				};
+			}
+			return item;
+		});
+	}
+
+	// If it's a single object with value and label
+	if (
+		utilityDateData.value !== undefined &&
+		utilityDateData.label !== undefined
+	) {
+		return [
+			{
+				label: format(new Date(utilityDateData.label), 'dd MMM, yyyy'),
+				value: utilityDateData.value,
+			},
+		];
+	}
+
+	return [];
+};

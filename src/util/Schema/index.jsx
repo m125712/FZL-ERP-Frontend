@@ -939,7 +939,15 @@ export const UTILITY_SCHEMA = {
 				],
 				'Invalid utility entry type'
 			),
-			reading: NUMBER_DOUBLE_REQUIRED,
+			reading: NUMBER_DOUBLE.when(['off_day'], {
+				is: (off_day) => off_day === false,
+				then: (Schema) =>
+					Schema.required('Reading is required').moreThan(
+						0,
+						'Reading must be more than 0'
+					),
+				otherwise: (Schema) => Schema.nullable(),
+			}),
 			voltage_ratio: NUMBER_DOUBLE_REQUIRED,
 			unit_cost: NUMBER_DOUBLE_REQUIRED,
 			remarks: STRING.nullable(),

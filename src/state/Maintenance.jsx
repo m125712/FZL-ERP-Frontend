@@ -53,7 +53,7 @@ export const useDashboard = () =>
 	});
 
 // Utility
-export const useUtility = () =>
+export const useUtility = (query) =>
 	createGlobalState({
 		queryKey: maintenanceQK.utility(),
 		url: `/maintain/utility`,
@@ -78,3 +78,10 @@ export const useUtilityEntryByUUID = (uuid) =>
 		url: `/maintain/utility-entry/${uuid}`,
 		enabled: !!uuid,
 	});
+//* Maintenance Report
+export const useMaintenanceUtilityReport = (query) => {
+	return createGlobalState({
+		queryKey: maintenanceQK.maintenanceUtilityReport(query),
+		url: `/report/utility-report?${query}`,
+	});
+};

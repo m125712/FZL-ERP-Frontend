@@ -8,7 +8,7 @@ const UtilityEntry = lazy(() => import('@/pages/Maintenance/Utility/Entry'));
 const UtilityDetails = lazy(
 	() => import('@/pages/Maintenance/Utility/Details')
 );
-
+const UtilityReport = lazy(() => import('@/pages/Maintenance/Report'));
 export const MaintenanceRoutes = [
 	{
 		name: 'Maintenance',
@@ -77,6 +77,13 @@ export const MaintenanceRoutes = [
 				hidden: true,
 				page_name: 'maintenance__utility_update',
 				actions: ['create', 'read', 'update'],
+			},
+			{
+				name: 'Utility Report',
+				path: '/maintenance/utility/report',
+				element: <UtilityReport />,
+				page_name: 'maintenance__utility_report',
+				actions: ['read'],
 			},
 		],
 	},

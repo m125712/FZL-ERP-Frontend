@@ -647,3 +647,10 @@ export const useOtherTable = (query) =>
 		queryKey: otherQK.table(query),
 		url: query ? `/audit/table-names?${query}` : '/audit/table-names',
 	});
+export const useOtherUtilityDate = (query) =>
+	createGlobalState({
+		queryKey: otherQK.utilityDate(),
+		url: query
+			? `/other/maintain/utility-date/value/label?${query}`
+			: '/other/maintain/utility-date/value/label',
+	});

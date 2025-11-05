@@ -50,7 +50,9 @@ export default function Index() {
 		watch,
 		context: form,
 		setValue,
+		formState: { errors: formErrors },
 	} = useRHF(UTILITY_SCHEMA, UTILITY_NULL);
+	console.log(formErrors);
 
 	const isUpdate = utility_uuid !== undefined;
 	const offDay = watch('off_day');

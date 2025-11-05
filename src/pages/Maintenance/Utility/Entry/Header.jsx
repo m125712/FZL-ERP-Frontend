@@ -1,8 +1,11 @@
+import { useOtherUtilityDate } from '@/state/Other';
 import { parseISO } from 'date-fns';
 
 import { DateInput } from '@/ui/Core';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
-import { FormField, SectionEntryBody, Textarea } from '@/ui';
+import { FormField, ReactSelect, SectionEntryBody, Textarea } from '@/ui';
+
+import { convertUtilityDateDataToOptions } from './utils';
 
 export default function Header({
 	register,
@@ -13,6 +16,11 @@ export default function Header({
 	watch,
 	Controller,
 }) {
+	const { data: utilityDate } = useOtherUtilityDate(
+		`current_date=${watch('date')}`
+	);
+	const utilityDateOptions = convertUtilityDateDataToOptions(utilityDate);
+
 	return (
 		<SectionEntryBody
 			title={
@@ -46,7 +54,7 @@ export default function Header({
 					selected={watch('date') ? parseISO(watch('date')) : null}
 					{...{ register, errors }}
 				/>
-				<DateInput
+				{/* <DateInput
 					label='previous_date'
 					Controller={Controller}
 					control={control}
@@ -56,7 +64,33 @@ export default function Header({
 							: null
 					}
 					{...{ register, errors }}
-				/>
+				/> */}
+				<FormField
+					label={`previous_date`}
+					title='Previous Date'
+					dynamicerror={errors?.previous_date}
+				>
+					<Controller
+						name={`previous_date`}
+						control={control}
+						render={({ field: { onChange, value } }) => {
+							return (
+								<ReactSelect
+									placeholder='Select Previous Date'
+									options={utilityDateOptions}
+									value={
+										utilityDateOptions?.find(
+											(opt) => opt.value === value
+										) || null
+									}
+									onChange={(opt) => onChange(opt?.value)}
+									menuPortalTarget={document.body}
+									isDisabled={!watch('date')}
+								/>
+							);
+						}}
+					/>
+				</FormField>
 			</div>
 
 			<Textarea label='remarks' register={register} errors={errors} />

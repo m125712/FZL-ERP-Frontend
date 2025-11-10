@@ -85,9 +85,13 @@ export default function ComplainBox({
 											onChange(e);
 										}}
 										disabled={
-											haveAccess.includes(
+											(!haveAccess.includes(
 												'show_own_orders'
-											) || !isUpdate
+											) &&
+												!haveAccess.includes(
+													'complain_entry'
+												)) ||
+											!isUpdate
 										}
 										checked={getValues('is_resolved')}
 									/>
@@ -99,7 +103,8 @@ export default function ComplainBox({
 						title='Complain Type'
 						label='name'
 						disabled={
-							!haveAccess.includes('show_own_orders') ||
+							(!haveAccess.includes('show_own_orders') &&
+								!haveAccess.includes('complain_entry')) ||
 							getValues('is_resolved')
 						}
 						{...{ register, errors }}
@@ -120,9 +125,13 @@ export default function ComplainBox({
 										placeholder='Select Issue Department'
 										options={issueDepartment}
 										isDisabled={
-											!haveAccess.includes(
+											(!haveAccess.includes(
 												'show_own_orders'
-											) || getValues('is_resolved')
+											) &&
+												!haveAccess.includes(
+													'complain_entry'
+												)) ||
+											getValues('is_resolved')
 										}
 										value={issueDepartment?.find(
 											(item) =>
@@ -146,7 +155,8 @@ export default function ComplainBox({
 				<Textarea
 					label='description'
 					disabled={
-						!haveAccess.includes('show_own_orders') ||
+						(!haveAccess.includes('show_own_orders') &&
+							!haveAccess.includes('complain_entry')) ||
 						getValues('is_resolved')
 					}
 					{...{ register, errors }}
@@ -156,7 +166,8 @@ export default function ComplainBox({
 					<Textarea
 						label='root_cause_analysis'
 						disabled={
-							haveAccess.includes('show_own_orders') ||
+							(!haveAccess.includes('show_own_orders') &&
+								!haveAccess.includes('complain_entry')) ||
 							!isUpdate ||
 							getValues('is_resolved')
 						}
@@ -165,7 +176,8 @@ export default function ComplainBox({
 					<Textarea
 						label='solution'
 						disabled={
-							haveAccess.includes('show_own_orders') ||
+							(!haveAccess.includes('show_own_orders') &&
+								!haveAccess.includes('complain_entry')) ||
 							!isUpdate ||
 							getValues('is_resolved')
 						}
@@ -178,7 +190,8 @@ export default function ComplainBox({
 					<Textarea
 						label='future_proof'
 						disabled={
-							haveAccess.includes('show_own_orders') ||
+							(!haveAccess.includes('show_own_orders') &&
+								!haveAccess.includes('complain_entry')) ||
 							!isUpdate ||
 							getValues('is_resolved')
 						}
@@ -188,6 +201,7 @@ export default function ComplainBox({
 						label='remarks'
 						disabled={
 							(!haveAccess.includes('show_own_orders') &&
+								!haveAccess.includes('complain_entry') &&
 								!isUpdate) ||
 							getValues('is_resolved')
 						}
@@ -207,7 +221,8 @@ export default function ComplainBox({
 						isUpdate={isUpdate}
 						MAX_FILES={MAX_FILES}
 						disabled={
-							!haveAccess.includes('show_own_orders') ||
+							(!haveAccess.includes('show_own_orders') &&
+								!haveAccess.includes('complain_entry')) ||
 							getValues('is_resolved')
 						}
 					/>

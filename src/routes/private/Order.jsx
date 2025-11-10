@@ -57,6 +57,7 @@ export const OrderRoutes = [
 					'click_status_marketing_checked',
 					'override_access',
 					'show_developer',
+					'complain_entry',
 				],
 			},
 			{
@@ -90,6 +91,7 @@ export const OrderRoutes = [
 					'update',
 					'delete',
 					'show_own_orders',
+					'complain_entry',
 				],
 				isDynamic: true,
 			},

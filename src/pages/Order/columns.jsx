@@ -684,7 +684,9 @@ export const DetailsColumns = ({
 				header: 'Complain',
 				enableColumnFilter: true,
 				width: 'w-36',
-				hidden: !haveAccess.includes('show_own_orders'),
+				hidden:
+					!haveAccess.includes('show_own_orders') &&
+					!haveAccess.includes('complain_entry'),
 				cell: (info) => {
 					const { order_description_uuid, order_number } =
 						info.row.original;

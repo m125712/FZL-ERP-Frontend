@@ -12,6 +12,8 @@ export const useOrderActions = (data, updateData, user) => {
 					[key]: currentValue ? false : true,
 					[`${key}_time`]: currentValue ? null : GetDateTime(),
 					[`${key}_by`]: currentValue ? null : user.uuid,
+					updated_by: user.uuid,
+					updated_at: GetDateTime(),
 				},
 				isOnCloseNeeded: false,
 			});

@@ -183,5 +183,5 @@ export const useComplainByUUID = (uuid) =>
 export const useComplainByProductDescriptionUUID = (uuid) =>
 	createGlobalState({
 		queryKey: orderQK.complaintByProductDescriptionUUID(uuid),
-		url: `/public/complaint-by-order-description-uuid/${uuid}?is_zipper`,
+		url: `/public/complaint-by-order-description-uuid/${uuid}?is_zipper=true`,
 	});

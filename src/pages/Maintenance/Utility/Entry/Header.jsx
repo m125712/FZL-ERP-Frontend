@@ -15,11 +15,15 @@ export default function Header({
 	isUpdate,
 	watch,
 	Controller,
+	data,
 }) {
 	const { data: utilityDate } = useOtherUtilityDate(
 		`current_date=${watch('date')}`
 	);
-	const utilityDateOptions = convertUtilityDateDataToOptions(utilityDate);
+	const utilityDateOptions = convertUtilityDateDataToOptions(
+		utilityDate,
+		data
+	);
 
 	return (
 		<SectionEntryBody

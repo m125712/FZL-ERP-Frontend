@@ -248,6 +248,7 @@ export default function Index() {
 								isUpdate,
 								offDay,
 								setValue,
+								data,
 							}}
 						/>
 

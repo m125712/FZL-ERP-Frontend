@@ -49,12 +49,12 @@ export const utilityEntryTypeOptions = [
 	{ label: 'TSL Off Hour', value: 'tsl_off_hour' },
 ];
 
-export const convertUtilityDateDataToOptions = (utilityDateData) => {
+export const convertUtilityDateDataToOptions = (utilityDateData, data) => {
 	if (!utilityDateData) return [];
 
 	// If it's an array, map over it and format each item
 	if (Array.isArray(utilityDateData)) {
-		return utilityDateData.map((item) => {
+		const mappedData = utilityDateData.map((item) => {
 			if (item?.value !== undefined && item?.label !== undefined) {
 				return {
 					label: format(new Date(item.label), 'dd MMM, yyyy'),
@@ -63,6 +63,25 @@ export const convertUtilityDateDataToOptions = (utilityDateData) => {
 			}
 			return item;
 		});
+
+		// Add previous_date if it exists and is not already in the array
+		if (data?.previous_date) {
+			const previousDateOption = {
+				label: format(new Date(data.previous_date), 'dd MMM, yyyy'),
+				value: data.previous_date,
+			};
+
+			// Check if previous_date already exists in the array
+			const exists = mappedData.some(
+				(item) => item.value === data.previous_date
+			);
+
+			if (!exists) {
+				return [...mappedData, previousDateOption];
+			}
+		}
+
+		return mappedData;
 	}
 
 	// If it's a single object with value and label

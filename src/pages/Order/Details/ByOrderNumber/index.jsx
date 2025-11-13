@@ -215,6 +215,7 @@ export default function Index() {
 
 			<OrderInformation
 				order={order_info}
+				orders={orders}
 				handelPdfDownload={() =>
 					getPdfData3?.download(`Order Sheet ${order_number}.pdf`)
 				}

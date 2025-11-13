@@ -1,14 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { PDF } from '@/assets/icons';
 import { useAuth } from '@/context/auth';
+import { complainColumns } from '@/pages/Order/columns';
+import { orderQK } from '@/state/QueryKeys';
+import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import { useAccess } from '@/hooks';
+import { Plus } from 'lucide-react';
+import { useNavigate } from 'react-router';
+import { defaultFetch, useAccess } from '@/hooks';
 
+import { Suspense } from '@/components/Feedback';
+import { DeleteModal } from '@/components/Modal';
+import ReactTableWithoutTitle from '@/components/Table/ReactTableWithoutTitle';
+import { ShowToast } from '@/components/Toast';
 import SectionContainer from '@/ui/Others/SectionContainer';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import RenderTable from '@/ui/Others/Table/RenderTable';
 import { LinkWithCopy, StatusButton } from '@/ui';
 
+import { api } from '@/lib/api';
 import GetDateTime from '@/util/GetDateTime';
 
 import ItemDescription from './Item';
@@ -108,8 +118,11 @@ const renderOrderStatus = (is_sample, is_bill) => {
 	return value;
 };
 
+const EMPTY_ARRAY = [];
+
 export function OrderInformation({
 	order,
+	orders = EMPTY_ARRAY,
 	handelPdfDownload,
 	handleViewChange,
 	updateView,
@@ -139,6 +152,143 @@ export function OrderInformation({
 		production_pause_time,
 		production_pause_by_name,
 	} = order;
+
+	// Get all order_description_uuids from orders array
+	const orderDescriptionUUIDs = useMemo(
+		() =>
+			orders
+				?.map((o) => o?.order_description_uuid)
+				?.filter((uuid) => uuid) || [],
+		[orders]
+	);
+
+	// Fetch complains for all order descriptions using useQueries
+	const complainQueries = useQueries({
+		queries: orderDescriptionUUIDs.map((uuid) => ({
+			queryKey: [
+				...orderQK.complaintByProductDescriptionUUID(uuid),
+				{
+					url: `/public/complaint-by-order-description-uuid/${uuid}?is_zipper=true`,
+				},
+			],
+			queryFn: () =>
+				defaultFetch(
+					`/public/complaint-by-order-description-uuid/${uuid}?is_zipper=true`
+				),
+			enabled: !!uuid,
+		})),
+	});
+
+	// Aggregate all complain data
+	const allComplainData = useMemo(() => {
+		const complains = [];
+		complainQueries.forEach((query) => {
+			if (query?.data?.data && Array.isArray(query.data.data)) {
+				complains.push(...query.data.data);
+			}
+		});
+		return complains;
+	}, [complainQueries]);
+
+	const haveAccess = useAccess('order__complain');
+	const navigation = useNavigate();
+
+	// Delete state
+	const [deleteItem, setDeleteItem] = useState({
+		itemId: null,
+		itemName: null,
+	});
+
+	const handelUpdate = (idx) => {
+		const complain = allComplainData[idx];
+		if (complain) {
+			navigation(
+				`/order/complain/${complain?.order_number}/${complain?.order_description_uuid}/${complain?.uuid}/update`
+			);
+		}
+	};
+
+	const handelDelete = (idx) => {
+		const complain = allComplainData[idx];
+		if (complain) {
+			setDeleteItem((prev) => ({
+				...prev,
+				itemId: complain.uuid,
+				itemName: complain.name,
+			}));
+			window['deleteComplainModal'].showModal();
+		}
+	};
+
+	const queryClient = useQueryClient();
+
+	// Mutation for updating complain
+	const updateComplainMutation = useMutation({
+		mutationFn: async ({ url, updatedData }) => {
+			const response = await api.patch(url, updatedData);
+			return response.data;
+		},
+		onSuccess: (data) => {
+			ShowToast(data?.toast);
+			// Invalidate all complain queries to refetch
+			orderDescriptionUUIDs.forEach((uuid) => {
+				queryClient.invalidateQueries({
+					queryKey: orderQK.complaintByProductDescriptionUUID(uuid),
+				});
+			});
+		},
+		onError: (error) => {
+			console.error(error);
+			ShowToast(error?.response?.data?.toast);
+		},
+	});
+
+	// Mutation for deleting complain
+	const deleteComplainMutation = useMutation({
+		mutationFn: async ({ url }) => {
+			const response = await api.delete(url);
+			return response.data;
+		},
+		onSuccess: (data) => {
+			ShowToast(data?.toast);
+			// Invalidate all complain queries to refetch
+			orderDescriptionUUIDs.forEach((uuid) => {
+				queryClient.invalidateQueries({
+					queryKey: orderQK.complaintByProductDescriptionUUID(uuid),
+				});
+			});
+		},
+		onError: (error) => {
+			console.error(error);
+			ShowToast(error?.response?.data?.toast);
+		},
+	});
+
+	const handelResolved = async (idx) => {
+		const complain = allComplainData[idx];
+		if (complain) {
+			const is_resolved = complain.is_resolved ? false : true;
+			await updateComplainMutation.mutateAsync({
+				url: `/public/complaint/${complain.uuid}`,
+				updatedData: {
+					is_resolved,
+					is_resolved_date: is_resolved ? GetDateTime() : null,
+				},
+			});
+		}
+	};
+
+	const deleteData = {
+		mutateAsync: deleteComplainMutation.mutateAsync,
+	};
+
+	const columns = complainColumns({
+		handelUpdate,
+		handelDelete,
+		haveAccess,
+		data: allComplainData,
+		handelResolved,
+	});
 
 	const renderItems = () => {
 		const order_details = [
@@ -303,7 +453,7 @@ export function OrderInformation({
 			>
 				<PDF className='w-4' /> PDF
 			</button>,
-			<div className='flex items-center gap-2'>
+			<div key='view-toggle' className='flex items-center gap-2'>
 				<SwitchToggle
 					onChange={handleViewChange}
 					checked={updateView}
@@ -323,7 +473,7 @@ export function OrderInformation({
 			// selector={renderSelector()}
 			className={'mb-8'}
 		>
-			<div className='grid grid-cols-1 bg-base-100 md:grid-cols-3 md:gap-8'>
+			<div className='grid grid-cols-1 bg-base-100 md:grid-cols-4 md:gap-8'>
 				<RenderTable
 					className={
 						'border-b border-secondary/30 md:border-b-0 md:border-r'
@@ -338,11 +488,55 @@ export function OrderInformation({
 					items={renderItems().buyer_details}
 				/>
 				<RenderTable
-					className={'border-secondary/30 md:border-l'}
+					className={'border-secondary/30 md:border-l md:border-r'}
 					title='Status Details'
 					items={renderItems().status_details}
 				/>
+				<div className='border border-secondary/30'>
+					<div className='flex items-center justify-between bg-base-200 px-3 py-2'>
+						<h4 className='text-lg font-medium capitalize leading-tight text-primary'>
+							Complain
+						</h4>
+						{haveAccess.includes('complain_entry') &&
+							orderDescriptionUUIDs.length > 0 && (
+								<button
+									type='button'
+									disabled={
+										!haveAccess.includes('complain_entry')
+									}
+									className='flex items-center rounded-sm bg-accent p-2 text-xs text-secondary-foreground disabled:bg-slate-400'
+									onClick={() =>
+										navigation(
+											`/order/complain/${order_number}/${orderDescriptionUUIDs[0]}`
+										)
+									}
+								>
+									New
+									<Plus className='ml-2' size={16} />
+								</button>
+							)}
+					</div>
+					<ReactTableWithoutTitle
+						title='Complain'
+						data={allComplainData}
+						columns={columns}
+					/>
+				</div>
 			</div>
+			{deleteData && (
+				<Suspense>
+					<DeleteModal
+						modalId={'deleteComplainModal'}
+						title={'Are you sure you want to delete this complain?'}
+						{...{
+							deleteItem,
+							setDeleteItem,
+							url: `/public/complaint`,
+							deleteData,
+						}}
+					/>
+				</Suspense>
+			)}
 		</SectionContainer>
 	);
 }

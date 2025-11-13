@@ -92,6 +92,7 @@ export const OrderRoutes = [
 					'delete',
 					'show_own_orders',
 					'complain_entry',
+					'resolve_complain',
 				],
 				isDynamic: true,
 			},

@@ -129,7 +129,7 @@ export const complainColumns = ({
 				hidden:
 					(!haveAccess.includes('update') &&
 						!haveAccess.includes('delete')) ||
-					!haveAccess.includes('show_own_orders'),
+					!haveAccess.includes('complain_entry'),
 				width: 'w-24',
 				cell: (info) => (
 					<EditDelete
@@ -138,12 +138,12 @@ export const complainColumns = ({
 						handelDelete={handelDelete}
 						showUpdate={
 							haveAccess.includes('update') &&
-							haveAccess.includes('show_own_orders') &&
+							haveAccess.includes('complain_entry') &&
 							!info.row.original.is_resolved
 						}
 						showDelete={
 							haveAccess.includes('delete') &&
-							haveAccess.includes('show_own_orders') &&
+							haveAccess.includes('complain_entry') &&
 							!info.row.original.is_resolved
 						}
 					/>

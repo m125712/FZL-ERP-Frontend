@@ -32,6 +32,10 @@ export const issueDepartment = [
 		value: 'planning',
 	},
 	{
+		label: 'Dyeing',
+		value: 'dyeing',
+	},
+	{
 		label: 'Delivery',
 		value: 'delivery',
 	},

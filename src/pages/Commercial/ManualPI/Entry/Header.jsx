@@ -212,9 +212,9 @@ export default function Header({
 										onChange={(e) => {
 											onChange(e.value);
 										}}
-										isDisabled={
-											manual_pi_uuid !== undefined
-										}
+										// isDisabled={
+										// 	manual_pi_uuid !== undefined
+										// }
 									/>
 								);
 							}}
@@ -238,9 +238,9 @@ export default function Header({
 										onChange={(e) => {
 											onChange(e.value);
 										}}
-										isDisabled={
-											manual_pi_uuid !== undefined
-										}
+										// isDisabled={
+										// 	manual_pi_uuid !== undefined
+										// }
 									/>
 								);
 							}}

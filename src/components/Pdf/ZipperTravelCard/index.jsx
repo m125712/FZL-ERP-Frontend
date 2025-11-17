@@ -71,7 +71,7 @@ export default function Index(batch) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', '*', '*', '*', 50, 50, 50],
+					widths: [50, 100, 100, 70, 50, 50, 50],
 					body: [
 						// * Header
 						TableHeader(node),

@@ -64,8 +64,7 @@ export default function Index() {
 				enableColumnFilter: false,
 				filterFn: 'isWithinRange',
 				cell: (info) => {
-					const dateValue = info.getValue();
-					return <DateTime date={dateValue} isTime={false} />;
+					return <DateTime date={info.getValue()} isTime={false} />;
 				},
 			},
 			{
@@ -73,8 +72,7 @@ export default function Index() {
 				header: 'Previous Date',
 				enableColumnFilter: false,
 				cell: (info) => {
-					const value = info.getValue();
-					return value ? format(parseISO(value), 'dd/MM/yyyy') : '-';
+					return <DateTime date={info.getValue()} isTime={false} />;
 				},
 			},
 

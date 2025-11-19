@@ -1,12 +1,10 @@
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useUtility, useUtilityByUUID } from '@/state/Maintenance';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
-import { configure, HotKeys } from 'react-hotkeys';
 import { useNavigate, useParams } from 'react-router';
 import { useRHF } from '@/hooks';
 
-import { DeleteModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
 import { DynamicField, FormField, Input, ReactSelect } from '@/ui';
 
@@ -29,7 +27,7 @@ export default function Index() {
 	const { utility_uuid } = useParams();
 
 	// const { url: utilityEntryUrl } = useUtilityEntry();
-	const { url: utilityUrl, updateData, postData, deleteData } = useUtility();
+	const { url: utilityUrl, updateData, postData } = useUtility();
 	const { data } = useUtilityByUUID(utility_uuid);
 
 	useEffect(() => {
@@ -50,49 +48,36 @@ export default function Index() {
 		watch,
 		context: form,
 		setValue,
-		formState: { errors: formErrors },
 	} = useRHF(UTILITY_SCHEMA, UTILITY_NULL);
-	console.log(formErrors);
 
 	const isUpdate = utility_uuid !== undefined;
 	const offDay = watch('off_day');
 
 	// utility_entries
-	const { fields: utilityEntryField, append: utilityEntryAppend } =
-		useFieldArray({
-			control,
-			name: 'utility_entries',
-		});
+	const { fields: utilityEntryField } = useFieldArray({
+		control,
+		name: 'utility_entries',
+	});
+
 	useEffect(() => {
 		if (data) {
 			reset(data);
 		} else {
 			// Initialize with 6 predefined entries for new utility
-			const initialEntries = PREDEFINED_UTILITY_TYPES.map((type) => ({
-				type,
-				reading: 0,
-				voltage_ratio: getDefaultVoltageRatio(type),
-				unit_cost: getDefaultUnitCost(type),
-				remarks: '',
-			}));
+			const initialEntries = PREDEFINED_UTILITY_TYPES.map(
+				(type, index) => ({
+					index,
+					type,
+					reading: 0,
+					voltage_ratio: getDefaultVoltageRatio(type),
+					unit_cost: getDefaultUnitCost(type),
+					remarks: '',
+				})
+			);
 			setValue('utility_entries', initialEntries);
 		}
 	}, [data, reset, setValue]);
-	const [deleteItem, setDeleteItem] = useState({
-		itemId: null,
-		itemName: null,
-	});
 
-	const handleUtilityEntryAppend = () => {
-		if (offDay) return;
-		utilityEntryAppend({
-			type: '',
-			reading: '',
-			voltage_ratio: '',
-			unit_cost: '',
-			remarks: '',
-		});
-	};
 	// Submit
 	const onSubmit = async (data) => {
 		const created_at = GetDateTime();
@@ -211,189 +196,165 @@ export default function Index() {
 		}
 	};
 
-	const keyMap = {
-		NEW_ROW: 'alt+n',
-		COPY_LAST_ROW: 'alt+c',
-	};
-
-	const handlers = {
-		NEW_ROW: handleUtilityEntryAppend,
-	};
-
-	configure({
-		ignoreTags: ['input', 'select', 'textarea'],
-		ignoreEventsCondition: function () {},
-	});
-
 	const rowClass =
-		'group whitespace-nowrap text-left text-sm font-normal tracking-wide  p-3';
+		'group whitespace-nowrap text-left text-sm font-normal tracking-wide p-3';
 
 	return (
 		<FormProvider {...form}>
-			<HotKeys {...{ keyMap, handlers }}>
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					noValidate
-					className='flex flex-col'
-				>
-					<div className='space-y-6'>
-						<Header
-							{...{
-								register,
-								errors,
-								control,
-								getValues,
-								Controller,
-								watch,
-								isUpdate,
-								offDay,
-								setValue,
-								data,
-							}}
-						/>
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				noValidate
+				className='flex flex-col'
+			>
+				<div className='space-y-6'>
+					<Header
+						{...{
+							register,
+							errors,
+							control,
+							getValues,
+							Controller,
+							watch,
+							isUpdate,
+							offDay,
+							setValue,
+							data,
+						}}
+					/>
 
-						<DynamicField
-							title='Utility Entries'
-							showAppendButton={false}
-							tableHead={[
-								'Type',
-								'Reading',
-								'Voltage Ratio',
-								'Unit Cost',
-								'Remarks',
-							].map((item) => (
-								<th
-									key={item}
-									scope='col'
-									className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-4 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'
-								>
-									{item}
-								</th>
-							))}
-						>
-							{utilityEntryField.map((item, index) => (
-								<tr key={item.id} className=''>
-									<td className={`${rowClass}`}>
-										<FormField
-											label={`utility_entries[${index}].type`}
-											title='Type'
-											is_title_needed='false'
-											dynamicerror={
-												errors?.utility_entries?.[index]
-													?.type
-											}
-										>
-											<Controller
-												name={`utility_entries[${index}].type`}
-												control={control}
-												render={({
-													field: { onChange, value },
-												}) => {
-													return (
-														<ReactSelect
-															placeholder='Select Type'
-															options={
-																utilityEntryTypeOptions
-															}
-															value={
-																utilityEntryTypeOptions.find(
-																	(opt) =>
-																		opt.value ===
-																		value
-																) || null
-															}
-															onChange={(opt) =>
-																onChange(
-																	opt?.value
-																)
-															}
-															menuPortalTarget={
-																document.body
-															}
-															isDisabled={true}
-														/>
-													);
-												}}
-											/>
-										</FormField>
-									</td>
-									<td className={`w-48 ${rowClass}`}>
-										<Input
-											title='reading'
-											label={`utility_entries[${index}].reading`}
-											is_title_needed='false'
-											type='number'
-											step='any'
-											dynamicerror={
-												errors?.utility_entries?.[index]
-													?.reading
-											}
-											register={register}
-											disabled={offDay}
+					<DynamicField
+						title='Utility Entries'
+						showAppendButton={false}
+						tableHead={[
+							'#',
+							'Type',
+							'Reading',
+							'Voltage Ratio',
+							'Unit Cost',
+							'Remarks',
+						].map((item) => (
+							<th
+								key={item}
+								scope='col'
+								className='group cursor-pointer select-none whitespace-nowrap bg-secondary px-4 py-2 text-left font-semibold tracking-wide text-secondary-content transition duration-300'
+							>
+								{item}
+							</th>
+						))}
+					>
+						{utilityEntryField.map((item, index) => (
+							<tr key={item.id} className=''>
+								<td className={`w-12 ${rowClass}`}>
+									{index + 1}
+								</td>
+								<td className={`${rowClass}`}>
+									<FormField
+										label={`utility_entries[${index}].type`}
+										title='Type'
+										is_title_needed='false'
+										dynamicerror={
+											errors?.utility_entries?.[index]
+												?.type
+										}
+									>
+										<Controller
+											name={`utility_entries[${index}].type`}
+											control={control}
+											render={({
+												field: { onChange, value },
+											}) => {
+												return (
+													<ReactSelect
+														placeholder='Select Type'
+														options={
+															utilityEntryTypeOptions
+														}
+														value={
+															utilityEntryTypeOptions.find(
+																(opt) =>
+																	opt.value ===
+																	value
+															) || null
+														}
+														onChange={(opt) =>
+															onChange(opt?.value)
+														}
+														menuPortalTarget={
+															document.body
+														}
+														isDisabled={true}
+													/>
+												);
+											}}
 										/>
-									</td>
-									<td className={`w-48 ${rowClass}`}>
-										<Input
-											title='voltage_ratio'
-											label={`utility_entries[${index}].voltage_ratio`}
-											is_title_needed='false'
-											type='number'
-											step='any'
-											dynamicerror={
-												errors?.utility_entries?.[index]
-													?.voltage_ratio
-											}
-											register={register}
-											disabled={offDay}
-										/>
-									</td>
-									<td className={`w-48 ${rowClass}`}>
-										<Input
-											title='unit_cost'
-											label={`utility_entries[${index}].unit_cost`}
-											is_title_needed='false'
-											type='number'
-											step='any'
-											dynamicerror={
-												errors?.utility_entries?.[index]
-													?.unit_cost
-											}
-											register={register}
-											disabled={offDay}
-										/>
-									</td>
-									<td className={`w-48 ${rowClass}`}>
-										<Input
-											title='remarks'
-											label={`utility_entries[${index}].remarks`}
-											is_title_needed='false'
-											dynamicerror={
-												errors?.utility_entries?.[index]
-													?.remarks
-											}
-											register={register}
-											disabled={offDay}
-										/>
-									</td>
-								</tr>
-							))}
-						</DynamicField>
-					</div>
+									</FormField>
+								</td>
+								<td className={`w-48 ${rowClass}`}>
+									<Input
+										title='reading'
+										label={`utility_entries[${index}].reading`}
+										is_title_needed='false'
+										type='number'
+										step='any'
+										dynamicerror={
+											errors?.utility_entries?.[index]
+												?.reading
+										}
+										register={register}
+										disabled={offDay}
+									/>
+								</td>
+								<td className={`w-48 ${rowClass}`}>
+									<Input
+										title='voltage_ratio'
+										label={`utility_entries[${index}].voltage_ratio`}
+										is_title_needed='false'
+										type='number'
+										step='any'
+										dynamicerror={
+											errors?.utility_entries?.[index]
+												?.voltage_ratio
+										}
+										register={register}
+										disabled={offDay}
+									/>
+								</td>
+								<td className={`w-48 ${rowClass}`}>
+									<Input
+										title='unit_cost'
+										label={`utility_entries[${index}].unit_cost`}
+										is_title_needed='false'
+										type='number'
+										step='any'
+										dynamicerror={
+											errors?.utility_entries?.[index]
+												?.unit_cost
+										}
+										register={register}
+										disabled={offDay}
+									/>
+								</td>
+								<td className={`w-48 ${rowClass}`}>
+									<Input
+										title='remarks'
+										label={`utility_entries[${index}].remarks`}
+										is_title_needed='false'
+										dynamicerror={
+											errors?.utility_entries?.[index]
+												?.remarks
+										}
+										register={register}
+										disabled={offDay}
+									/>
+								</td>
+							</tr>
+						))}
+					</DynamicField>
+				</div>
 
-					<Footer buttonClassName='!btn-primary' />
-				</form>
-			</HotKeys>
-			<Suspense>
-				<DeleteModal
-					modalId={'utility_entry_delete'}
-					title={'Utility Entry'}
-					deleteItem={deleteItem}
-					setDeleteItem={setDeleteItem}
-					setItems={utilityEntryField}
-					url='/maintain/utility-entry'
-					deleteData={deleteData}
-				/>
-			</Suspense>
+				<Footer buttonClassName='!btn-primary' />
+			</form>
+
 			<DevTool control={control} placement='top-left' />
 		</FormProvider>
 	);

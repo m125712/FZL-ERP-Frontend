@@ -31,7 +31,7 @@ const Properties = lazy(() => import('@/pages/Order/Properties'));
 const Settings = lazy(() => import('@/pages/Order/Settings'));
 const OrderPricing = lazy(() => import('@/pages/Order/OrderPricing'));
 const PriceLock = lazy(() => import('@/pages/Order/PriceLock'));
-
+const ComplainIndex = lazy(() => import('@/pages/Order/Complain'));
 export const OrderRoutes = [
 	{
 		name: 'Order',
@@ -225,6 +225,13 @@ export const OrderRoutes = [
 					'click_status_skip_slider_production',
 					'click_status_cancel',
 				],
+			},
+			{
+				name: 'Complain',
+				path: '/order/complain-index',
+				element: <ComplainIndex />,
+				page_name: 'order__complain_index',
+				actions: ['read', 'update', 'delete', 'resolve_complain'],
 			},
 		],
 	},

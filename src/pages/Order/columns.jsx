@@ -872,6 +872,196 @@ export const DetailsColumns = ({
 	);
 };
 
+export const OrderComplainColumns = ({
+	handelUpdate,
+	haveAccess,
+	handelResolved,
+	data,
+}) => {
+	return useMemo(
+		() => [
+			{
+				accessorKey: 'actions',
+				header: 'Actions',
+				enableColumnFilter: false,
+				enableSorting: false,
+				hidden: !haveAccess.includes('update'),
+				cell: (info) => (
+					<EditDelete
+						idx={info.row.index}
+						handelUpdate={handelUpdate}
+						showUpdate={haveAccess.includes('update')}
+						showDelete={false}
+					/>
+				),
+			},
+			{
+				accessorKey: 'is_resolved',
+				header: 'Resolved',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { is_resolved_date, solution } = info.row.original;
+					return (
+						<div className='flex flex-col'>
+							<SwitchToggle
+								disabled={
+									!(
+										haveAccess.includes(
+											'resolve_complain'
+										) && solution.length > 0
+									)
+								}
+								onChange={() => {
+									handelResolved(info.row.index);
+								}}
+								checked={info.getValue() === true}
+							/>
+							<DateTime date={is_resolved_date} />
+						</div>
+					);
+				},
+			},
+			{
+				accessorKey: 'order_number',
+				header: 'O/N',
+				enableColumnFilter: true,
+				cell: (info) => {
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${info.getValue()}`}
+							openInNewTab={true}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'item_description',
+				header: 'Item',
+				enableColumnFilter: true,
+				width: 'w-36',
+				cell: (info) => {
+					const { order_description_uuid, order_number } =
+						info.row.original;
+					return (
+						<CustomLink
+							label={info.getValue()}
+							url={`/order/details/${order_number}/${order_description_uuid}`}
+							openInNewTab={true}
+						/>
+					);
+				},
+			},
+			{
+				accessorKey: 'party_name',
+				header: 'Party',
+				enableColumnFilter: true,
+				width: 'w-36',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'name',
+				header: 'Name',
+				enableColumnFilter: true,
+				width: 'w-36',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'description',
+				header: 'Description',
+				enableColumnFilter: true,
+				width: 'w-36',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'root_cause_analysis',
+				header: 'Root Cause Analysis',
+				enableColumnFilter: true,
+				width: 'w-36',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'issue_department',
+				header: 'Issue Department',
+				enableColumnFilter: true,
+				width: 'w-36',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'solution',
+				header: 'Solution',
+				enableColumnFilter: true,
+				width: 'w-36',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'future_proof',
+				header: 'Future Proof',
+				enableColumnFilter: true,
+				width: 'w-36',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'marketing_name',
+				header: 'Marketing',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'buyer_name',
+				header: 'Buyer',
+				width: 'w-32',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'factory_name',
+				header: 'Factory',
+				width: 'w-32',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'merchandiser_name',
+				header: 'Merchandiser',
+				width: 'w-32',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_by_name',
+				header: 'Created By',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'created_at',
+				header: 'Created',
+				enableColumnFilter: false,
+				filterFn: 'isWithinRange',
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+			{
+				accessorKey: 'updated_at',
+				header: 'Updated',
+				enableColumnFilter: false,
+				cell: (info) => <DateTime date={info.getValue()} />,
+			},
+		],
+		[data]
+	);
+};
+
 export const SettingsColumns = ({
 	haveAccess,
 	data,

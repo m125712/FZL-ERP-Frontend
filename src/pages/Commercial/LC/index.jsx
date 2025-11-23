@@ -562,7 +562,7 @@ export default function Index() {
 		window.open(`/commercial/lc/${uuid}/update`, '_blank');
 		// navigate(`/commercial/lc/${uuid}/update`); // /commercial/lc/:lc_uuid/update
 	};
-
+	if (!user?.uuid) return null;
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 

@@ -66,7 +66,7 @@ export default function index() {
 		],
 		[data]
 	);
-
+	if (!user?.uuid) return null;
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 

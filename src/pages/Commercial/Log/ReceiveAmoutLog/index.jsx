@@ -167,6 +167,7 @@ export default function ProductionLog() {
 	// if (error) return <h1>Error:{error}</h1>;
 
 	// Fetching data from server
+	if (!user?.uuid) return null;
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

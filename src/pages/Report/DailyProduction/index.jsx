@@ -79,6 +79,8 @@ export default function index() {
 			Excel(value, from, to);
 		}
 	}, [isFetching, isGenerating, refetch, reset, from, to]);
+
+	if (!user?.uuid) return null;
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;
 

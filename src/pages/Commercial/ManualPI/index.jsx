@@ -194,6 +194,7 @@ export default function Index() {
 		const uuid = data[idx]?.uuid;
 		navigate(`/commercial/manual-pi/${uuid}/update`);
 	};
+	if (!user?.uuid) return null;
 
 	if (isLoading)
 		return <span className='loading loading-dots loading-lg z-50' />;

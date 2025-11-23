@@ -683,13 +683,11 @@ export const DetailsColumns = ({
 				accessorKey: 'complain',
 				header: 'Complain',
 				enableColumnFilter: true,
-				width: 'w-36',
+				width: 'w-12',
 				hidden:
 					!haveAccess.includes('show_own_orders') &&
 					!haveAccess.includes('complain_entry'),
 				cell: (info) => {
-					const { order_description_uuid, order_number } =
-						info.row.original;
 					return (
 						// <CustomLink
 						// 	label={info.getValue()}

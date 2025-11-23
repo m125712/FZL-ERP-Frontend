@@ -3,6 +3,23 @@ import { format } from 'date-fns';
 
 import GetDateTime from '@/util/GetDateTime';
 
+function secondsToHours(seconds) {
+	if (seconds === 0) return 0;
+	const hours = seconds / 3600;
+	return hours.toFixed(2);
+}
+
+// Format values for display
+const fmt = (value) => {
+	if (typeof value === 'string') {
+		return value;
+	}
+	if (value === 0) {
+		return '0';
+	}
+	return value?.toLocaleString();
+};
+
 export default function MaintenanceDashboard() {
 	const { data: dashboard, isLoading } = useDashboard();
 
@@ -23,26 +40,14 @@ export default function MaintenanceDashboard() {
 		{
 			label: 'Submitted',
 			stats: data?.submitted,
-			bg: 'bg-slate-50',
-			text: 'text-slate-800',
-		},
-		{
-			label: 'Resolved',
-			stats: data?.resolved,
 			bg: 'bg-green-50',
 			text: 'text-green-800',
 		},
 		{
-			label: 'Awaiting Response',
+			label: 'Waiting',
 			stats: data?.awaiting_response,
-			bg: 'bg-red-50',
-			text: 'text-red-800',
-		},
-		{
-			label: 'Rejected',
-			stats: data?.rejected,
-			bg: 'bg-red-500',
-			text: 'text-white',
+			bg: 'bg-slate-50',
+			text: 'text-slate-800',
 		},
 		{
 			label: 'Ongoing',
@@ -51,30 +56,37 @@ export default function MaintenanceDashboard() {
 			text: 'text-yellow-800',
 		},
 		{
-			label: 'Average resolution time (H)',
-			stats: data?.avg_resolution_time_seconds,
+			label: 'Rejected',
+			stats: data?.rejected,
+			bg: 'bg-red-50',
+			text: 'text-red-800',
+		},
+		{
+			label: 'Okay',
+			stats: data?.respondent,
 			bg: 'bg-blue-50',
 			text: 'text-blue-800',
 		},
+		{
+			label: 'Resolved',
+			stats: data?.resolved,
+			bg: 'bg-green-200',
+			text: 'text-green-800',
+		},
+		{
+			label: 'Average resolution time (H)',
+			stats: data?.avg_resolution_time_seconds,
+			bg: 'bg-slate-50',
+			text: 'text-slate-800',
+		},
 	];
-	function secondsToHours(seconds) {
-		if (seconds === 0) return 0;
-		const hours = seconds / 3600;
-		return hours.toFixed(2);
-	}
-	// Format values for display
-	const fmt = (value) => {
-		if (typeof value === 'string') return value;
-		if (value === 0) return '0';
-		return value?.toLocaleString();
-	};
 
 	return (
-		<div className='min-h-screen p-6 text-primary'>
+		<div className='p-6 text-primary'>
 			{/* Date Display */}
 			<div className='mb-6 text-primary'>
 				<span className='text-xl font-bold'>
-					{format(GetDateTime(), 'dd MMM, yyyy')}
+					{format(GetDateTime(), 'dd MMM, yyyy - EEEE')}
 				</span>
 			</div>
 
@@ -88,21 +100,19 @@ export default function MaintenanceDashboard() {
 									<th className='border-r border-secondary p-3 text-left'>
 										Time and Status
 									</th>
-									<th className='border-r border-secondary bg-accent p-3 text-center'>
+									<th className='border-r border-secondary bg-accent p-3'>
 										Today
 									</th>
-									<th className='border-r border-secondary p-3 text-center'>
+									<th className='border-r border-secondary p-3'>
 										Yesterday
 									</th>
-									<th className='border-r border-secondary p-3 text-center'>
+									<th className='border-r border-secondary p-3'>
 										Last 7 days
 									</th>
-									<th className='border-r border-secondary p-3 text-center'>
+									<th className='border-r border-secondary p-3'>
 										Last One month
 									</th>
-									<th className='p-3 text-center'>
-										Last One year
-									</th>
+									<th className='p-3'>Last One year</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -199,7 +209,7 @@ export default function MaintenanceDashboard() {
 					<div className='rounded-lg border border-secondary-light text-primary'>
 						<div className='border-b border-secondary-light p-3 text-center'>
 							<span className='font-medium'>
-								Average Resolution Time – Last 1 Month
+								Average Resolution Time - Last 1 Month
 							</span>
 						</div>
 						<div className='p-6 text-center'>

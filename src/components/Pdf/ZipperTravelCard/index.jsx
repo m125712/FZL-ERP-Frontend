@@ -9,6 +9,7 @@ import { getPageFooter, getPageHeader } from './utils';
 const node = [
 	getTable('order_number', 'O/N'),
 	getTable('item_description', 'Description'),
+	getTable('style', 'Style'),
 	getTable('color', 'Color'),
 	getTable('quantity', 'Quantity (pcs)', 'right'),
 	getTable('production_quantity_in_kg', 'Expected (KG)', 'right'),
@@ -70,19 +71,23 @@ export default function Index(batch) {
 			{
 				table: {
 					headerRows: 1,
-					widths: ['*', '*', '*', '*', '*', '*'],
+					widths: [50, 100, 100, 70, 50, 50, 50],
 					body: [
 						// * Header
 						TableHeader(node),
 
 						// * Body
-						...dyeing_batch_entry?.map((item) => [
+						...(dyeing_batch_entry?.map((item) => [
 							{
 								text: item.order_number,
 								alignment: 'left',
 							},
 							{
 								text: item.item_description,
+								alignment: 'left',
+							},
+							{
+								text: item.style,
 								alignment: 'left',
 							},
 							{
@@ -106,14 +111,15 @@ export default function Index(batch) {
 								text: item.production_quantity_in_kg,
 								alignment: 'right',
 							},
-						]),
+						]) || []),
 						[
 							{
 								text: 'Total',
 								bold: true,
 								alignment: 'right',
-								colSpan: 3,
+								colSpan: 4,
 							},
+							{},
 							{},
 							{},
 							{

@@ -14,6 +14,7 @@ const AuthProvider = ({ children }) => {
 		useLocalStorage('can_access', '');
 
 	const Login = async (data) => {
+		await Logout();
 		try {
 			const res = await api.post('/hr/user/login', data);
 			if (res?.data?.status === 400) {

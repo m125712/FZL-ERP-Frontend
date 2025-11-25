@@ -91,8 +91,33 @@ export default function Index(data) {
 	const sortedThreadData = manual_thread_pi_entry.sort((a, b) => {
 		return a.order_number.localeCompare(b.order_number);
 	});
-	const zipper = sortedZipperData.map((item) => {
-		const rowSpan = sortedZipperData.filter(
+
+	// Group zipper data by item and unit_price to merge sizes
+	const groupedZipperData = sortedZipperData.reduce((acc, item) => {
+		const key = `${item.item}_${item.unit_price}`;
+		if (!acc[key]) {
+			acc[key] = {
+				...item,
+				sizes: [item.size],
+				quantities: [item.quantity],
+			};
+		} else {
+			acc[key].sizes.push(item.size);
+			acc[key].quantities.push(item.quantity);
+			acc[key].quantity =
+				Number(acc[key].quantity) + Number(item.quantity);
+			acc[key].value = Number(acc[key].value) + Number(item.value);
+		}
+		return acc;
+	}, {});
+
+	const mergedZipperData = Object.values(groupedZipperData).map((item) => ({
+		...item,
+		size: item.sizes.join(', '),
+	}));
+
+	const zipper = mergedZipperData.map((item) => {
+		const rowSpan = mergedZipperData.filter(
 			(data) => data.item === item.item
 		).length;
 		return {
@@ -100,7 +125,7 @@ export default function Index(data) {
 			style: { text: item.style, rowSpan: rowSpan },
 			item: { text: item.item, rowSpan: rowSpan },
 			specification: { text: item.specification, rowSpan: rowSpan },
-			size: { text: item.size, rowSpan: rowSpan },
+			size: item.size,
 			quantity: item.quantity,
 			unit_price: item.unit_price,
 			unit_price_per_pcs: item.unit_price_per_pcs,
@@ -111,15 +136,15 @@ export default function Index(data) {
 		const rowSpan = sortedThreadData.filter(
 			(data) => data.order_number === item.order_number
 		).length;
-		const sizeRowSpan = sortedThreadData.filter(
-			(data) =>
-				data.size === item.size &&
-				data.order_number === item.order_number
-		).length;
+		// const sizeRowSpan = sortedThreadData.filter(
+		// 	(data) =>
+		// 		data.size === item.size &&
+		// 		data.order_number === item.order_number
+		// ).length;
 		return {
 			order_number: { text: item.order_number, rowSpan: rowSpan },
 			style: { text: item.style, rowSpan: rowSpan },
-			size: { text: item.size, rowSpan: sizeRowSpan },
+			size: item.size,
 			quantity: item.quantity,
 			unit_price: item.unit_price,
 			unit_price_per_pcs: item.unit_price_per_pcs,
@@ -157,7 +182,7 @@ export default function Index(data) {
 				? {
 						table: {
 							headerRows: 1,
-							widths: [40, '*', 50, 75, 35, 35, 52, 35],
+							widths: [40, '*', 50, 75, 35, 35, 52, 40],
 							body: [
 								[
 									{

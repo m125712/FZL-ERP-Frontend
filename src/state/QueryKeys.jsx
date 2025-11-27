@@ -2067,6 +2067,7 @@ export const reportQK = {
 	],
 	lcPayment: (date, type) => [...reportQK.all(), 'lc-payment', date, type],
 	lcFortNight: (query) => [...reportQK.all(), 'lc-fort-night', query],
+	marketReport: (from, to) => [...reportQK.all(), 'market-report', from, to],
 };
 
 export const marketingQK = {

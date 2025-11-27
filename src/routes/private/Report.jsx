@@ -81,6 +81,8 @@ const LcPayment = lazy(() => import('@/pages/Report/LcPayment'));
 
 const LcFortNight = lazy(() => import('@/pages/Report/LcFortNight'));
 
+const MarketReport = lazy(() => import('@/pages/Report/MarketReport'));
+
 export const ReportRoutes = [
 	{
 		name: 'Report',
@@ -321,6 +323,13 @@ export const ReportRoutes = [
 				path: '/report/lc-fort-night',
 				element: <LcFortNight />,
 				page_name: 'report__lc_fortnight',
+				actions: ['read'],
+			},
+			{
+				name: 'Market Report',
+				path: '/report/marketing-report',
+				element: <MarketReport />,
+				page_name: 'report__marketing_report',
 				actions: ['read'],
 			},
 			{

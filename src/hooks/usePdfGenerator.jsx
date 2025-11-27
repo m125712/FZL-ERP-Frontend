@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { data } from 'react-router';
 
 import PdfWorker from '@/components/Pdf/PDFWorker/index.js?worker';
 

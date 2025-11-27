@@ -496,3 +496,11 @@ export const useLcFortNight = (query) => {
 		enabled: !!query,
 	});
 };
+
+//* Market Report
+export const useMarketReport = (from = '', to = '', { enabled = false } = {}) =>
+	createGlobalState({
+		queryKey: reportQK.marketReport(from, to),
+		url: `/report/market-report?from_date=${from}&to_date=${to}`,
+		enabled,
+	});

@@ -146,6 +146,7 @@ export const BUYER_NULL = {
 
 export const PARTY_SCHEMA = {
 	name: STRING_REQUIRED,
+	parent_party_uuid: STRING.nullable(),
 	short_name: STRING.nullable(),
 	address: STRING_REQUIRED,
 	remarks: STRING.nullable(),

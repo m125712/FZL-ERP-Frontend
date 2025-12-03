@@ -231,6 +231,13 @@ export const PartyColumns = ({
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'parent_party_name',
+				header: 'Parent Party',
+				enableColumnFilter: false,
+				width: 'w-32',
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'short_name',
 				header: 'Short Name',
 				enableColumnFilter: false,

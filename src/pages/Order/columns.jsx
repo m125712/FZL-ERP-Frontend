@@ -6,6 +6,7 @@ import { CustomLink, DateTime, EditDelete, StatusButton } from '@/ui';
 
 import { DEFAULT_COLUMNS } from '@/util/Table/DefaultColumns';
 
+import { REPORT_DATE_TIME_FORMAT } from '../Report/utils';
 import { issueDepartment } from './Details/Complain/utils';
 
 export const BuyerColumns = ({
@@ -864,13 +865,13 @@ export const DetailsColumns = ({
 				header: 'Created',
 				enableColumnFilter: false,
 				filterFn: 'isWithinRange',
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => REPORT_DATE_TIME_FORMAT(info.getValue()),
 			},
 			{
 				accessorKey: 'order_description_updated_at',
 				header: 'Updated',
 				enableColumnFilter: false,
-				cell: (info) => <DateTime date={info.getValue()} />,
+				cell: (info) => REPORT_DATE_TIME_FORMAT(info.getValue()),
 			},
 		],
 		[data]

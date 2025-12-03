@@ -4,7 +4,7 @@ import { useOtherParty } from '@/state/Other';
 import { useFetchForRhfReset, useRHF } from '@/hooks';
 
 import { AddModal } from '@/components/Modal';
-import { Input } from '@/ui';
+import { FormField, Input, ReactSelect } from '@/ui';
 
 import nanoid from '@/lib/nanoid';
 import { DevTool } from '@/lib/react-hook-devtool';
@@ -19,13 +19,20 @@ export default function Index({
 	setUpdateParty,
 }) {
 	const { url, updateData, postData } = useOrderParty();
-	const { invalidateQuery: invalidatePartyAll } = useOtherParty();
+	const { data: partyOptions, invalidateQuery: invalidatePartyAll } =
+		useOtherParty();
 	const { invalidateQuery: invalidateOrderFactory } = useOrderFactory();
 
-	const { register, handleSubmit, errors, reset, control, context } = useRHF(
-		PARTY_SCHEMA,
-		PARTY_NULL
-	);
+	const {
+		register,
+		handleSubmit,
+		errors,
+		reset,
+		control,
+		context,
+		Controller,
+		getValues,
+	} = useRHF(PARTY_SCHEMA, PARTY_NULL);
 
 	const { user } = useAuth();
 
@@ -93,6 +100,32 @@ export default function Index({
 		>
 			<Input label='name' {...{ register, errors }} />
 			<Input label='short_name' {...{ register, errors }} />
+			<FormField
+				label='parent_party_uuid'
+				title='Parent Party'
+				errors={errors}
+			>
+				<Controller
+					name={'parent_party_uuid'}
+					control={control}
+					render={({ field: { onChange } }) => {
+						return (
+							<ReactSelect
+								placeholder='Select Parent Party'
+								options={partyOptions}
+								value={partyOptions?.filter(
+									(item) =>
+										item.value ===
+										getValues('parent_party_uuid')
+								)}
+								onChange={(e) => {
+									onChange(e.value);
+								}}
+							/>
+						);
+					}}
+				/>
+			</FormField>
 			<Input label='address' rows={2} {...{ register, errors }} />
 			<Input label='remarks' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />

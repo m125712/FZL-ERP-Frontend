@@ -225,6 +225,18 @@ export default function Index() {
 				cell: (info) => info.getValue(),
 			},
 			{
+				accessorKey: 'puller_color_name',
+				header: 'Puller Color',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'teeth_color_name',
+				header: 'Teeth Color',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
 				accessorKey: 'size',
 				header: 'Size',
 				enableColumnFilter: false,

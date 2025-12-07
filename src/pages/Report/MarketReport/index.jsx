@@ -8,8 +8,8 @@ import { SimpleDatePicker } from '@/ui';
 import PageInfo from '@/util/PageInfo';
 
 export default function Index() {
-	const [from, setFrom] = useState(new Date());
-	const [to, setTo] = useState(new Date());
+	const [from, setFrom] = useState(() => new Date());
+	const [to, setTo] = useState(() => new Date());
 
 	const { data, isLoading } = useMarketReport(
 		format(from, 'yyyy-MM-dd'),
@@ -20,9 +20,9 @@ export default function Index() {
 	);
 
 	const info = new PageInfo(
-		'Marketing Report',
-		'/report/marketing-report',
-		'report__marketing_report'
+		'Market Report',
+		'/report/market-report',
+		'report__market_report'
 	);
 
 	useEffect(() => {
@@ -42,14 +42,9 @@ export default function Index() {
 				enableColumnFilter: false,
 			},
 			{
-				accessorFn: (row) =>
-					row.order_details
-						.map((order) => order.order_number)
-						.join(', '),
-				id: 'order_number',
-				header: 'Order Number',
+				accessorKey: 'opening',
+				header: 'Opening',
 				enableColumnFilter: false,
-				width: 'w-40',
 			},
 			{
 				accessorKey: 'running_total_lc_value',
@@ -72,6 +67,16 @@ export default function Index() {
 				accessorFn: (row) => row.running_pi_cash_ids.join(', '),
 				id: 'running_pi_cash_ids',
 				header: 'Cash Number',
+				enableColumnFilter: false,
+				width: 'w-40',
+			},
+			{
+				accessorFn: (row) =>
+					row.order_details
+						.map((order) => order.order_number)
+						.join(', '),
+				id: 'order_number',
+				header: 'Order Number',
 				enableColumnFilter: false,
 				width: 'w-40',
 			},
@@ -103,6 +108,11 @@ export default function Index() {
 			{
 				accessorKey: 'total_produced_value_company_deleted',
 				header: 'Total Produced Value Company (Deleted)',
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'closing',
+				header: 'Closing Quantity',
 				enableColumnFilter: false,
 			},
 		],

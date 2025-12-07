@@ -329,7 +329,7 @@ export const ReportRoutes = [
 				name: 'Market Report',
 				path: '/report/marketing-report',
 				element: <MarketReport />,
-				page_name: 'report__marketing_report',
+				page_name: 'report__market_report',
 				actions: ['read'],
 			},
 			{

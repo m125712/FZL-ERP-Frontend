@@ -48,7 +48,13 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'running_total_lc_value',
-				header: 'LC Value',
+				header: 'LC Value (USD)',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'running_total_lc_value_bdt',
+				header: 'LC Value (BDT)',
 				enableColumnFilter: false,
 			},
 			{
@@ -60,7 +66,7 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'running_total_cash_received',
-				header: 'Cash Value',
+				header: 'Cash Value (BDT)',
 				enableColumnFilter: false,
 			},
 			{
@@ -73,46 +79,66 @@ export default function Index() {
 			{
 				accessorFn: (row) =>
 					row.order_details
-						.map((order) => order.order_number)
-						.join(', '),
+						?.map((order) => order.order_number)
+						?.join(', '),
 				id: 'order_number',
-				header: 'Order Number',
+				header: 'O/N',
 				enableColumnFilter: false,
 				width: 'w-40',
 			},
 			{
 				accessorKey: 'total_produced_quantity',
-				header: 'Total Produced Quantity',
-				enableColumnFilter: false,
-			},
-			{
-				accessorKey: 'total_produced_value_party',
-				header: 'Total Produced Value (Party)',
+				header: 'Produced Qty',
 				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'total_produced_value_company',
-				header: 'Total Produced Value (Company)',
+				header: 'Produced Value (Com USD)',
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'total_produced_value_company_bdt',
+				header: 'Produced Value (Com BDT)',
 				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'total_produced_quantity_deleted',
-				header: 'Total Produced Quantity (Deleted)',
-				enableColumnFilter: false,
-			},
-			{
-				accessorKey: 'total_produced_value_party_deleted',
-				header: 'Total Produced Value Party (Deleted)',
+				header: 'Produced Qty (Deleted)',
 				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'total_produced_value_company_deleted',
-				header: 'Total Produced Value Company (Deleted)',
+				header: 'Produced Value Com (Deleted USD)',
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'total_produced_value_company_deleted_bdt',
+				header: 'Produced Value Com (Deleted BDT)',
 				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'closing',
-				header: 'Closing Quantity',
+				header: 'Closing Qty',
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'total_produced_value_party',
+				header: 'Produced Value (Party USD)',
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'total_produced_value_party_bdt',
+				header: 'Produced Value (Party BDT)',
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'total_produced_value_party_deleted',
+				header: 'Produced Value Party (Deleted USD)',
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'total_produced_value_party_deleted_bdt',
+				header: 'Produced Value Party (Deleted BDT)',
 				enableColumnFilter: false,
 			},
 		],

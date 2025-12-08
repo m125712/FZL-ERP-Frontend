@@ -48,14 +48,23 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'running_total_lc_value',
-				header: 'LC Value (USD)',
+				header: (
+					<>
+						LC Value <br></br> (USD)
+					</>
+				),
 				enableColumnFilter: false,
-				cell: (info) => info.getValue(),
+				cell: (info) => info.getValue().toFixed(2),
 			},
 			{
 				accessorKey: 'running_total_lc_value_bdt',
-				header: 'LC Value (BDT)',
+				header: (
+					<>
+						LC Value <br></br> (BDT)
+					</>
+				),
 				enableColumnFilter: false,
+				cell: (info) => info.getValue().toFixed(2),
 			},
 			{
 				accessorFn: (row) => row.running_lc_file_numbers.join(', '),
@@ -68,6 +77,7 @@ export default function Index() {
 				accessorKey: 'running_total_cash_received',
 				header: 'Cash Value (BDT)',
 				enableColumnFilter: false,
+				cell: (info) => info.getValue().toFixed(2),
 			},
 			{
 				accessorFn: (row) => row.running_pi_cash_ids.join(', '),
@@ -88,32 +98,70 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'total_produced_quantity',
-				header: 'Produced Qty',
+				header: (
+					<>
+						Produced <br></br> Qty
+					</>
+				),
 				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'total_produced_value_company',
-				header: 'Produced Value (Com USD)',
+				header: (
+					<>
+						Produced Value <br></br> (Com USD)
+					</>
+				),
 				enableColumnFilter: false,
+				cell: (info) => info.getValue().toFixed(2),
 			},
 			{
 				accessorKey: 'total_produced_value_company_bdt',
-				header: 'Produced Value (Com BDT)',
+				header: (
+					<>
+						Produced Value <br></br> (Com BDT)
+					</>
+				),
 				enableColumnFilter: false,
+				cell: (info) => info.getValue().toFixed(2),
 			},
 			{
 				accessorKey: 'total_produced_quantity_deleted',
-				header: 'Produced Qty (Deleted)',
+				header: (
+					<>
+						Produced Qty <br></br> (Deleted)
+					</>
+				),
 				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'total_produced_value_company_deleted',
-				header: 'Produced Value Com (Deleted USD)',
+				header: (
+					<>
+						Produced Value <br></br> Com (Deleted USD)
+					</>
+				),
 				enableColumnFilter: false,
+				cell: (info) => info.getValue().toFixed(2),
 			},
 			{
 				accessorKey: 'total_produced_value_company_deleted_bdt',
-				header: 'Produced Value Com (Deleted BDT)',
+				header: (
+					<>
+						Produced Value <br></br> Com (Deleted BDT)
+					</>
+				),
+				enableColumnFilter: false,
+				cell: (info) => info.getValue().toFixed(2),
+			},
+			{
+				accessorKey: 'remarks_amount',
+				header: 'Remarks Amount',
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'remarks',
+				header: 'Remarks',
 				enableColumnFilter: false,
 			},
 			{
@@ -123,23 +171,43 @@ export default function Index() {
 			},
 			{
 				accessorKey: 'total_produced_value_party',
-				header: 'Produced Value (Party USD)',
+				header: (
+					<>
+						Produced Value <br></br> (Party USD)
+					</>
+				),
 				enableColumnFilter: false,
+				cell: (info) => info.getValue().toFixed(2),
 			},
 			{
 				accessorKey: 'total_produced_value_party_bdt',
-				header: 'Produced Value (Party BDT)',
+				header: (
+					<>
+						Produced Value <br></br> (Party BDT)
+					</>
+				),
 				enableColumnFilter: false,
+				cell: (info) => info.getValue().toFixed(2),
 			},
 			{
 				accessorKey: 'total_produced_value_party_deleted',
-				header: 'Produced Value Party (Deleted USD)',
+				header: (
+					<>
+						Produced Value <br></br> (Party USD)
+					</>
+				),
 				enableColumnFilter: false,
+				cell: (info) => info.getValue().toFixed(2),
 			},
 			{
 				accessorKey: 'total_produced_value_party_deleted_bdt',
-				header: 'Produced Value Party (Deleted BDT)',
+				header: (
+					<>
+						Produced Value <br></br> Party (Deleted BDT)
+					</>
+				),
 				enableColumnFilter: false,
+				cell: (info) => info.getValue().toFixed(2),
 			},
 		],
 		[data]

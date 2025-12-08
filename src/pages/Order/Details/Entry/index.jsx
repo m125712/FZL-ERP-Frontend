@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useOrderDescription } from '@/state/Order';
 import { useAuth } from '@context/auth';
 import { FormProvider } from 'react-hook-form';
@@ -10,7 +10,7 @@ import { useAccess, useFetchForOrderReset, useRHF } from '@/hooks';
 import FileUploading from '@/components/layout/file-uploading';
 import { DeleteModal } from '@/components/Modal';
 import { Footer } from '@/components/Modal/ui';
-import { ErrorToast, ShowLocalToast } from '@/components/Toast';
+import { ShowLocalToast } from '@/components/Toast';
 import HandsonSpreadSheet from '@/ui/Dynamic/HandsonSpreadSheet'; //! why it is must??
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { CheckBox } from '@/ui';
@@ -30,12 +30,11 @@ import {
 import GetDateTime from '@/util/GetDateTime';
 import { UUID } from '@/util/Schema/utils';
 
-import ReadFile from '../../../../ui/Others/read-file';
 import Header from './header';
 import FullOrder from './spread-sheets/full-order';
 import Slider from './spread-sheets/slider';
 import Tape from './spread-sheets/tape';
-import { getPath, toggleBleach } from './utils';
+import { toggleBleach } from './utils';
 
 export default function Index() {
 	const { url, updateData, postData, deleteData } = useOrderDescription();
@@ -201,7 +200,7 @@ export default function Index() {
 
 	// * Updates the selectedUnit state and ensures only one checkbox is active
 	const headerButtons = [
-		<div className='flex items-center gap-2'>
+		<div className='flex items-center gap-2' key={'header_btn'}>
 			<div className='flex rounded-md bg-secondary px-1'>
 				<CheckBox
 					text='text-secondary-content'

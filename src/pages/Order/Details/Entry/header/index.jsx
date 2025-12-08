@@ -23,6 +23,7 @@ import {
 	useOtherOrderPropertiesByTopStopper,
 	useOtherOrderPropertiesByZipperNumber,
 } from '@/state/Other';
+import { format, subMonths } from 'date-fns';
 import { useParams } from 'react-router';
 
 import {
@@ -71,7 +72,12 @@ export default function Header({
 	});
 	const [orderNoDetails, setOrderNoDetails] = useState({});
 
-	const { data: order } = useOtherOrder('page=order_sheet');
+	const toDate = format(new Date(), 'yyyy-MM-dd');
+	const fromDate = format(subMonths(new Date(), 6), 'yyyy-MM-dd');
+
+	const { data: order } = useOtherOrder(
+		`page=order_sheet&from_date=${fromDate}&to_date=${toDate}`
+	);
 	const { data: item } = useOtherOrderPropertiesByItem();
 	const { data: zipper_number } = useOtherOrderPropertiesByZipperNumber();
 	const { data: end_type } = useOtherOrderPropertiesByEndType();

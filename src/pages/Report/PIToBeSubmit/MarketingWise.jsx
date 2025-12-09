@@ -41,7 +41,7 @@ export default function Index() {
 				},
 				id: 'order_object',
 				header: 'O/N',
-				width: 'w-40',
+				width: 'w-64',
 				enableColumnFilter: false,
 				cell: (info) => {
 					const orderNumbers = info.row.original.order_object;

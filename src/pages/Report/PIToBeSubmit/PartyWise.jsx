@@ -52,11 +52,12 @@ export default function Index() {
 						const uuid = orderNumber.value;
 						return (
 							<CustomLink
+								key={uuid ?? number}
 								label={number}
 								url={
 									isThreadOrder
 										? `/thread/order-info/${uuid}`
-										: `/order/details/${number}`
+										: `/order/details/${uuid}`
 								}
 								openInNewTab={true}
 							/>

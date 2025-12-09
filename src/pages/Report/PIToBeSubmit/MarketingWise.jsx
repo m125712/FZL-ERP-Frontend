@@ -46,17 +46,18 @@ export default function Index() {
 				cell: (info) => {
 					const orderNumbers = info.row.original.order_object;
 					return orderNumbers?.map((orderNumber) => {
-						if (orderNumber === null) return;
+						if (orderNumber === null) return null;
 						const isThreadOrder = orderNumber.label?.includes('ST');
 						const number = orderNumber.label;
 						const uuid = orderNumber.value;
 						return (
 							<CustomLink
+								key={uuid ?? number}
 								label={number}
 								url={
 									isThreadOrder
 										? `/thread/order-info/${uuid}`
-										: `/order/details/${number}`
+										: `/order/details/${uuid}`
 								}
 								openInNewTab={true}
 							/>

@@ -1748,6 +1748,11 @@ export const reportQK = {
 		'store-approved',
 		query || '',
 	],
+	storeApprovedSwatch: (query) => [
+		...reportQK.all(),
+		'store-approved-swatch',
+		query || '',
+	],
 	//*Production Report DateWise
 	productionReportDateWise: (from, to, type, query) => [
 		...reportQK.all(),

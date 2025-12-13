@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useAuth } from '@/context/auth';
-import { useReportStoreApproved } from '@/state/Report';
+import { useReportStoreApprovedSwatch } from '@/state/Report';
 import numeral from 'numeral';
 import { useAccess } from '@/hooks';
 
@@ -18,7 +18,7 @@ export default function index() {
 	const haveAccess = useAccess('report__approved_orders');
 	const { user } = useAuth();
 
-	const { data, isLoading } = useReportStoreApproved(
+	const { data, isLoading } = useReportStoreApprovedSwatch(
 		getPath(haveAccess, user?.uuid),
 		{
 			enabled: !!user?.uuid,
@@ -73,7 +73,7 @@ export default function index() {
 	return (
 		<div className='flex flex-col gap-8'>
 			<ReactTable
-				title={'Approved (Recipe)'}
+				title={'Approved (Swatch)'}
 				accessor={false}
 				data={data}
 				columns={columns}

@@ -18,6 +18,15 @@ export const useReportStoreApproved = (query, { enabled = false }) =>
 		enabled,
 	});
 
+export const useReportStoreApprovedSwatch = (query, { enabled = false }) =>
+	createGlobalState({
+		queryKey: reportQK.storeApprovedSwatch(query),
+		url: query
+			? `/report/item-zipper-number-end-wise-swatch-approved?${query}`
+			: `/report/item-zipper-number-end-wise-swatch-approved`,
+		enabled,
+	});
+
 export const useProductionReportDateWise = (
 	from = '',
 	to = '',

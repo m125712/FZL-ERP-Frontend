@@ -55,7 +55,7 @@ export default function Index() {
 
 	return (
 		<ReactTable
-			title={'Party Wise'}
+			title={'Party Wise App. (recipe)'}
 			accessor={false}
 			data={data}
 			columns={columns}

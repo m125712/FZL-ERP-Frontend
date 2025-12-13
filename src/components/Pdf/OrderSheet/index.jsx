@@ -320,6 +320,9 @@ export default function OrderSheetPdf(order_sheet) {
 																entry?.end_user_short_name
 																	? entry?.end_user_short_name
 																	: '',
+																entry?.garments_remarks
+																	? ` (${entry?.garments_remarks})`
+																	: '',
 															],
 															style: 'tableHeader',
 															alignment: 'left',

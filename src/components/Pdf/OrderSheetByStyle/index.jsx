@@ -376,7 +376,7 @@ export default function OrderSheetByStyle(orderByStyle) {
 																									},
 																								]
 																							: []),
-
+																						entry.garments_remarks,
 																						...(entry.description
 																							? [
 																									{

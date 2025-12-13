@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useAuth } from '@/context/auth';
 import { useApprovedOrdersPartyWise } from '@/state/Report';
 import numeral from 'numeral';
@@ -18,7 +18,6 @@ export default function Index() {
 	const haveAccess = useAccess('report__approved_orders');
 	const { user } = useAuth();
 
-	const [status, setStatus] = useState('pending');
 	const { data, isLoading } = useApprovedOrdersPartyWise(
 		getPath(haveAccess, user?.uuid),
 		{
@@ -47,7 +46,7 @@ export default function Index() {
 				cell: (info) => numeral(info.getValue()).format('0.0a'),
 			},
 		],
-		[data, status]
+		[data]
 	);
 	if (!user?.uuid) return null;
 	if (isLoading)

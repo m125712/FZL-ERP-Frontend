@@ -73,7 +73,7 @@ export default function index() {
 	return (
 		<div className='flex flex-col gap-8'>
 			<ReactTable
-				title={'Approved'}
+				title={'Approved (Recipe)'}
 				accessor={false}
 				data={data}
 				columns={columns}

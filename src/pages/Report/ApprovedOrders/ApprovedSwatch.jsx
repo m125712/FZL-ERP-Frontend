@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useAuth } from '@/context/auth';
-import { useApprovedOrdersPartyWise } from '@/state/Report';
+import { useReportStoreApprovedSwatch } from '@/state/Report';
 import numeral from 'numeral';
 import { useAccess } from '@/hooks';
 
@@ -14,11 +14,11 @@ const getPath = (haveAccess, userUUID) => {
 	return ``;
 };
 
-export default function Index() {
+export default function index() {
 	const haveAccess = useAccess('report__approved_orders');
 	const { user } = useAuth();
 
-	const { data, isLoading } = useApprovedOrdersPartyWise(
+	const { data, isLoading } = useReportStoreApprovedSwatch(
 		getPath(haveAccess, user?.uuid),
 		{
 			enabled: !!user?.uuid,
@@ -28,10 +28,28 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'party_name',
-				header: 'Party',
+				accessorKey: 'item_name',
+				header: 'Item',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'zipper_number_name',
+				header: 'Zipper No.',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'end_type_name',
+				header: 'End Type',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'total_quantity',
+				header: 'Total Quantity',
+				enableColumnFilter: false,
+				cell: (info) => numeral(info.getValue()).format('0.0a'),
 			},
 			{
 				accessorKey: 'not_approved',
@@ -53,11 +71,13 @@ export default function Index() {
 		return <span className='loading loading-dots loading-lg z-50' />;
 
 	return (
-		<ReactTable
-			title={'Party Wise App. (recipe)'}
-			accessor={false}
-			data={data}
-			columns={columns}
-		/>
+		<div className='flex flex-col gap-8'>
+			<ReactTable
+				title={'Approved (Swatch)'}
+				accessor={false}
+				data={data}
+				columns={columns}
+			/>
+		</div>
 	);
 }

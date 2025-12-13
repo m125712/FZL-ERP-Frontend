@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import PageInfo from '@/util/PageInfo';
 
 import Approved from './Approved';
+import ApprovedSwatch from './ApprovedSwatch';
 import PartyWise from './partyWise';
 
 export default function Index() {
@@ -20,6 +21,7 @@ export default function Index() {
 		<div className='flex flex-col gap-8'>
 			<PartyWise />
 			<Approved />
+			<ApprovedSwatch />
 		</div>
 	);
 }

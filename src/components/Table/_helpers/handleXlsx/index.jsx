@@ -39,6 +39,9 @@ const HandleXlsx = ({
 	const openingIndex = csvHeadersId.indexOf('opening');
 	const salesIndex = csvHeadersId.indexOf('total_produced_value_company_bdt');
 	const grossIndex = csvHeadersId.indexOf('gross_due');
+	const salesDeletedIndex = csvHeadersId.indexOf(
+		'total_produced_value_company_deleted_bdt'
+	);
 	const cashIndex = csvHeadersId.indexOf('running_total_cash_received');
 	const lcIndex = csvHeadersId.indexOf('running_total_lc_value_bdt');
 
@@ -71,8 +74,13 @@ const HandleXlsx = ({
 				const excelRow = i + 2;
 				const openingCell = `${colLetter(openingIndex)}${excelRow}`;
 				const salesCell = `${colLetter(salesIndex)}${excelRow}`;
+				const salesDeletedCell = `${colLetter(
+					salesDeletedIndex
+				)}${excelRow}`;
 				const grossCell = `${colLetter(grossIndex)}${excelRow}`;
-				ws[grossCell] = { f: `${openingCell}+${salesCell}` };
+				ws[grossCell] = {
+					f: `${openingCell}+${salesCell}-${salesDeletedCell}`,
+				};
 			}
 		}
 
@@ -88,11 +96,14 @@ const HandleXlsx = ({
 				const excelRow = i + 2;
 				const openingCell = `${colLetter(openingIndex)}${excelRow}`;
 				const salesCell = `${colLetter(salesIndex)}${excelRow}`;
+				const salesDeletedCell = `${colLetter(
+					salesDeletedIndex
+				)}${excelRow}`;
 				const cashCell = `${colLetter(cashIndex)}${excelRow}`;
 				const lcCell = `${colLetter(lcIndex)}${excelRow}`;
 				const netCell = `${colLetter(netColIndex)}${excelRow}`;
 				ws[netCell] = {
-					f: `${openingCell}+${salesCell}-${cashCell}-${lcCell}`,
+					f: `${openingCell}+${salesCell}-${salesDeletedCell}-${cashCell}-${lcCell}`,
 				};
 			}
 		}

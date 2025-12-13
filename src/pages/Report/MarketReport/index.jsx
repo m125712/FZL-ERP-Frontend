@@ -58,6 +58,12 @@ export default function Index() {
 				cell: (info) => info.getValue()?.toFixed(2),
 			},
 			{
+				accessorKey: 'total_produced_value_company_deleted_bdt',
+				header: 'Sales (Deleted)',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue()?.toFixed(2),
+			},
+			{
 				accessorFn: (row) =>
 					Number(row.opening || 0) +
 					Number(row.total_produced_value_company_bdt || 0),
@@ -65,12 +71,6 @@ export default function Index() {
 				header: 'Gross Due',
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()).toFixed(2),
-			},
-			{
-				accessorKey: 'total_produced_value_company_deleted_bdt',
-				header: 'Sales (Deleted)',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue()?.toFixed(2),
 			},
 			// {
 			// 	accessorKey: 'running_total_lc_value',

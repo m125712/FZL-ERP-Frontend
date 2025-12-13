@@ -55,6 +55,8 @@ function Table({
 	showDateRange = true,
 	containerClassName = '',
 	autoResetPageIndex = true,
+	showExport = true,
+	showXlsx = false,
 	...props
 }) {
 	//* Define state variables
@@ -155,6 +157,8 @@ function Table({
 					extraExcelData={props.extraExcelData}
 					//pdf={pdf}
 					//extraData={extraData}
+					showExport={showExport}
+					showXlsx={showXlsx}
 				/>
 			</Suspense>
 		);

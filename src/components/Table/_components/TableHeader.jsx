@@ -8,6 +8,7 @@ import {
 	HandleExport,
 	HandlePDF,
 	HandleReload,
+	HandleXlsx,
 	SearchBox,
 } from '../_helpers';
 import { dateRangeColumnId } from '../utils';
@@ -66,14 +67,27 @@ const TableHeader = (props) => {
 						<HandlePDF onClick={props.onClickPdfDownload} />
 					)}
 
-					<HandleExport
-						{...{
-							getAllLeafColumns: props.getAllLeafColumns,
-							filteredRows: props.filteredRows,
-							title: props.title,
-							extraExcelData: props.extraExcelData,
-						}}
-					/>
+					{props.showExport && (
+						<HandleExport
+							{...{
+								getAllLeafColumns: props.getAllLeafColumns,
+								filteredRows: props.filteredRows,
+								title: props.title,
+								extraExcelData: props.extraExcelData,
+							}}
+						/>
+					)}
+					{props.showXlsx && (
+						<HandleXlsx
+							{...{
+								getAllLeafColumns: props.getAllLeafColumns,
+								filteredRows: props.filteredRows,
+								title: props.title,
+								extraExcelData: props.extraExcelData,
+							}}
+						/>
+					)}
+
 					{props.showPdf && (
 						<HandlePDF
 							{...{

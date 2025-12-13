@@ -6,6 +6,7 @@ import HandleEntry from './handleNew';
 import HandlePDF from './handlePDF';
 import HandleReload from './handleReload';
 import SearchBox from './handleSearchBox';
+import HandleXlsx from './handleXlsx';
 
 export {
 	SearchBox,
@@ -16,4 +17,5 @@ export {
 	HandleEntry,
 	HandlePDF,
 	DateRange,
+	HandleXlsx,
 };

@@ -32,59 +32,9 @@ export default function Index() {
 	const columns = useMemo(
 		() => [
 			{
-				accessorKey: 'marketing_name',
-				header: 'Marketing',
-				enableColumnFilter: false,
-			},
-			{
 				accessorKey: 'party_name',
 				header: 'Party',
 				enableColumnFilter: false,
-			},
-			{
-				accessorKey: 'opening',
-				header: 'Opening',
-				enableColumnFilter: false,
-			},
-			{
-				accessorKey: 'running_total_lc_value',
-				header: (
-					<>
-						LC Value <br></br> (USD)
-					</>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue().toFixed(2),
-			},
-			{
-				accessorKey: 'running_total_lc_value_bdt',
-				header: (
-					<>
-						LC Value <br></br> (BDT)
-					</>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue().toFixed(2),
-			},
-			{
-				accessorFn: (row) => row.running_lc_file_numbers.join(', '),
-				id: 'running_lc_file_numbers',
-				header: 'LC Number',
-				enableColumnFilter: false,
-				width: 'w-40',
-			},
-			{
-				accessorKey: 'running_total_cash_received',
-				header: 'Cash Value (BDT)',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue().toFixed(2),
-			},
-			{
-				accessorFn: (row) => row.running_pi_cash_ids.join(', '),
-				id: 'running_pi_cash_ids',
-				header: 'Cash Number',
-				enableColumnFilter: false,
-				width: 'w-40',
 			},
 			{
 				accessorFn: (row) =>
@@ -97,62 +47,120 @@ export default function Index() {
 				width: 'w-40',
 			},
 			{
-				accessorKey: 'total_produced_quantity',
-				header: (
-					<>
-						Produced <br></br> Qty
-					</>
-				),
+				accessorKey: 'opening',
+				header: `Opening Due`,
 				enableColumnFilter: false,
-			},
-			{
-				accessorKey: 'total_produced_value_company',
-				header: (
-					<>
-						Produced Value <br></br> (Com USD)
-					</>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue().toFixed(2),
 			},
 			{
 				accessorKey: 'total_produced_value_company_bdt',
-				header: (
-					<>
-						Produced Value <br></br> (Com BDT)
-					</>
-				),
+				header: 'Sales',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue().toFixed(2),
-			},
-			{
-				accessorKey: 'total_produced_quantity_deleted',
-				header: (
-					<>
-						Produced Qty <br></br> (Deleted)
-					</>
-				),
-				enableColumnFilter: false,
-			},
-			{
-				accessorKey: 'total_produced_value_company_deleted',
-				header: (
-					<>
-						Produced Value <br></br> Com (Deleted USD)
-					</>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue().toFixed(2),
+				cell: (info) => info.getValue()?.toFixed(2),
 			},
 			{
 				accessorKey: 'total_produced_value_company_deleted_bdt',
-				header: (
-					<>
-						Produced Value <br></br> Com (Deleted BDT)
-					</>
-				),
+				header: 'Sales (Deleted)',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue().toFixed(2),
+				cell: (info) => info.getValue()?.toFixed(2),
+			},
+			{
+				accessorFn: (row) =>
+					Number(row.opening || 0) +
+					Number(row.total_produced_value_company_bdt || 0),
+				id: 'gross_due',
+				header: 'Gross Due',
+				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()).toFixed(2),
+			},
+			// {
+			// 	accessorKey: 'running_total_lc_value',
+			// 	header: (
+			// 		<>
+			// 			LC Value <br></br> (USD)
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue().toFixed(2),
+			// },
+			{
+				accessorKey: 'running_total_cash_received',
+				header: 'Cash',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue()?.toFixed(2),
+			},
+			{
+				accessorFn: (row) => row.running_pi_cash_ids.join(', '),
+				id: 'running_pi_cash_ids',
+				header: 'Cash Number',
+				enableColumnFilter: false,
+				width: 'w-40',
+			},
+			{
+				accessorKey: 'running_total_lc_value_bdt',
+				header: 'LC',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue()?.toFixed(2),
+			},
+			{
+				accessorFn: (row) => row.running_lc_file_numbers.join(', '),
+				id: 'running_lc_file_numbers',
+				header: 'LC Number',
+				enableColumnFilter: false,
+				width: 'w-40',
+			},
+			// {
+			// 	accessorKey: 'total_produced_quantity',
+			// 	header: (
+			// 		<>
+			// 			Produced <br></br> Qty
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// },
+			// {
+			// 	accessorKey: 'total_produced_value_company',
+			// 	header: (
+			// 		<>
+			// 			Produced Value <br></br> (Com USD)
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue().toFixed(2),
+			// },
+
+			// {
+			// 	accessorKey: 'total_produced_quantity_deleted',
+			// 	header: (
+			// 		<>
+			// 			Produced Qty <br></br> (Deleted)
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// },
+			// {
+			// 	accessorKey: 'total_produced_value_company_deleted',
+			// 	header: (
+			// 		<>
+			// 			Produced Value <br></br> Com (Deleted USD)
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue().toFixed(2),
+			// },
+			{
+				accessorKey: 'net_due',
+				header: 'Net Due',
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'period_of_due_year',
+				header: 'Period of Due Year',
+				enableColumnFilter: false,
+			},
+			{
+				accessorKey: 'period_of_due_month',
+				header: 'Period of Due Month',
+				enableColumnFilter: false,
 			},
 			{
 				accessorKey: 'remarks_amount',
@@ -165,50 +173,50 @@ export default function Index() {
 				enableColumnFilter: false,
 			},
 			{
-				accessorKey: 'closing',
-				header: 'Closing Qty',
+				accessorKey: 'marketing_name',
+				header: 'O.C.',
 				enableColumnFilter: false,
 			},
-			{
-				accessorKey: 'total_produced_value_party',
-				header: (
-					<>
-						Produced Value <br></br> (Party USD)
-					</>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue().toFixed(2),
-			},
-			{
-				accessorKey: 'total_produced_value_party_bdt',
-				header: (
-					<>
-						Produced Value <br></br> (Party BDT)
-					</>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue().toFixed(2),
-			},
-			{
-				accessorKey: 'total_produced_value_party_deleted',
-				header: (
-					<>
-						Produced Value <br></br> (Party USD)
-					</>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue().toFixed(2),
-			},
-			{
-				accessorKey: 'total_produced_value_party_deleted_bdt',
-				header: (
-					<>
-						Produced Value <br></br> Party (Deleted BDT)
-					</>
-				),
-				enableColumnFilter: false,
-				cell: (info) => info.getValue().toFixed(2),
-			},
+			// {
+			// 	accessorKey: 'total_produced_value_party',
+			// 	header: (
+			// 		<>
+			// 			Produced Value <br></br> (Party USD)
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue().toFixed(2),
+			// },
+			// {
+			// 	accessorKey: 'total_produced_value_party_bdt',
+			// 	header: (
+			// 		<>
+			// 			Produced Value <br></br> (Party BDT)
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue().toFixed(2),
+			// },
+			// {
+			// 	accessorKey: 'total_produced_value_party_deleted',
+			// 	header: (
+			// 		<>
+			// 			Produced Value <br></br> (Party USD)
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue().toFixed(2),
+			// },
+			// {
+			// 	accessorKey: 'total_produced_value_party_deleted_bdt',
+			// 	header: (
+			// 		<>
+			// 			Produced Value <br></br> Party (Deleted BDT)
+			// 		</>
+			// 	),
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue().toFixed(2),
+			// },
 		],
 		[data]
 	);
@@ -224,6 +232,8 @@ export default function Index() {
 				data={data}
 				columns={columns}
 				extraClass={'py-0.5'}
+				showXlsx={true}
+				showExport={false}
 				extraButton={
 					<div className='flex items-center gap-2'>
 						<SimpleDatePicker

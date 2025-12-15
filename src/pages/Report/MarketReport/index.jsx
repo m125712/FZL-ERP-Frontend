@@ -55,14 +55,25 @@ export default function Index() {
 				accessorKey: 'total_produced_value_company_bdt',
 				header: 'Sales',
 				enableColumnFilter: false,
-				cell: (info) => info.getValue()?.toFixed(2),
+				cell: (info) => {
+					const {
+						total_produced_value_company_bdt,
+						total_produced_value_company_deleted_bdt,
+					} = info.row.original;
+
+					return (
+						Number(total_produced_value_company_bdt) -
+						Number(total_produced_value_company_deleted_bdt)
+					)?.toFixed(2);
+				},
 			},
-			{
-				accessorKey: 'total_produced_value_company_deleted_bdt',
-				header: 'Sales (Deleted)',
-				enableColumnFilter: false,
-				cell: (info) => info.getValue()?.toFixed(2),
-			},
+			// disabled as per request
+			// {
+			// 	accessorKey: 'total_produced_value_company_deleted_bdt',
+			// 	header: 'Sales (Deleted)',
+			// 	enableColumnFilter: false,
+			// 	cell: (info) => info.getValue()?.toFixed(2),
+			// },
 			{
 				accessorFn: (row) =>
 					Number(row.opening || 0) +
@@ -72,6 +83,8 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => Number(info.getValue()).toFixed(2),
 			},
+			// lc dollar value column
+			// disabled as per request
 			// {
 			// 	accessorKey: 'running_total_lc_value',
 			// 	header: (
@@ -88,26 +101,28 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) => info.getValue()?.toFixed(2),
 			},
-			{
-				accessorFn: (row) => row.running_pi_cash_ids.join(', '),
-				id: 'running_pi_cash_ids',
-				header: 'Cash Number',
-				enableColumnFilter: false,
-				width: 'w-40',
-			},
+			// disabled as per request
+			// {
+			// 	accessorFn: (row) => row.running_pi_cash_ids.join(', '),
+			// 	id: 'running_pi_cash_ids',
+			// 	header: 'Cash Number',
+			// 	enableColumnFilter: false,
+			// 	width: 'w-40',
+			// },
 			{
 				accessorKey: 'running_total_lc_value_bdt',
 				header: 'LC',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue()?.toFixed(2),
 			},
-			{
-				accessorFn: (row) => row.running_lc_file_numbers.join(', '),
-				id: 'running_lc_file_numbers',
-				header: 'LC Number',
-				enableColumnFilter: false,
-				width: 'w-40',
-			},
+			// disabled as per request
+			// {
+			// 	accessorFn: (row) => row.running_lc_file_numbers.join(', '),
+			// 	id: 'running_lc_file_numbers',
+			// 	header: 'LC Number',
+			// 	enableColumnFilter: false,
+			// 	width: 'w-40',
+			// },
 			// {
 			// 	accessorKey: 'total_produced_quantity',
 			// 	header: (
@@ -148,9 +163,24 @@ export default function Index() {
 			// 	cell: (info) => info.getValue().toFixed(2),
 			// },
 			{
-				accessorKey: 'net_due',
+				accessorFn: (row) => {
+					const gross =
+						Number(row.opening || 0) +
+						Number(row.total_produced_value_company_bdt || 0) -
+						Number(
+							row.total_produced_value_company_deleted_bdt || 0
+						);
+					return (
+						gross -
+						Number(row.running_total_cash_received || 0) -
+						Number(row.running_total_lc_value_bdt || 0) -
+						Number(row.remarks_amount || 0)
+					);
+				},
+				id: 'net_due',
 				header: 'Net Due',
 				enableColumnFilter: false,
+				cell: (info) => Number(info.getValue()).toFixed(2),
 			},
 			{
 				accessorKey: 'period_of_due_year',

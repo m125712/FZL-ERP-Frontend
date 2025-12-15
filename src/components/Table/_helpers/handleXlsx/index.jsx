@@ -44,6 +44,7 @@ const HandleXlsx = ({
 	);
 	const cashIndex = csvHeadersId.indexOf('running_total_cash_received');
 	const lcIndex = csvHeadersId.indexOf('running_total_lc_value_bdt');
+	const remarksIndex = csvHeadersId.indexOf('remarks_amount');
 
 	// Build AOA (array of arrays) for SheetJS
 	const aoa = [];
@@ -68,19 +69,24 @@ const HandleXlsx = ({
 
 		const totalRows = filteredRows.length;
 
-		// Insert formulas for gross_due and net_due if columns exist
+		// Insert visible formula text for gross_due and net_due (include remarks if present)
 		if (openingIndex > -1 && salesIndex > -1 && grossIndex > -1) {
 			for (let i = 0; i < totalRows; i++) {
 				const excelRow = i + 2;
 				const openingCell = `${colLetter(openingIndex)}${excelRow}`;
 				const salesCell = `${colLetter(salesIndex)}${excelRow}`;
-				const salesDeletedCell = `${colLetter(
-					salesDeletedIndex
-				)}${excelRow}`;
+				const salesDeletedCell =
+					salesDeletedIndex > -1
+						? `${colLetter(salesDeletedIndex)}${excelRow}`
+						: null;
 				const grossCell = `${colLetter(grossIndex)}${excelRow}`;
-				ws[grossCell] = {
-					f: `${openingCell}+${salesCell}-${salesDeletedCell}`,
-				};
+				if (salesDeletedCell) {
+					ws[grossCell] = {
+						f: `${openingCell}+${salesCell}-${salesDeletedCell}`,
+					};
+				} else {
+					ws[grossCell] = { f: `${openingCell}+${salesCell}` };
+				}
 			}
 		}
 
@@ -96,15 +102,34 @@ const HandleXlsx = ({
 				const excelRow = i + 2;
 				const openingCell = `${colLetter(openingIndex)}${excelRow}`;
 				const salesCell = `${colLetter(salesIndex)}${excelRow}`;
-				const salesDeletedCell = `${colLetter(
-					salesDeletedIndex
-				)}${excelRow}`;
+				const salesDeletedCell =
+					salesDeletedIndex > -1
+						? `${colLetter(salesDeletedIndex)}${excelRow}`
+						: null;
 				const cashCell = `${colLetter(cashIndex)}${excelRow}`;
 				const lcCell = `${colLetter(lcIndex)}${excelRow}`;
+				const remarksCell =
+					remarksIndex > -1
+						? `${colLetter(remarksIndex)}${excelRow}`
+						: null;
 				const netCell = `${colLetter(netColIndex)}${excelRow}`;
-				ws[netCell] = {
-					f: `${openingCell}+${salesCell}-${salesDeletedCell}-${cashCell}-${lcCell}`,
-				};
+				if (salesDeletedCell && remarksCell) {
+					ws[netCell] = {
+						f: `${openingCell}+${salesCell}-${salesDeletedCell}-${cashCell}-${lcCell}-${remarksCell}`,
+					};
+				} else if (salesDeletedCell) {
+					ws[netCell] = {
+						f: `${openingCell}+${salesCell}-${salesDeletedCell}-${cashCell}-${lcCell}`,
+					};
+				} else if (remarksCell) {
+					ws[netCell] = {
+						f: `${openingCell}+${salesCell}-${cashCell}-${lcCell}-${remarksCell}`,
+					};
+				} else {
+					ws[netCell] = {
+						f: `${openingCell}+${salesCell}-${cashCell}-${lcCell}`,
+					};
+				}
 			}
 		}
 

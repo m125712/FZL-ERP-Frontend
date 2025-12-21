@@ -251,7 +251,12 @@ export const PartyColumns = ({
 				width: 'w-32',
 				cell: (info) => info.getValue(),
 			},
-
+			{
+				accessorKey: 'index',
+				header: 'Index',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
 			...DEFAULT_COLUMNS({ handelUpdate, handelDelete, haveAccess }),
 		],
 		[data]

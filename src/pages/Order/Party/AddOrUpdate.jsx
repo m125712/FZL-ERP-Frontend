@@ -13,6 +13,7 @@ import GetDateTime from '@/util/GetDateTime';
 
 export default function Index({
 	modalId = '',
+	// eslint-disable-next-line @eslint-react/no-unstable-default-props
 	updateParty = {
 		uuid: null,
 	},
@@ -127,6 +128,7 @@ export default function Index({
 				/>
 			</FormField>
 			<Input label='address' rows={2} {...{ register, errors }} />
+			<Input label='index' {...{ register, errors }} />
 			<Input label='remarks' {...{ register, errors }} />
 			<DevTool control={control} placement='top-left' />
 		</AddModal>

@@ -85,6 +85,21 @@ export const useOtherOrder = (
 		refetchOnWindowFocus,
 	});
 
+// GET OTHER ORDER
+export const useOtherOrderHeader = (
+	query,
+	enabled = true,
+	refetchOnWindowFocus = false
+) =>
+	createGlobalState({
+		queryKey: otherQK.orderHeader(query),
+		url: query
+			? `/other/order/info/value/label?${query}`
+			: '/other/order/info/value/label',
+		enabled,
+		refetchOnWindowFocus,
+	});
+
 // GET OTHER ORDER FOR PACKING LIST
 export const useOtherOrderPackingList = (param) =>
 	createGlobalState({

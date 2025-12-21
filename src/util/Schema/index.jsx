@@ -150,6 +150,7 @@ export const PARTY_SCHEMA = {
 	short_name: STRING.nullable(),
 	address: STRING_REQUIRED,
 	remarks: STRING.nullable(),
+	index: NUMBER_REQUIRED.default(0).min(0, 'Minimum of 0'),
 };
 
 export const PARTY_NULL = {
@@ -158,6 +159,7 @@ export const PARTY_NULL = {
 	short_name: '',
 	address: '',
 	remarks: '',
+	index: 1102,
 };
 
 // Merchandiser

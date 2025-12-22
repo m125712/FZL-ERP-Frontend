@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import {
 	useOtherOrder,
 	useOtherOrderDescriptionByOrderNumber,
+	useOtherOrderHeader,
 	useOtherOrderPropertiesByBottomStopper,
 	useOtherOrderPropertiesByColor,
 	useOtherOrderPropertiesByColoringType,
@@ -78,6 +79,8 @@ export default function Header({
 	const { data: order } = useOtherOrder(
 		`page=order_sheet&from_date=${fromDate}&to_date=${toDate}`
 	);
+	const { data: orderHeader } = useOtherOrderHeader(`page=order_sheet`);
+
 	const { data: item } = useOtherOrderPropertiesByItem();
 	const { data: zipper_number } = useOtherOrderPropertiesByZipperNumber();
 	const { data: end_type } = useOtherOrderPropertiesByEndType();
@@ -188,8 +191,8 @@ export default function Header({
 								<ReactSelect
 									className='w-40'
 									placeholder='Select Description'
-									options={order}
-									value={order?.filter(
+									options={orderHeader}
+									value={orderHeader?.filter(
 										(item) => item.value == refOrder.value
 									)}
 									onChange={(e) => {

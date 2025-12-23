@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { DEFAULT_FONT_SIZE, PRIMARY_COLOR } from '../ui';
 import { company, getEmptyColumn } from '../utils';
 
-const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
+// const PAGE_HEADER_EMPTY_ROW = ['', '', '', ''];
 
 const getDateFormate = (date) => format(new Date(date), 'dd/MM/yyyy');
 
@@ -41,6 +41,7 @@ export const getPageHeader = (data) => {
 										`${company.bin}\n`,
 										`${company.tax}\n`,
 									],
+									bold: true,
 									alignment: 'left',
 								},
 								{

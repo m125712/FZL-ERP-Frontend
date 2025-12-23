@@ -5,6 +5,7 @@ import { useAccess } from '@/hooks';
 
 import { Suspense } from '@/components/Feedback';
 import ReactTable from '@/components/Table';
+import { StatusSelect } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
@@ -17,12 +18,19 @@ const DeleteModal = lazy(() => import('@/components/Modal/Delete'));
 export default function Index() {
 	const { user } = useAuth();
 	const haveAccess = useAccess('order__party_description');
+	const [status, setStatus] = useState('false');
 	const { data, isLoading, url, updateData, deleteData, invalidateQuery } =
 		useOrderInfo(
 			haveAccess.includes('show_own_orders')
-				? `own_uuid=${user.uuid}`
-				: ''
+				? `own_uuid=${user.uuid}` + `&is_cancelled=${status}`
+				: '' + `is_cancelled=${status}`
 		);
+
+	const options = [
+		{ value: 'true', label: 'Cancelled' },
+		{ value: 'false', label: 'Not Cancelled' },
+		{ value: 'all', label: 'All' },
+	];
 
 	const info = new PageInfo(
 		'Party Description',
@@ -127,6 +135,13 @@ export default function Index() {
 				accessor={haveAccess.includes('create')}
 				data={data}
 				columns={columns}
+				extraButton={
+					<StatusSelect
+						status={status}
+						setStatus={setStatus}
+						options={options}
+					/>
+				}
 			/>
 
 			<Suspense>

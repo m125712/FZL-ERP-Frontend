@@ -26,6 +26,7 @@ export default function Index({
 		is_inch: 0,
 		party_name: null,
 		recipe_name: null,
+		is_show_extra_information: true,
 	},
 	setUpdate,
 }) {

@@ -50,11 +50,13 @@ export default function Index(data) {
 			{
 				table: {
 					headerRows: 1,
-					widths: [40, 40, 70, 40, 30],
+					widths: [40, 40, 40, 30, 70],
 					body: [
 						[
 							{
-								text: 'Fortune Zipper LTD',
+								text: data?.is_show_extra_information
+									? 'Fortune Zipper LTD'
+									: '',
 								style: 'header',
 								bold: true,
 

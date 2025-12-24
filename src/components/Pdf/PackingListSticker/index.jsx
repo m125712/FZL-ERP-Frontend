@@ -82,7 +82,9 @@ export default function Index(data) {
 					body: [
 						[
 							{
-								text: 'Fortune Zipper LTD',
+								text: data?.is_show_extra_information
+									? 'Fortune Zipper LTD'
+									: '',
 								style: 'header',
 								bold: true,
 								alignment: 'center',
@@ -209,7 +211,7 @@ export default function Index(data) {
 						TableHeader(node, DEFAULT_FONT_SIZE - 2, '#000000'),
 
 						// * Body
-						...packing_list_entry?.map((item) =>
+						...(packing_list_entry || []).map((item) =>
 							node.map((nodeItem) => {
 								const { field } = nodeItem;
 								let text = item[nodeItem.field];

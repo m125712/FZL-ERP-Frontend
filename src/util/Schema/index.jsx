@@ -1633,6 +1633,7 @@ export const PACKING_LIST_SCHEMA = {
 			),
 	}),
 
+	is_show_extra_information: BOOLEAN_REQUIRED.default(true),
 	remarks: STRING.nullable(),
 	packing_list_entry: yup.array().of(
 		yup.object().shape({
@@ -1712,6 +1713,7 @@ export const PACKING_LIST_NULL = {
 	order_info_uuid: '',
 	carton_size_uuid: '',
 	carton_weight: '',
+	is_show_extra_information: true,
 	remarks: '',
 	packing_list_entry: [
 		{

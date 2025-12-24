@@ -3,6 +3,7 @@ import { useOtherCarton, useOtherOrder, useThreadOrder } from '@/state/Other';
 import { Controller } from 'react-hook-form';
 
 import {
+	CheckBox,
 	FormField,
 	Input,
 	ReactSelect,
@@ -126,6 +127,13 @@ export default function Header({
 					label='carton_weight'
 					{...{ register, errors }}
 				/>
+				<div className='flex items-center gap-4'>
+					<CheckBox
+						label='is_show_extra_information'
+						title='Show Extra Information'
+						{...{ register, errors }}
+					/>
+				</div>
 				<Textarea label='remarks' {...{ register, errors }} />
 			</div>
 		</SectionEntryBody>

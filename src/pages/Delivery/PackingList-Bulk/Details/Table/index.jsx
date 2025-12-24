@@ -166,6 +166,7 @@ export default function Index({ packing_list_entry, data }) {
 		setUpdate((prev) => ({
 			...prev,
 			...val,
+			is_show_extra_information: data?.is_show_extra_information,
 			item_for: data?.item_for,
 			challan_number: data.challan_number,
 			packing_list_wise_rank: data.packing_list_wise_rank,

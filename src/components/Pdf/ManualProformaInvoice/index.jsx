@@ -95,11 +95,17 @@ export default function Index(data) {
 	// Group zipper data by item and unit_price to merge sizes
 	const groupedZipperData = sortedZipperData.reduce((acc, item) => {
 		const key = `${item.item}_${item.unit_price}`;
+		const ensureOrderArray = (val) => {
+			if (val == null) return [];
+			return Array.isArray(val) ? val : [val];
+		};
+
 		if (!acc[key]) {
 			acc[key] = {
 				...item,
 				sizes: [item.size],
 				quantities: [item.quantity],
+				order_number: ensureOrderArray(item.order_number),
 			};
 		} else {
 			acc[key].sizes.push(item.size);
@@ -107,6 +113,9 @@ export default function Index(data) {
 			acc[key].quantity =
 				Number(acc[key].quantity) + Number(item.quantity);
 			acc[key].value = Number(acc[key].value) + Number(item.value);
+			const incomingOrders = ensureOrderArray(item.order_number);
+			if (!acc[key].order_number) acc[key].order_number = [];
+			acc[key].order_number.push(...incomingOrders);
 		}
 		return acc;
 	}, {});
@@ -114,6 +123,7 @@ export default function Index(data) {
 	const mergedZipperData = Object.values(groupedZipperData).map((item) => ({
 		...item,
 		size: item.sizes.join(', '),
+		order_number: item.order_number.join(', '),
 	}));
 
 	const zipper = mergedZipperData.map((item) => {

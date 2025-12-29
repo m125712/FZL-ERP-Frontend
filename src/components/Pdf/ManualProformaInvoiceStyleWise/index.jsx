@@ -96,7 +96,7 @@ export default function Index(data) {
 			(data) => data.item === item.item
 		).length;
 		return {
-			order_number: { text: item.order_number, rowSpan: rowSpan },
+			order_number: item.order_number,
 			style: item.style,
 			item: { text: item.item, rowSpan: rowSpan },
 			specification: { text: item.specification, rowSpan: rowSpan },
@@ -157,7 +157,7 @@ export default function Index(data) {
 				? {
 						table: {
 							headerRows: 1,
-							widths: [40, '*', 50, 75, 35, 35, 52, 35],
+							widths: [44, '*', 50, 70, 35, 35, 52, 35],
 							body: [
 								[
 									{

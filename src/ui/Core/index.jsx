@@ -45,7 +45,7 @@ export const Input = ({ register, ...props }) => (
 				props?.className
 			)}
 			id={props.label}
-			name={props.label}
+			name={props.name ?? props.label}
 			disabled={props.disabled}
 			{...register(props?.label)}
 			{...props}

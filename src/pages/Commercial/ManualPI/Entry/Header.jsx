@@ -261,7 +261,12 @@ export default function Header({
 				</div>
 				<div className='flex flex-col gap-1 md:flex-row'>
 					<Input label='receive_amount' {...{ register, errors }} />
-					<Input label='weight' {...{ register, errors }} />
+					<Input
+						title='Net weight'
+						label='weight'
+						{...{ register, errors }}
+					/>
+					<Input label='gross_weight' {...{ register, errors }} />
 					<Textarea label='pi_number' {...{ register, errors }} />
 				</div>
 				<Textarea label='remarks' {...{ register, errors }} />

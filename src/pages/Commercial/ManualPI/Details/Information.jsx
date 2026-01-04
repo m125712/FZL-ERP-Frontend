@@ -94,6 +94,7 @@ export default function Information({ data }) {
 		payment,
 		receive_amount,
 		weight,
+		gross_weight,
 		date,
 		pi_number,
 		created_by_name,
@@ -145,8 +146,12 @@ export default function Information({ data }) {
 				value: receive_amount,
 			},
 			{
-				label: 'Weight',
+				label: 'Net Weight',
 				value: weight,
+			},
+			{
+				label: 'Gross Weight',
+				value: gross_weight,
 			},
 			{
 				label: 'Date',

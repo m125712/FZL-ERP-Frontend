@@ -177,6 +177,21 @@ export default function Index() {
 		},
 		[status, pi]
 	);
+
+	const getTotalValueManualPi = useCallback(
+		(piArray) => {
+			if (!piArray || !Array.isArray(piArray)) {
+				return 0;
+			}
+
+			return piArray.reduce((acc, item) => {
+				if (item.uuid === null || item.uuid === undefined) return acc;
+				const piIdxValue = ManualPi?.find((e) => e.value === item.uuid);
+				return acc + piIdxValue?.pi_value;
+			}, 0);
+		},
+		[status, ManualPi]
+	);
 	// Submit
 	const onSubmit = async (data) => {
 		// Validation: at least one PI selected if not old PI
@@ -558,9 +573,9 @@ export default function Index() {
 					}}
 				/>
 
-				{!watch('is_old_pi') && (
+				{
 					<DynamicField
-						title={`Details(Total Value: ${Number(
+						title={`PI Details (Total Value: ${Number(
 							getTotalValue(watch('pi'))
 						)
 							.toFixed(2)
@@ -584,17 +599,9 @@ export default function Index() {
 						))}
 					>
 						{piFields.map((item, index) => {
-							const piIdxValue = watch('is_old_pi')
-								? ManualPi?.find(
-										(e) =>
-											e.value ===
-											watch(`pi[${index}].uuid`)
-									)
-								: pi?.find(
-										(e) =>
-											e.value ===
-											watch(`pi[${index}].uuid`)
-									);
+							const piIdxValue = pi?.find(
+								(e) => e.value === watch(`pi[${index}].uuid`)
+							);
 							const uuid = watch('is_old_pi')
 								? watch(`manual_pi[${index}].uuid`)
 								: watch(`pi[${index}].uuid`);
@@ -697,11 +704,11 @@ export default function Index() {
 							);
 						})}
 					</DynamicField>
-				)}
+				}
 				{watch('is_old_pi') && (
 					<DynamicField
-						title={`Details(Total Value: ${Number(
-							getTotalValue(watch('pi'))
+						title={`Manual PI Details (Total Value: ${Number(
+							getTotalValueManualPi(watch('manual_pi'))
 						)
 							.toFixed(2)
 							.toLocaleString()})`}

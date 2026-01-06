@@ -3,6 +3,7 @@ import { useCommercialPIDetailsByPiId } from '@/state/Commercial';
 import { useParams } from 'react-router';
 
 import PiPdfSheet from '@/components/Pdf/ProformaInvoice';
+import PiPdfSheetForCommercial from '@/components/Pdf/ProformaInvoiceForCommercial';
 import PiPdfSheetWithDzn from '@/components/Pdf/ProformaInvoiceOnlyDzn';
 import PiPdfSheetWihPCS from '@/components/Pdf/ProformaInvoiceOnlyPCS';
 
@@ -23,6 +24,7 @@ export default function Index() {
 	const [data2, setData] = useState('');
 	const [data3, setData3] = useState('');
 	const [data4, setData4] = useState('');
+	const [dataForCommercial, setDataForCommercial] = useState('');
 
 	useEffect(() => {
 		if (data && data?.pi_cash_entry) {
@@ -34,6 +36,9 @@ export default function Index() {
 			});
 			PiPdfSheetWihPCS(data)?.getDataUrl((dataUrl) => {
 				setData4(dataUrl);
+			});
+			PiPdfSheetForCommercial(data)?.getDataUrl((dataUrl) => {
+				setDataForCommercial(dataUrl);
 			});
 		}
 	}, [data]);
@@ -61,8 +66,7 @@ export default function Index() {
 					className='h-[40rem] w-full rounded-md border-none'
 				/>
 			</div>
-
-			<Information pi={data} />
+			<Information pi={data} dataForCommercial={dataForCommercial} />
 
 			{data?.pi_cash_entry.length > 0 && (
 				<ZipperTable pi={data?.pi_cash_entry} />

@@ -8,7 +8,7 @@ import RenderTable from '@/ui/Others/Table/RenderTable';
 
 import { DollarToWord } from '@/lib/NumToWord';
 
-export default function Information({ pi }) {
+export default function Information({ pi, dataForCommercial = null }) {
 	const {
 		uuid,
 		id,
@@ -79,6 +79,50 @@ export default function Information({ pi }) {
 	useEffect(() => {
 		PiPdf(pi_info).then((res) => setData(res));
 	}, [pi]);
+
+	const handleDownload = async () => {
+		if (!dataForCommercial) return;
+		try {
+			// Handle data URLs and normal URLs by fetching and creating a blob
+			if (dataForCommercial.startsWith('data:')) {
+				const res = await fetch(dataForCommercial);
+				const blob = await res.blob();
+				const url = URL.createObjectURL(blob);
+				const a = document.createElement('a');
+				a.href = url;
+				a.download = `${id || 'pi'}.pdf`;
+				document.body.appendChild(a);
+				a.click();
+				a.remove();
+				URL.revokeObjectURL(url);
+				return;
+			}
+
+			const response = await fetch(dataForCommercial);
+			const blob = await response.blob();
+			const url = URL.createObjectURL(blob);
+			const contentDisposition = response.headers.get(
+				'content-disposition'
+			);
+			let filename = `${id || 'pi'}.pdf`;
+			if (contentDisposition) {
+				const match = /filename\*?="?([^";]+)"?/.exec(
+					contentDisposition
+				);
+				if (match) filename = match[1];
+			}
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = filename;
+			document.body.appendChild(a);
+			a.click();
+			a.remove();
+			URL.revokeObjectURL(url);
+		} catch (err) {
+			console.error('Download failed, opening in new tab', err);
+			window.open(dataForCommercial, '_blank');
+		}
+	};
 
 	const renderItems = () => {
 		const total_zipper = pi_cash_entry.reduce(
@@ -293,7 +337,7 @@ export default function Information({ pi }) {
 				key='pdf'
 				type='button'
 				className='btn btn-accent btn-sm rounded-badge'
-				onClick={() => PiPdf(pi_info).download(pi_info.pi_number)}
+				onClick={handleDownload}
 			>
 				<PDF className='w-4' /> PDF
 			</button>,

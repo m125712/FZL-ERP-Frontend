@@ -109,7 +109,7 @@ export default function Information({ lc }) {
 		updated_at,
 		remarks,
 		lc_entry_others,
-
+		lc_value,
 		export_lc_number,
 		export_lc_date,
 		// export_lc_expire_date,
@@ -136,7 +136,9 @@ export default function Information({ lc }) {
 			},
 			{
 				label: 'Total Value',
-				value: Number(total_value).toFixed(2),
+				value: is_old_pi
+					? Number(lc_value).toFixed(2)
+					: Number(total_value).toFixed(2),
 			},
 			{
 				label: 'Old PI',

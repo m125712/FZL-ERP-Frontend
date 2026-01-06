@@ -97,9 +97,9 @@ export default function Index({ entries, manualPI = false }) {
 							});
 						});
 
-					return links.map((link, index) => (
+					return links.map((link) => (
 						<CustomLink
-							key={index}
+							key={link.url}
 							label={link.label}
 							url={link.url}
 						/>
@@ -130,5 +130,11 @@ export default function Index({ entries, manualPI = false }) {
 		[entries]
 	);
 
-	return <ReactTableTitleOnly title='PI' data={entries} columns={columns} />;
+	return (
+		<ReactTableTitleOnly
+			title={`${manualPI ? 'Manual PI' : 'PI'}`}
+			data={entries}
+			columns={columns}
+		/>
+	);
 }

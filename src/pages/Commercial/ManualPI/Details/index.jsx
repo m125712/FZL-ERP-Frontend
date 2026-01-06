@@ -3,6 +3,7 @@ import { useCommercialManualPIDetails } from '@/state/Commercial';
 import { useParams } from 'react-router';
 
 import PiPdfSheet from '@/components/Pdf/ManualProformaInvoice';
+import PiPdfForCommercial from '@/components/Pdf/ManualProformaInvoiceForCommercial';
 import PiPdfSheetStyleWise from '@/components/Pdf/ManualProformaInvoiceStyleWise';
 
 import Information from './Information';
@@ -21,6 +22,7 @@ export default function Index() {
 	// ! FOR TESTING
 	const [data2, setData] = useState('');
 	const [data3, setData3] = useState('');
+	const [dataForCommercial, setDataForCommercial] = useState('');
 
 	useEffect(() => {
 		if (
@@ -32,6 +34,9 @@ export default function Index() {
 			});
 			PiPdfSheetStyleWise(data)?.getDataUrl((dataUrl) => {
 				setData3(dataUrl);
+			});
+			PiPdfForCommercial(data)?.getDataUrl((dataUrl) => {
+				setDataForCommercial(dataUrl);
 			});
 		}
 	}, [data]);
@@ -52,7 +57,13 @@ export default function Index() {
 					className='h-[40rem] w-full rounded-md border-none'
 				/>
 			</div>
-			<Information data={data} />
+			{/* <div className='space-y-6'>
+				<iframe
+					src={dataForCommercial}
+					className='h-[40rem] w-full rounded-md border-none'
+				/>
+			</div> */}
+			<Information data={data} dataForCommercial={dataForCommercial} />
 			<Table
 				entries={data?.manual_zipper_pi_entry}
 				title='Zipper Details'

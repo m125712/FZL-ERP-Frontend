@@ -1,3 +1,4 @@
+import { PDF } from '@/assets/icons';
 import { useOtherPiValues } from '@/state/Other';
 import { format } from 'date-fns';
 
@@ -80,7 +81,7 @@ import { CustomLink } from '@/ui';
 // 	);
 // }
 
-export default function Information({ data }) {
+export default function Information({ data, dataForCommercial }) {
 	const {
 		lc_number,
 		pi_uuids,
@@ -212,8 +213,69 @@ export default function Information({ data }) {
 		};
 	};
 
+	const handleDownload = async () => {
+		if (!dataForCommercial) return;
+		try {
+			// Handle data URLs and normal URLs by fetching and creating a blob
+			if (dataForCommercial.startsWith('data:')) {
+				const res = await fetch(dataForCommercial);
+				const blob = await res.blob();
+				const url = URL.createObjectURL(blob);
+				const a = document.createElement('a');
+				a.href = url;
+				a.download = `${pi_number || 'manual_pi'}.pdf`;
+				document.body.appendChild(a);
+				a.click();
+				a.remove();
+				URL.revokeObjectURL(url);
+				return;
+			}
+
+			const response = await fetch(dataForCommercial);
+			const blob = await response.blob();
+			const url = URL.createObjectURL(blob);
+			const contentDisposition = response.headers.get(
+				'content-disposition'
+			);
+			let filename = `${pi_number || 'manual_pi'}.pdf`;
+			if (contentDisposition) {
+				const match = /filename\*?="?([^";]+)"?/.exec(
+					contentDisposition
+				);
+				if (match) filename = match[1];
+			}
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = filename;
+			document.body.appendChild(a);
+			a.click();
+			a.remove();
+			URL.revokeObjectURL(url);
+		} catch (err) {
+			console.error('Download failed, opening in new tab', err);
+			window.open(dataForCommercial, '_blank');
+		}
+	};
+
+	const renderButtons = () => {
+		return [
+			<button
+				key='pdf'
+				type='button'
+				className='btn btn-accent btn-sm rounded-badge'
+				onClick={handleDownload}
+			>
+				<PDF className='w-4' /> PDF
+			</button>,
+		];
+	};
+
 	return (
-		<SectionContainer title={'Information'} contentClassName={'space-y-0 '}>
+		<SectionContainer
+			buttons={renderButtons()}
+			title={'Information'}
+			contentClassName={'space-y-0 '}
+		>
 			<div className='grid grid-cols-1 lg:grid-cols-3'>
 				<RenderTable
 					className={'border-secondary/30 lg:border-r'}

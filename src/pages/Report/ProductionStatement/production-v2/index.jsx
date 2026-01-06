@@ -74,8 +74,8 @@ export default function ProductionStatementReport() {
 		const result = await refetch();
 		const { data } = result;
 		const { data: value } = data;
-		if (data) Excel(value);
-	}, [data]);
+		if (data) Excel(value, from, to, priceFor);
+	}, [data, from, to, priceFor]);
 
 	return (
 		<div className='flex flex-col gap-8'>

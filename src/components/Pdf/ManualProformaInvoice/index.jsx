@@ -128,12 +128,13 @@ export default function Index(data) {
 
 	const zipper = mergedZipperData.map((item) => {
 		const rowSpan = mergedZipperData.filter(
-			(data) => data.item === item.item
+			(data) =>
+				data.item.replace('4.5', '3') === item.item.replace('4.5', '3')
 		).length;
 		return {
 			order_number: { text: item.order_number, rowSpan: rowSpan },
 			style: { text: item.style, rowSpan: rowSpan },
-			item: { text: item.item, rowSpan: rowSpan },
+			item: { text: item.item.replace('4.5', '3'), rowSpan: rowSpan },
 			specification: { text: item.specification, rowSpan: rowSpan },
 			size: item.size,
 			quantity: item.quantity,

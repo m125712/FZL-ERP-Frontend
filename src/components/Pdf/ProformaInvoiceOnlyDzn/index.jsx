@@ -11,7 +11,7 @@ import { getPageFooter, getPageHeader } from './utils';
 const zipperNode = [
 	getTable('order_number', 'Order No'),
 	getTable('style', 'Style'),
-	getTable('pi_item_description', 'Item'),
+	getTable('pi_item_description_for_commercial', 'Item'),
 	getTable('specification', 'Specification'),
 	getTable('size', 'Size'),
 	getTable('quantity', 'Quantity', 'right'),
@@ -94,7 +94,7 @@ export default function Index(data) {
 	});
 	//*
 	pi_cash_entry.forEach((item) => {
-		uniqueItemDescription.add(item.pi_item_description);
+		uniqueItemDescription.add(item.pi_item_description_for_commercial);
 	});
 
 	pi_cash_entry_thread.forEach((item) => {
@@ -106,7 +106,7 @@ export default function Index(data) {
 		orderID[item] = new Set();
 		TotalUnitPrice[item] = new Set();
 		pi_cash_entry.forEach((item2) => {
-			if (item2.pi_item_description === item) {
+			if (item2.pi_item_description_for_commercial === item) {
 				style[item].add(item2.style);
 				orderID[item].add(item2.order_number);
 				TotalUnitPrice[item].add(item2.unit_price);
@@ -126,14 +126,14 @@ export default function Index(data) {
 			let isSliderOrder = false;
 			pi_cash_entry.forEach((item2) => {
 				if (
-					item2.pi_item_description === item &&
+					item2.pi_item_description_for_commercial === item &&
 					item2.unit_price === item3 &&
 					item2.order_type === 'full'
 				) {
 					value += parseFloat(item2.value);
 					quantity += parseFloat(item2.pi_cash_quantity);
 				} else if (
-					item2.pi_item_description === item &&
+					item2.pi_item_description_for_commercial === item &&
 					item2.unit_price === item3 &&
 					item2.order_type === 'tape'
 				) {
@@ -141,7 +141,7 @@ export default function Index(data) {
 					quantity += parseFloat(item2.size);
 					isTapeOrder = true;
 				} else if (
-					item2.pi_item_description === item &&
+					item2.pi_item_description_for_commercial === item &&
 					item2.unit_price === item3 &&
 					item2.order_type === 'slider'
 				) {
@@ -173,7 +173,7 @@ export default function Index(data) {
 			const sizes = pi_cash_entry
 				.filter(
 					(entry) =>
-						entry.pi_item_description === item &&
+						entry.pi_item_description_for_commercial === item &&
 						entry.unit_price === item3
 				)
 				.map((entry) => parseFloat(entry.size));
@@ -187,7 +187,9 @@ export default function Index(data) {
 	// * Specifications
 	const specifications = [...uniqueItemDescription].map((item) => {
 		return pi_cash_entry
-			.filter((entry) => entry.pi_item_description === item)
+			.filter(
+				(entry) => entry.pi_item_description_for_commercial === item
+			)
 			.flatMap((entry) => [
 				...new Set(
 					entry.short_names.filter(
@@ -239,7 +241,7 @@ export default function Index(data) {
 							priceIndex === 0 ? [...style[item]].join(', ') : '',
 						rowSpan,
 					},
-					pi_item_description: {
+					pi_item_description_for_commercial: {
 						text: priceIndex === 0 ? item : '',
 						rowSpan,
 					},

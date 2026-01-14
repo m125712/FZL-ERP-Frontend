@@ -170,7 +170,7 @@ export const ReportRoutes = [
 				path: '/report/sample',
 				element: <Sample />,
 				page_name: 'report__sample',
-				actions: ['read', 'show_zero_balance'],
+				actions: ['read', 'show_zero_balance', 'show_own_orders'],
 			},
 			{
 				name: 'Bulk',

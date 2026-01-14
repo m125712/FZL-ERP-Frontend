@@ -32,8 +32,8 @@ export default function Index() {
 	const haveAccess = useAccess('report__sample');
 	const { user } = useAuth();
 
-	const [date, setDate] = useState(new Date());
-	const [toDate, setToDate] = useState(new Date());
+	const [date, setDate] = useState(() => new Date());
+	const [toDate, setToDate] = useState(() => new Date());
 	const { data, isLoading, url } = useSample(
 		format(date, 'yyyy-MM-dd'),
 		format(toDate, 'yyyy-MM-dd'),
@@ -207,6 +207,12 @@ export default function Index() {
 			{
 				accessorKey: 'quantity',
 				header: 'QTY',
+				enableColumnFilter: false,
+				cell: (info) => info.getValue(),
+			},
+			{
+				accessorKey: 'delivered_balance',
+				header: 'Balance',
 				enableColumnFilter: false,
 				cell: (info) => info.getValue(),
 			},

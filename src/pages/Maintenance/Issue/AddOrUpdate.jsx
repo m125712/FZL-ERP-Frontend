@@ -38,7 +38,7 @@ export default function Index({
 	);
 
 	const { invalidateQuery } = useIssue(
-		haveAccess.includes('show_own_issue') ? `own_uuid =${user?.uuid}` : ''
+		haveAccess.includes('show_own_issue') ? `own_uuid=${user?.uuid}` : ''
 	);
 
 	const {

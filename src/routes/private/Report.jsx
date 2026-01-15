@@ -159,7 +159,7 @@ export const ReportRoutes = [
 				actions: ['read', 'show_own_orders'],
 			},
 			{
-				name: 'Production Statement',
+				name: 'Production Statement ***',
 				path: '/report/production-statement',
 				element: <ProductionStatement />,
 				page_name: 'report__production_statement',
@@ -298,7 +298,7 @@ export const ReportRoutes = [
 				actions: ['read'],
 			},
 			{
-				name: 'Daily Order Status',
+				name: 'Daily Order Status ***',
 				path: '/report/daily-order-status',
 				element: <DailyOrderStatus />,
 				page_name: 'report__daily_order_status',
@@ -312,14 +312,14 @@ export const ReportRoutes = [
 				actions: ['read'],
 			},
 			{
-				name: 'LC Payment',
+				name: 'LC Payment ***',
 				path: '/report/lc-payment',
 				element: <LcPayment />,
 				page_name: 'report__lc_payment',
 				actions: ['read'],
 			},
 			{
-				name: 'LC Fort Night',
+				name: 'LC Fort Night ***',
 				path: '/report/lc-fort-night',
 				element: <LcFortNight />,
 				page_name: 'report__lc_fortnight',

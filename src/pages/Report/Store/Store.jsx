@@ -6,13 +6,14 @@ import ReactTable from '@/components/Table';
 import { SimpleDatePicker, StatusSelect } from '@/ui';
 
 export default function index() {
-	const [from, setFrom] = useState(new Date());
-	const [to, setTo] = useState(new Date());
+	const [from, setFrom] = useState(() => new Date());
+	const [to, setTo] = useState(() => new Date());
 	const [type, setType] = useState('rm');
 
 	const options = [
 		{ value: 'rm', label: 'RM' },
 		{ value: 'accessories', label: 'Accessories' },
+		{ value: 'maintenance', label: 'Maintenance' },
 	];
 
 	const { data, isLoading } = useReportStock(

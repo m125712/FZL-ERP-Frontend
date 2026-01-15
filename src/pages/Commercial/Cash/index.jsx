@@ -9,6 +9,7 @@ import ReactTable from '@/components/Table';
 import SwitchToggle from '@/ui/Others/SwitchToggle';
 import { CustomLink, DateTime, EditDelete, StatusSelect, Transfer } from '@/ui';
 
+import { cn } from '@/lib/utils';
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
@@ -114,6 +115,106 @@ export default function Index() {
 				enableColumnFilter: false,
 				cell: (info) =>
 					info.getValue() ? info.getValue().toLocaleString() : 0,
+			},
+			{
+				accessorFn: (row) => {
+					const { order_numbers, thread_order_numbers } = row;
+					const zipper =
+						order_numbers
+							?.map((order) => order?.order_number)
+							?.join(', ') || '';
+					const thread =
+						thread_order_numbers
+							?.map((order) => order?.thread_order_number)
+							?.join(', ') || '';
+
+					if (zipper?.length > 0 && thread?.length > 0)
+						return `${zipper}, ${thread}`;
+
+					if (zipper?.length > 0) return zipper;
+
+					if (thread?.length > 0) return thread;
+
+					return '--';
+				},
+				id: 'order_numbers',
+				header: 'O/N & Status',
+				enableColumnFilter: false,
+				cell: (info) => {
+					const { order_numbers, thread_order_numbers } =
+						info.row.original;
+
+					let links = [];
+
+					order_numbers
+						?.filter((order) => order.order_info_uuid)
+						?.forEach((order) => {
+							links.push({
+								quantity: order.quantity,
+								delivered: order.delivered,
+								packing_list: order.packing_list,
+								label: order.order_number,
+								url: `/order/details/${order.order_number}`,
+							});
+						});
+
+					thread_order_numbers
+						?.filter((order) => order.thread_order_info_uuid)
+						?.forEach((order) => {
+							links.push({
+								quantity: order.quantity,
+								delivered: order.delivered,
+								packing_list: order.packing_list,
+								label: order.thread_order_number,
+								url: `/thread/order-info/${order.thread_order_info_uuid}`,
+							});
+						});
+
+					return (
+						<table
+							className={cn(
+								'table table-xs rounded-md border-2 border-primary/20 align-top'
+							)}
+						>
+							<thead>
+								<tr>
+									<th>O/N</th>
+									<th>P/Q</th>
+									<th>D/Q</th>
+								</tr>
+							</thead>
+							<tbody>
+								{links?.map((item, index) => {
+									const getPercentage = (qty) =>
+										Number(
+											(qty / item.quantity) * 100 || 0
+										).toFixed(1);
+									return (
+										<tr key={index}>
+											<td>
+												<CustomLink
+													label={item.label}
+													url={item.url}
+													showCopyButton={false}
+													openInNewTab
+												/>
+											</td>
+											<td>
+												{getPercentage(
+													item.packing_list
+												)}
+												%
+											</td>
+											<td>
+												{getPercentage(item.delivered)}%
+											</td>
+										</tr>
+									);
+								})}
+							</tbody>
+						</table>
+					);
+				},
 			},
 			{
 				accessorFn: (row) => {

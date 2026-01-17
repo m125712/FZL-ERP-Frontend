@@ -2,23 +2,15 @@ import { useMemo, useState } from 'react';
 import { useAuth } from '@/context/auth';
 import { useOtherShadeRecipe } from '@/state/Other';
 import { useThreadSwatch, useThreadSwatchBulk } from '@/state/Thread';
-import { format } from 'date-fns';
 import { useAccess } from '@/hooks';
 
 import ReactTable from '@/components/Table';
-import SwitchToggle from '@/ui/Others/SwitchToggle';
-import {
-	DateTime,
-	LinkWithCopy,
-	ReactSelect,
-	StatusButton,
-	StatusSelect,
-} from '@/ui';
+import { StatusSelect } from '@/ui';
 
 import GetDateTime from '@/util/GetDateTime';
 import PageInfo from '@/util/PageInfo';
 
-import { createColumns, createColumnsLog } from './columns';
+import { createColumnsLog } from './columns';
 
 const options = [
 	{ value: 'all', label: 'All' },
@@ -58,38 +50,38 @@ export default function Index() {
 	// * fetching the data
 	const { data: shade_recipe } = useOtherShadeRecipe();
 
-	const handleSwatchApprovalDate = async (idx) => {
-		await updateData.mutateAsync({
-			url: `/thread/swatch-approval-received-bulk/${data[idx]?.order_number}`,
-			updatedData: {
-				uuids: bulkSwatch[idx].uuids,
-				swatch_approval_received: data[idx]?.swatch_approval_received
-					? false
-					: true,
-				swatch_approval_received_date: data[idx]
-					?.swatch_approval_received
-					? null
-					: GetDateTime(),
-				swatch_approval_received_by: user?.uuid,
-				updated_at: GetDateTime(),
-				updated_by: user?.uuid,
-			},
-			isOnCloseNeeded: false,
-		});
-	};
-	const handleSwatchStatus = async (e, idx) => {
-		await updateData.mutateAsync({
-			url: `/thread/update/order-swatch-bulk/${bulkSwatch[idx]?.order_number}`,
-			updatedData: {
-				uuids: bulkSwatch[idx].uuids,
-				recipe_uuid: e.value,
-				swatch_approval_date: GetDateTime(),
-				updated_at: GetDateTime(),
-				updated_by: user?.uuid,
-			},
-			isOnCloseNeeded: false,
-		});
-	};
+	// const handleSwatchApprovalDate = async (idx) => {
+	// 	await updateData.mutateAsync({
+	// 		url: `/thread/swatch-approval-received-bulk/${data[idx]?.order_number}`,
+	// 		updatedData: {
+	// 			uuids: bulkSwatch[idx].uuids,
+	// 			swatch_approval_received: data[idx]?.swatch_approval_received
+	// 				? false
+	// 				: true,
+	// 			swatch_approval_received_date: data[idx]
+	// 				?.swatch_approval_received
+	// 				? null
+	// 				: GetDateTime(),
+	// 			swatch_approval_received_by: user?.uuid,
+	// 			updated_at: GetDateTime(),
+	// 			updated_by: user?.uuid,
+	// 		},
+	// 		isOnCloseNeeded: false,
+	// 	});
+	// };
+	// const handleSwatchStatus = async (e, idx) => {
+	// 	await updateData.mutateAsync({
+	// 		url: `/thread/update/order-swatch-bulk/${bulkSwatch[idx]?.order_number}`,
+	// 		updatedData: {
+	// 			uuids: bulkSwatch[idx].uuids,
+	// 			recipe_uuid: e.value,
+	// 			swatch_approval_date: GetDateTime(),
+	// 			updated_at: GetDateTime(),
+	// 			updated_by: user?.uuid,
+	// 		},
+	// 		isOnCloseNeeded: false,
+	// 	});
+	// };
 	const handleSwatchApprovalDateLog = async (idx) => {
 		await updateData.mutateAsync({
 			url: `/thread/swatch-approval-received/${data[idx]?.order_entry_uuid}`,
@@ -121,16 +113,16 @@ export default function Index() {
 		});
 	};
 
-	const columns = useMemo(
-		() =>
-			createColumns({
-				shade_recipe,
-				handleSwatchStatus,
-				haveAccess,
-				handleSwatchApprovalDate,
-			}),
-		[data, shade_recipe, haveAccess]
-	);
+	// const columns = useMemo(
+	// 	() =>
+	// 		createColumns({
+	// 			shade_recipe,
+	// 			handleSwatchStatus,
+	// 			haveAccess,
+	// 			handleSwatchApprovalDate,
+	// 		}),
+	// 	[data, shade_recipe, haveAccess]
+	// );
 	const columnLog = useMemo(
 		() =>
 			createColumnsLog({

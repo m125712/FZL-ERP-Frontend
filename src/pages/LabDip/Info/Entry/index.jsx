@@ -206,7 +206,7 @@ export default function Index() {
 
 		//* Post new order description */ //
 		await postData.mutateAsync({
-			url,
+			url: '/lab-dip/info',
 			newData: lab_info,
 			isOnCloseNeeded: false,
 		});

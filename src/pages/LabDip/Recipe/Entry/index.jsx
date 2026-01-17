@@ -115,14 +115,11 @@ export default function Index() {
 
 	// Submit
 	const onSubmit = async (data) => {
-		const DEFAULT_SWATCH_APPROVAL_DATE = null;
-
 		// * Update data * //
 		if (isUpdate) {
 			// * updated order description * //
 			const recipe_updated = {
 				...data,
-				// lab_dip_info_uuid: null,
 				approved: data.approved ? 1 : 0,
 				status: data.status ? 1 : 0,
 				updated_at: GetDateTime(),
@@ -201,7 +198,7 @@ export default function Index() {
 
 		//* Post new order description */ //
 		await postData.mutateAsync({
-			url,
+			url: '/lab-dip/recipe',
 			newData: recipe,
 			isOnCloseNeeded: false,
 		});
